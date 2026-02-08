@@ -47,7 +47,7 @@ Docker build uses Bun, serves via Nginx on port 8080.
 
 Three sidebar sections reflecting the domain structure:
 
-- **Executive:** `/overview` (firm-wide aggregate)
+- **Overview:** `/overview` (firm-wide aggregate - AUM, KRI/guideline breaches)
 - **Analytics:** `/summary` (pillar summary), `/guidelines`, `/performance`, `/risk` (all portfolio-scoped with optional `:portfolioId` param)
 - **Management:** `/portfolios`, `/reports`
 - **Other:** `/` (welcome)

@@ -15,8 +15,7 @@ const router = useRouter()
 const { data: user } = useCurrentUser()
 
 const navItems = [
-  { label: 'Home', icon: 'pi pi-home', to: '/' },
-  { label: 'Overview', icon: 'pi pi-objects-column', to: '/overview', section: 'Executive' },
+  { label: 'Overview', icon: 'pi pi-objects-column', to: '/overview' },
   { label: 'Summary', icon: 'pi pi-th-large', to: '/summary', section: 'Analytics' },
   { label: 'Guidelines', icon: 'pi pi-check-square', to: '/guidelines' },
   { label: 'Performance', icon: 'pi pi-chart-line', to: '/performance' },
@@ -31,7 +30,6 @@ const showTooltip = computed(() => appStore.sidebarCollapsed && !appStore.isMobi
 const env = import.meta.env.MODE === 'production' ? 'PROD' : 'DEV'
 
 function isActive(to: string) {
-  if (to === '/') return route.path === '/'
   return route.path === to || route.path.startsWith(to + '/')
 }
 
@@ -63,53 +61,66 @@ function navigate(to: string) {
       : (appStore.sidebarExpanded ? 'expanded' : 'collapsed')
     "
   >
-    <!-- Header -->
-    <div class="sidebar-header">
-      <div class="sidebar-logo">
-        <div class="logo-container">
-          <img src="/logo-light.svg" alt="RiskCog" class="logo-icon" />
-        </div>
+    <div class="sidebar-inner">
+      <!-- Header -->
+      <div class="sidebar-header">
+        <button class="sidebar-logo" @click="navigate('/')">
+          <div class="logo-container">
+            <img src="/logo-light.svg" alt="RiskCog" class="logo-icon" />
+          </div>
+          <Transition name="label">
+            <span v-if="showLabels" class="logo-text">
+              RiskCog
+            </span>
+          </Transition>
+        </button>
         <Transition name="label">
-          <span v-if="showLabels" class="logo-text">
-            RiskCog
-          </span>
+          <span v-if="showLabels" class="env-tag" :class="env.toLowerCase()">{{ env }}</span>
         </Transition>
       </div>
-      <Transition name="label">
-        <span v-if="showLabels" class="env-tag" :class="env.toLowerCase()">{{ env }}</span>
-      </Transition>
-    </div>
 
-    <!-- Navigation -->
-    <nav class="sidebar-nav">
-      <ul class="nav-list">
-        <template v-for="item in navItems" :key="item.to">
-          <!-- Section header -->
-          <li v-if="item.section" class="nav-section" :class="{ 'nav-section-collapsed': !showLabels }">
-            <Transition name="label">
-              <span v-if="showLabels" class="nav-section-label">{{ item.section }}</span>
-            </Transition>
-          </li>
-
-          <!-- Nav item -->
-          <li>
-            <button
-              v-tooltip.right="showTooltip ? item.label : undefined"
-              class="nav-item"
-              :class="{ active: isActive(item.to) }"
-              @click="navigate(item.to)"
-            >
-              <i :class="item.icon" class="nav-icon" />
+      <!-- Navigation -->
+      <nav class="sidebar-nav">
+        <ul class="nav-list">
+          <template v-for="item in navItems" :key="item.to">
+            <!-- Section header -->
+            <li v-if="item.section" class="nav-section" :class="{ 'nav-section-collapsed': !showLabels }">
               <Transition name="label">
-                <span v-if="showLabels" class="nav-label">
-                  {{ item.label }}
-                </span>
+                <span v-if="showLabels" class="nav-section-label">{{ item.section }}</span>
               </Transition>
-            </button>
-          </li>
-        </template>
-      </ul>
-    </nav>
+            </li>
+
+            <!-- Nav item -->
+            <li>
+              <button
+                v-tooltip.right="showTooltip ? item.label : undefined"
+                class="nav-item"
+                :class="{ active: isActive(item.to) }"
+                @click="navigate(item.to)"
+              >
+                <i :class="item.icon" class="nav-icon" />
+                <Transition name="label">
+                  <span v-if="showLabels" class="nav-label">
+                    {{ item.label }}
+                  </span>
+                </Transition>
+              </button>
+            </li>
+          </template>
+        </ul>
+      </nav>
+
+      <!-- User section -->
+      <div v-if="user" class="sidebar-user">
+        <div class="user-avatar">{{ user.initials }}</div>
+        <Transition name="label">
+          <div v-if="showLabels" class="user-info">
+            <span class="user-name">{{ user.name }}</span>
+            <span class="user-role">{{ user.role }}</span>
+          </div>
+        </Transition>
+      </div>
+    </div>
 
     <!-- Edge toggle (desktop only) -->
     <button
@@ -120,17 +131,6 @@ function navigate(to: string) {
     >
       <i :class="appStore.sidebarExpanded ? 'pi pi-chevron-left' : 'pi pi-chevron-right'" />
     </button>
-
-    <!-- User section -->
-    <div v-if="user" class="sidebar-user">
-      <div class="user-avatar">{{ user.initials }}</div>
-      <Transition name="label">
-        <div v-if="showLabels" class="user-info">
-          <span class="user-name">{{ user.name }}</span>
-          <span class="user-role">{{ user.role }}</span>
-        </div>
-      </Transition>
-    </div>
   </aside>
 </template>
 
@@ -183,6 +183,14 @@ function navigate(to: string) {
   transition: transform 0.3s cubic-bezier(0, 0.52, 0, 1);
 }
 
+/* Inner wrapper - clips content, lets edge toggle protrude */
+.sidebar-inner {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
 /* Header */
 .sidebar-header {
   padding: 1.25rem 1rem;
@@ -200,6 +208,11 @@ function navigate(to: string) {
   color: var(--p-surface-0);
   white-space: nowrap;
   overflow: hidden;
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: inherit;
 }
 
 .logo-container {

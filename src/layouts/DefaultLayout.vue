@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import AppSidebar from '@/components/AppSidebar.vue'
 import AppTopbar from '@/components/AppTopbar.vue'
+import { useAnalyticsSync } from '@/composables/useAnalyticsSync'
+
+useAnalyticsSync()
 </script>
 
 <template>

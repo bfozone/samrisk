@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 declare module 'vue-router' {
   interface RouteMeta {
     title?: string
+    analyticsRoute?: boolean
   }
 }
 
@@ -16,10 +17,46 @@ const router = createRouter({
       meta: { title: 'Home' },
     },
     {
-      path: '/dashboard/:portfolioId?',
-      name: 'dashboard',
-      component: () => import('@/views/DashboardView.vue'),
-      meta: { title: 'Dashboard' },
+      path: '/overview',
+      name: 'overview',
+      component: () => import('@/views/OverviewView.vue'),
+      meta: { title: 'Overview' },
+    },
+    {
+      path: '/summary/:portfolioId?',
+      name: 'summary',
+      component: () => import('@/views/SummaryView.vue'),
+      meta: { title: 'Summary', analyticsRoute: true },
+    },
+    {
+      path: '/performance/:portfolioId?',
+      name: 'performance',
+      component: () => import('@/views/PerformanceView.vue'),
+      meta: { title: 'Performance', analyticsRoute: true },
+    },
+    {
+      path: '/guidelines/:portfolioId?',
+      name: 'guidelines',
+      component: () => import('@/views/GuidelinesView.vue'),
+      meta: { title: 'Guidelines', analyticsRoute: true },
+    },
+    {
+      path: '/risk/:portfolioId?',
+      name: 'risk',
+      component: () => import('@/views/RiskView.vue'),
+      meta: { title: 'Risk', analyticsRoute: true },
+    },
+    {
+      path: '/portfolios',
+      name: 'portfolios',
+      component: () => import('@/views/PortfoliosView.vue'),
+      meta: { title: 'Portfolios' },
+    },
+    {
+      path: '/reports',
+      name: 'reports',
+      component: () => import('@/views/ReportsView.vue'),
+      meta: { title: 'Reports' },
     },
     {
       path: '/:pathMatch(.*)*',

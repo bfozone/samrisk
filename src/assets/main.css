@@ -186,3 +186,25 @@ input,
 textarea {
   caret-color: var(--p-primary-color);
 }
+
+/* -- Analytics empty state ----------------------- */
+
+.analytics-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--app-space-md);
+  padding: var(--app-space-2xl) var(--app-space-lg);
+  text-align: center;
+  color: var(--p-surface-400);
+}
+
+.analytics-empty-state i {
+  font-size: 2.5rem;
+}
+
+.analytics-empty-state p {
+  font-size: 0.9375rem;
+  max-width: 28rem;
+}

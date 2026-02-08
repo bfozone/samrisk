@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useAppStore } from '@/stores/app'
+import { useAnalyticsContext } from '@/stores/analytics'
 import { useCurrentUser } from '@/composables/useAuth'
 import { useRoute, useRouter } from 'vue-router'
 import { computed } from 'vue'
@@ -8,33 +9,39 @@ import Tooltip from 'primevue/tooltip'
 const vTooltip = Tooltip
 
 const appStore = useAppStore()
+const analytics = useAnalyticsContext()
 const route = useRoute()
 const router = useRouter()
 const { data: user } = useCurrentUser()
 
 const navItems = [
   { label: 'Home', icon: 'pi pi-home', to: '/' },
-  { label: 'Dashboard', icon: 'pi pi-chart-bar', to: '/dashboard', section: 'Analytics' },
-  { label: 'Risk Analysis', icon: 'pi pi-shield', to: '/risk', badge: 2 },
-  { label: 'Exposures', icon: 'pi pi-sitemap', to: '/exposures' },
+  { label: 'Overview', icon: 'pi pi-objects-column', to: '/overview', section: 'Executive' },
+  { label: 'Summary', icon: 'pi pi-th-large', to: '/summary', section: 'Analytics' },
+  { label: 'Guidelines', icon: 'pi pi-check-square', to: '/guidelines' },
+  { label: 'Performance', icon: 'pi pi-chart-line', to: '/performance' },
+  { label: 'Risk', icon: 'pi pi-shield', to: '/risk' },
   { label: 'Portfolios', icon: 'pi pi-briefcase', to: '/portfolios', section: 'Management' },
   { label: 'Reports', icon: 'pi pi-file', to: '/reports' },
-  { label: 'Settings', icon: 'pi pi-cog', to: '/settings', bottom: true },
 ]
 
 const showLabels = computed(() => appStore.sidebarExpanded || (appStore.isMobile && appStore.mobileOpen))
 const showTooltip = computed(() => appStore.sidebarCollapsed && !appStore.isMobile)
-const firstBottomIndex = navItems.findIndex((i) => i.bottom)
 
 const env = import.meta.env.MODE === 'production' ? 'PROD' : 'DEV'
 
 function isActive(to: string) {
   if (to === '/') return route.path === '/'
-  return route.path.startsWith(to)
+  return route.path === to || route.path.startsWith(to + '/')
 }
 
+const analyticsRoutes = new Set(['/summary', '/guidelines', '/performance', '/risk'])
+
 function navigate(to: string) {
-  router.push(to)
+  const target = analyticsRoutes.has(to) && analytics.portfolioId
+    ? `${to}/${analytics.portfolioId}`
+    : to
+  router.push(target)
   if (appStore.isMobile) appStore.closeMobile()
 }
 </script>
@@ -76,9 +83,7 @@ function navigate(to: string) {
     <!-- Navigation -->
     <nav class="sidebar-nav">
       <ul class="nav-list">
-        <template v-for="(item, index) in navItems" :key="item.to">
-          <li v-if="index === firstBottomIndex" class="nav-spacer" aria-hidden="true" />
-
+        <template v-for="item in navItems" :key="item.to">
           <!-- Section header -->
           <li v-if="item.section" class="nav-section" :class="{ 'nav-section-collapsed': !showLabels }">
             <Transition name="label">
@@ -100,13 +105,21 @@ function navigate(to: string) {
                   {{ item.label }}
                 </span>
               </Transition>
-              <span v-if="item.badge && showLabels" class="nav-badge">{{ item.badge }}</span>
-              <span v-else-if="item.badge && !showLabels" class="nav-badge-dot" />
             </button>
           </li>
         </template>
       </ul>
     </nav>
+
+    <!-- Edge toggle (desktop only) -->
+    <button
+      v-if="!appStore.isMobile"
+      class="sidebar-edge-toggle"
+      @click="appStore.toggleSidebar()"
+      aria-label="Toggle sidebar"
+    >
+      <i :class="appStore.sidebarExpanded ? 'pi pi-chevron-left' : 'pi pi-chevron-right'" />
+    </button>
 
     <!-- User section -->
     <div v-if="user" class="sidebar-user">
@@ -137,7 +150,7 @@ function navigate(to: string) {
   color: var(--p-surface-300);
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  overflow: visible;
   transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 50;
   flex-shrink: 0;
@@ -232,6 +245,44 @@ function navigate(to: string) {
   color: #9ec436;
 }
 
+/* Edge toggle */
+.sidebar-edge-toggle {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translate(50%, -50%);
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  border: 1px solid var(--p-surface-200);
+  background: var(--p-surface-0);
+  color: var(--p-surface-500);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 60;
+  opacity: 0;
+  transition:
+    opacity var(--app-transition-fast),
+    background-color var(--app-transition-fast),
+    color var(--app-transition-fast);
+  box-shadow: var(--app-shadow-sm);
+}
+
+.app-sidebar:hover .sidebar-edge-toggle {
+  opacity: 1;
+}
+
+.sidebar-edge-toggle:hover {
+  background: var(--p-surface-100);
+  color: var(--p-surface-700);
+}
+
+.sidebar-edge-toggle i {
+  font-size: 0.625rem;
+}
+
 /* Navigation */
 .sidebar-nav {
   flex: 1;
@@ -249,11 +300,6 @@ function navigate(to: string) {
   display: flex;
   flex-direction: column;
   gap: 0.125rem;
-  flex: 1;
-}
-
-.nav-spacer {
-  flex: 1;
 }
 
 /* Section headers */
@@ -285,6 +331,7 @@ function navigate(to: string) {
 
 /* Nav items */
 .nav-item {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 0.75rem;
@@ -335,38 +382,6 @@ function navigate(to: string) {
   overflow: hidden;
   flex: 1;
   text-align: left;
-}
-
-/* Badges */
-.nav-badge {
-  font-size: 0.625rem;
-  font-weight: 600;
-  min-width: 1.25rem;
-  height: 1.25rem;
-  padding: 0 0.375rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(238, 0, 12, 0.15);
-  color: var(--p-primary-color);
-  border-radius: 9999px;
-  flex-shrink: 0;
-  line-height: 1;
-}
-
-.nav-badge-dot {
-  width: 0.375rem;
-  height: 0.375rem;
-  background: var(--p-primary-color);
-  border-radius: 50%;
-  flex-shrink: 0;
-  position: absolute;
-  top: 0.375rem;
-  right: 0.375rem;
-}
-
-.nav-item {
-  position: relative;
 }
 
 /* User section */

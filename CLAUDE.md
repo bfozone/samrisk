@@ -43,6 +43,17 @@ Docker build uses Bun, serves via Nginx on port 8080.
 - `src/types/` - Shared TypeScript interfaces
 - `src/theme/` - PrimeVue preset and chart color palette
 
+## Routes
+
+Three sidebar sections reflecting the domain structure:
+
+- **Executive:** `/overview` (firm-wide aggregate)
+- **Analytics:** `/summary` (pillar summary), `/guidelines`, `/performance`, `/risk` (all portfolio-scoped with optional `:portfolioId` param)
+- **Management:** `/portfolios`, `/reports`
+- **Other:** `/` (welcome)
+
+All Analytics views share a portfolio context managed by `stores/analytics.ts` and synced to URL params via `composables/useAnalyticsSync.ts`. The topbar shows portfolio and date selectors on analytics routes.
+
 ## Status
 
-- Only `/` (home) and `/dashboard` routes are implemented - other nav items are placeholder
+- `/` (welcome) and `/summary` have content - all other views are placeholder shells

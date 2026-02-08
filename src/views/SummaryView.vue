@@ -1,18 +1,14 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useRoute } from 'vue-router'
+import { useAnalyticsContext } from '@/stores/analytics'
 import ChartCard from '@/components/ChartCard.vue'
-import { usePortfolios } from '@/composables/usePortfolios'
 import { useVaR, useExposures } from '@/composables/useRisk'
 import { chartColors } from '@/theme/preset'
 import type { EChartsOption } from 'echarts'
 
-const route = useRoute()
-const { data: portfolios } = usePortfolios()
+const analytics = useAnalyticsContext()
 
-const portfolioId = computed(
-  () => (route.params.portfolioId as string) || portfolios.value?.[0]?.id || '',
-)
+const portfolioId = computed(() => analytics.portfolioId ?? '')
 
 const { data: varData, isLoading: varLoading } = useVaR(portfolioId)
 const { data: exposureData, isLoading: exposureLoading } = useExposures(portfolioId)
@@ -62,19 +58,20 @@ const exposureChartOption = computed<EChartsOption>(() => {
 
 <template>
   <div class="dashboard">
-    <h1>Dashboard</h1>
-    <div class="dashboard-grid">
-      <ChartCard title="Value at Risk" :option="varChartOption" :loading="varLoading" />
-      <ChartCard title="Asset Allocation" :option="exposureChartOption" :loading="exposureLoading" />
+    <template v-if="analytics.hasPortfolio">
+      <div class="dashboard-grid">
+        <ChartCard title="Value at Risk" :option="varChartOption" :loading="varLoading" />
+        <ChartCard title="Asset Allocation" :option="exposureChartOption" :loading="exposureLoading" />
+      </div>
+    </template>
+    <div v-else class="analytics-empty-state">
+      <i class="pi pi-briefcase" />
+      <p>Select a portfolio from the topbar to view summary analytics</p>
     </div>
   </div>
 </template>
 
 <style scoped>
-.dashboard h1 {
-  margin-bottom: var(--app-space-lg);
-}
-
 .dashboard-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));

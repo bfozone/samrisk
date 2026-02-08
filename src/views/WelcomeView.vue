@@ -23,14 +23,21 @@ const today = computed(() =>
 
 <template>
   <div class="welcome">
-    <h1 class="welcome-greeting">
+    <p class="welcome-greeting">
       {{ greeting }}<span v-if="user">, {{ user.name.split(' ')[0] }}</span>
-    </h1>
+    </p>
     <p class="welcome-date">{{ today }}</p>
   </div>
 </template>
 
 <style scoped>
+.welcome-greeting {
+  font-size: 1.75rem;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--p-surface-900);
+}
+
 .welcome-date {
   margin-top: 0.375rem;
   font-size: 0.875rem;

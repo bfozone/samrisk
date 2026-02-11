@@ -3,13 +3,6 @@
 
 <template>
   <div class="reports">
-    <p class="placeholder-hint">Report generation and export</p>
+    <p class="placeholder-hint">Report generation and regulatory exports</p>
   </div>
 </template>
-
-<style scoped>
-.placeholder-hint {
-  color: var(--p-surface-400);
-  font-size: 0.875rem;
-}
-</style>

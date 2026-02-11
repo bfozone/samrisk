@@ -26,6 +26,7 @@ const today = computed(() =>
     <p class="welcome-greeting">
       {{ greeting }}<span v-if="user">, {{ user.name.split(' ')[0] }}</span>
     </p>
+    <p class="welcome-subtitle">Welcome to the Sustainable Asset Management Risk Platform</p>
     <p class="welcome-date">{{ today }}</p>
   </div>
 </template>
@@ -36,6 +37,12 @@ const today = computed(() =>
   font-weight: 600;
   line-height: 1.3;
   color: var(--p-surface-900);
+}
+
+.welcome-subtitle {
+  margin-top: 0.5rem;
+  font-size: 1rem;
+  color: var(--p-surface-600);
 }
 
 .welcome-date {

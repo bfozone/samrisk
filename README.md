@@ -1,4 +1,4 @@
-# RiskCog Mockup App
+# SAMRisk Mockup App
 
 Skeleton frontend for a future production risk/portfolio application.
 

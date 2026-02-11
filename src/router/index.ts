@@ -28,12 +28,6 @@ const router = createRouter({
       meta: { title: 'Home' },
     },
     {
-      path: '/overview',
-      name: 'overview',
-      component: () => import('@/views/OverviewView.vue'),
-      meta: { title: 'Overview' },
-    },
-    {
       path: '/summary/:portfolioId?',
       name: 'summary',
       component: () => import('@/views/SummaryView.vue'),
@@ -47,28 +41,58 @@ const router = createRouter({
       meta: { title: 'Performance', analyticsRoute: true },
     },
     {
+      path: '/market-risk/:portfolioId?',
+      name: 'market-risk',
+      component: () => import('@/views/MarketRiskView.vue'),
+      meta: { title: 'Market Risk', analyticsRoute: true },
+    },
+    {
+      path: '/liquidity-risk/:portfolioId?',
+      name: 'liquidity-risk',
+      component: () => import('@/views/LiquidityRiskView.vue'),
+      meta: { title: 'Liquidity Risk', analyticsRoute: true },
+    },
+    {
+      path: '/credit-risk/:portfolioId?',
+      name: 'credit-risk',
+      component: () => import('@/views/CreditRiskView.vue'),
+      meta: { title: 'Credit Risk', analyticsRoute: true },
+    },
+    {
+      path: '/esg/:portfolioId?',
+      name: 'esg',
+      component: () => import('@/views/EsgView.vue'),
+      meta: { title: 'ESG', analyticsRoute: true },
+    },
+    {
+      path: '/kri',
+      name: 'kri',
+      component: () => import('@/views/KriDashboardView.vue'),
+      meta: { title: 'KRI Dashboard' },
+    },
+    {
       path: '/guidelines/:portfolioId?',
       name: 'guidelines',
       component: () => import('@/views/GuidelinesView.vue'),
       meta: { title: 'Guidelines', analyticsRoute: true },
     },
     {
-      path: '/risk/:portfolioId?',
-      name: 'risk',
-      component: () => import('@/views/RiskView.vue'),
-      meta: { title: 'Risk', analyticsRoute: true },
-    },
-    {
-      path: '/portfolios',
-      name: 'portfolios',
-      component: () => import('@/views/PortfoliosView.vue'),
-      meta: { title: 'Portfolios' },
-    },
-    {
       path: '/reports',
       name: 'reports',
       component: () => import('@/views/ReportsView.vue'),
       meta: { title: 'Reports' },
+    },
+    {
+      path: '/product-master',
+      name: 'product-master',
+      component: () => import('@/views/ProductMasterView.vue'),
+      meta: { title: 'Product Master' },
+    },
+    {
+      path: '/security-master',
+      name: 'security-master',
+      component: () => import('@/views/SecurityMasterView.vue'),
+      meta: { title: 'Security Master' },
     },
     {
       path: '/showcase',
@@ -130,7 +154,7 @@ const router = createRouter({
 })
 
 router.afterEach((to) => {
-  document.title = to.meta.title ? `${to.meta.title} - RiskCog` : 'RiskCog'
+  document.title = to.meta.title ? `${to.meta.title} - SAMRisk` : 'SAMRisk'
 })
 
 export default router

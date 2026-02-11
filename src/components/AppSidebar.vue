@@ -15,13 +15,17 @@ const router = useRouter()
 const { data: user } = useCurrentUser()
 
 const navItems = [
-  { label: 'Overview', icon: 'pi pi-objects-column', to: '/overview' },
   { label: 'Summary', icon: 'pi pi-th-large', to: '/summary', section: 'Analytics' },
-  { label: 'Guidelines', icon: 'pi pi-check-square', to: '/guidelines' },
   { label: 'Performance', icon: 'pi pi-chart-line', to: '/performance' },
-  { label: 'Risk', icon: 'pi pi-shield', to: '/risk' },
-  { label: 'Portfolios', icon: 'pi pi-briefcase', to: '/portfolios', section: 'Management' },
+  { label: 'Market Risk', icon: 'pi pi-shield', to: '/market-risk' },
+  { label: 'Liquidity Risk', icon: 'pi pi-wave-pulse', to: '/liquidity-risk' },
+  { label: 'Credit Risk', icon: 'pi pi-building-columns', to: '/credit-risk' },
+  { label: 'ESG', icon: 'pi pi-globe', to: '/esg' },
+  { label: 'KRI Dashboard', icon: 'pi pi-gauge', to: '/kri', section: 'Monitoring' },
+  { label: 'Guidelines', icon: 'pi pi-check-square', to: '/guidelines', section: 'Compliance' },
   { label: 'Reports', icon: 'pi pi-file', to: '/reports' },
+  { label: 'Product Master', icon: 'pi pi-box', to: '/product-master', section: 'Master Data' },
+  { label: 'Security Master', icon: 'pi pi-lock', to: '/security-master' },
   { label: 'Charts', icon: 'pi pi-chart-bar', to: '/showcase', section: 'Showcase' },
   { label: 'Controls', icon: 'pi pi-sliders-h', to: '/showcase/controls' },
   { label: 'Feedback', icon: 'pi pi-comment', to: '/showcase/feedback' },
@@ -44,7 +48,7 @@ function isActive(to: string) {
     && (route.path === item.to || route.path.startsWith(item.to + '/')))
 }
 
-const analyticsRoutes = new Set(['/summary', '/guidelines', '/performance', '/risk'])
+const analyticsRoutes = new Set(['/summary', '/performance', '/market-risk', '/liquidity-risk', '/credit-risk', '/esg'])
 
 function navigate(to: string) {
   const target = analyticsRoutes.has(to) && analytics.portfolioId
@@ -77,11 +81,11 @@ function navigate(to: string) {
       <div class="sidebar-header">
         <button class="sidebar-logo" @click="navigate('/')">
           <div class="logo-container">
-            <img src="/logo-light.svg" alt="RiskCog" class="logo-icon" />
+            <img src="/logo-light.svg" alt="SAMRisk" class="logo-icon" />
           </div>
           <Transition name="label">
             <span v-if="showLabels" class="logo-text">
-              RiskCog
+              SAMRisk
             </span>
           </Transition>
         </button>

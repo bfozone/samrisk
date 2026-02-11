@@ -1,4 +1,4 @@
-# RiskCog
+# SAMRisk
 
 Financial risk dashboard - Vue 3 + TypeScript + Vite SPA.
 
@@ -47,9 +47,10 @@ Docker build uses Bun, serves via Nginx on port 8080.
 
 Three sidebar sections reflecting the domain structure:
 
-- **Overview:** `/overview` (firm-wide aggregate - AUM, KRI/guideline breaches)
-- **Analytics:** `/summary` (pillar summary), `/guidelines`, `/performance`, `/risk` (all portfolio-scoped with optional `:portfolioId` param)
-- **Management:** `/portfolios`, `/reports`
+- **Analytics:** `/summary`, `/performance`, `/market-risk`, `/liquidity-risk`, `/credit-risk`, `/esg` (all portfolio-scoped with optional `:portfolioId` param)
+- **Monitoring:** `/kri` (KRI dashboard)
+- **Compliance:** `/guidelines` (portfolio-scoped), `/reports`
+- **Master Data:** `/product-master`, `/security-master`
 - **Other:** `/` (welcome)
 
 All Analytics views share a portfolio context managed by `stores/analytics.ts` and synced to URL params via `composables/useAnalyticsSync.ts`. The topbar shows portfolio and date selectors on analytics routes.

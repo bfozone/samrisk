@@ -5,7 +5,7 @@ import { useAppStore } from '@/stores/app'
 import { useAnalyticsContext } from '@/stores/analytics'
 import { usePortfolios } from '@/composables/usePortfolios'
 import AppButton from '@/components/base/AppButton.vue'
-import Select from 'primevue/select'
+import AppSelect from '@/components/base/AppSelect.vue'
 import DatePicker from 'primevue/datepicker'
 
 const appStore = useAppStore()
@@ -52,7 +52,7 @@ const dateModel = computed({
     </div>
 
     <div v-if="isAnalyticsRoute" class="topbar-right">
-      <Select
+      <AppSelect
         :modelValue="analytics.portfolioId"
         @update:modelValue="analytics.selectPortfolio($event)"
         :options="portfolios ?? []"

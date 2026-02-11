@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import ChartCard from '@/components/ChartCard.vue'
+import ShowcaseLayout from '@/components/ShowcaseLayout.vue'
 import DashboardGrid from '@/components/DashboardGrid.vue'
+import ChartCard from '@/components/ChartCard.vue'
 import { uiColorPresets } from '@/ui/config'
 import {
   lineChart, barChart, pieChart, treemapChart, sunburstChart, heatmapChart,
@@ -305,7 +306,7 @@ const calendarHeatmapOption = calendarHeatmapChart({
 </script>
 
 <template>
-  <div class="showcase">
+  <ShowcaseLayout>
     <DashboardGrid>
       <ChartCard title="Line - Time Series" :option="lineTimeSeriesOption" />
       <ChartCard title="Line - Dual Axis" :option="lineDualAxisOption" />
@@ -326,11 +327,5 @@ const calendarHeatmapOption = calendarHeatmapChart({
       <ChartCard title="Radar - Multi-Fund Comparison" :option="radarComparisonOption" />
       <ChartCard title="Calendar Heatmap - Daily P&L" :option="calendarHeatmapOption" size="sm" />
     </DashboardGrid>
-  </div>
+  </ShowcaseLayout>
 </template>
-
-<style scoped>
-.showcase {
-  max-width: 1400px;
-}
-</style>

@@ -2,26 +2,22 @@
 import { ref, computed } from 'vue'
 import { FilterMatchMode } from '@primevue/core/api'
 
+import ShowcaseLayout from '@/components/ShowcaseLayout.vue'
+import DashboardGrid from '@/components/DashboardGrid.vue'
+import Section from '@/components/base/Section.vue'
 import AppCard from '@/components/base/AppCard.vue'
 import AppDataTable from '@/components/base/AppDataTable.vue'
+import AppTag from '@/components/base/AppTag.vue'
+import AppInputText from '@/components/base/AppInputText.vue'
+import AppSelect from '@/components/base/AppSelect.vue'
+import ValueCell from '@/components/base/ValueCell.vue'
 import Column from 'primevue/column'
 import ColumnGroup from 'primevue/columngroup'
 import Row from 'primevue/row'
-import Tag from 'primevue/tag'
-import InputText from 'primevue/inputtext'
 import InputNumber from 'primevue/inputnumber'
-import Select from 'primevue/select'
 import TreeTable from 'primevue/treetable'
 
 // ── Helpers ──────────────────────────────────────────
-
-function fmtPct(v: number) {
-  return `${v >= 0 ? '+' : ''}${v.toFixed(1)}%`
-}
-
-function fmtCurrency(v: number) {
-  return `CHF ${v.toLocaleString('de-CH')}`
-}
 
 function sideSeverity(side: string) {
   return side === 'Buy' ? 'info' : 'danger'
@@ -292,9 +288,9 @@ const totalTarget = computed(() => editableData.value.reduce((s, r) => s + r.tar
 </script>
 
 <template>
-  <div class="showcase">
+  <ShowcaseLayout>
     <!-- Basic + Selection (2-col) -->
-    <div class="showcase-grid">
+    <DashboardGrid>
       <AppCard>
         <template #title>Basic with Sorting</template>
         <template #content>
@@ -307,9 +303,7 @@ const totalTarget = computed(() => editableData.value.reduce((s, r) => s + r.tar
             </Column>
             <Column field="returnYtd" header="YTD Return" sortable>
               <template #body="{ data }">
-                <span :style="{ color: data.returnYtd >= 0 ? 'var(--p-green-500)' : 'var(--p-red-500)' }">
-                  {{ fmtPct(data.returnYtd) }}
-                </span>
+                <ValueCell :value="data.returnYtd" format="percent" />
               </template>
             </Column>
           </AppDataTable>
@@ -326,381 +320,371 @@ const totalTarget = computed(() => editableData.value.reduce((s, r) => s + r.tar
             <Column field="instrument" header="Instrument" />
             <Column field="side" header="Side">
               <template #body="{ data }">
-                <Tag :value="data.side" :severity="sideSeverity(data.side)" />
+                <AppTag :value="data.side" :severity="sideSeverity(data.side)" />
               </template>
             </Column>
             <Column field="notional" header="Notional">
-              <template #body="{ data }">{{ fmtCurrency(data.notional) }}</template>
+              <template #body="{ data }">
+                <ValueCell :value="data.notional" format="currency" :colored="false" />
+              </template>
             </Column>
           </AppDataTable>
         </template>
       </AppCard>
-    </div>
+    </DashboardGrid>
 
     <!-- Sparklines + Inline Bars (full width) -->
-    <AppCard class="section-gap">
-      <template #title>Sparklines + Inline Bars</template>
-      <template #content>
-        <AppDataTable :value="sparklineData" striped-rows size="small">
-          <Column field="name" header="Portfolio" sortable />
-          <Column field="aum" header="AuM" sortable>
-            <template #body="{ data }">{{ fmtCurrency(data.aum) }}</template>
-          </Column>
-          <Column header="30D Trend" style="width: 8rem">
-            <template #body="{ data }">
-              <svg width="80" height="24" class="sparkline">
-                <path :d="sparklinePath(data.spark, 78, 22)" fill="none" :stroke="sparklineColor(data.spark)" stroke-width="1.5" />
-              </svg>
-            </template>
-          </Column>
-          <Column field="returnMtd" header="MTD" sortable>
-            <template #body="{ data }">
-              <span :style="{ color: data.returnMtd >= 0 ? 'var(--p-green-500)' : 'var(--p-red-500)' }">
-                {{ fmtPct(data.returnMtd) }}
-              </span>
-            </template>
-          </Column>
-          <Column field="returnYtd" header="YTD" sortable>
-            <template #body="{ data }">
-              <span :style="{ color: data.returnYtd >= 0 ? 'var(--p-green-500)' : 'var(--p-red-500)' }">
-                {{ fmtPct(data.returnYtd) }}
-              </span>
-            </template>
-          </Column>
-          <Column field="weight" header="Weight" sortable style="min-width: 12rem">
-            <template #body="{ data }">
-              <div class="inline-bar-cell">
-                <div class="inline-bar" :style="{ width: (data.weight / maxWeight * 100) + '%' }" />
-                <span class="inline-bar-label">{{ data.weight.toFixed(1) }}%</span>
-              </div>
-            </template>
-          </Column>
-        </AppDataTable>
-      </template>
-    </AppCard>
+    <Section>
+      <AppCard>
+        <template #title>Sparklines + Inline Bars</template>
+        <template #content>
+          <AppDataTable :value="sparklineData" striped-rows size="small">
+            <Column field="name" header="Portfolio" sortable />
+            <Column field="aum" header="AuM" sortable>
+              <template #body="{ data }">
+                <ValueCell :value="data.aum" format="currency" :colored="false" />
+              </template>
+            </Column>
+            <Column header="30D Trend" style="width: 8rem">
+              <template #body="{ data }">
+                <svg width="80" height="24" class="sparkline">
+                  <path :d="sparklinePath(data.spark, 78, 22)" fill="none" :stroke="sparklineColor(data.spark)" stroke-width="1.5" />
+                </svg>
+              </template>
+            </Column>
+            <Column field="returnMtd" header="MTD" sortable>
+              <template #body="{ data }">
+                <ValueCell :value="data.returnMtd" format="percent" />
+              </template>
+            </Column>
+            <Column field="returnYtd" header="YTD" sortable>
+              <template #body="{ data }">
+                <ValueCell :value="data.returnYtd" format="percent" />
+              </template>
+            </Column>
+            <Column field="weight" header="Weight" sortable style="min-width: 12rem">
+              <template #body="{ data }">
+                <div class="inline-bar-cell">
+                  <div class="inline-bar" :style="{ width: (data.weight / maxWeight * 100) + '%' }" />
+                  <span class="inline-bar-label">{{ data.weight.toFixed(1) }}%</span>
+                </div>
+              </template>
+            </Column>
+          </AppDataTable>
+        </template>
+      </AppCard>
+    </Section>
 
     <!-- Heatmap Cells (full width) -->
-    <AppCard class="section-gap">
-      <template #title>Heatmap Cells</template>
-      <template #content>
-        <AppDataTable :value="heatmapData" size="small">
-          <Column field="name" header="Portfolio" frozen style="min-width: 9rem" />
-          <Column v-for="(m, i) in months" :key="m" :header="m" style="min-width: 4.5rem; text-align: center">
-            <template #body="{ data }">
-              <div class="heatmap-cell" :style="{ background: heatmapBg(data.returns[i]) }">
-                <span :style="{ color: data.returns[i] >= 0 ? 'var(--p-green-600)' : 'var(--p-red-600)' }">
-                  {{ data.returns[i] >= 0 ? '+' : '' }}{{ data.returns[i].toFixed(1) }}
-                </span>
-              </div>
-            </template>
-          </Column>
-        </AppDataTable>
-      </template>
-    </AppCard>
+    <Section>
+      <AppCard>
+        <template #title>Heatmap Cells</template>
+        <template #content>
+          <AppDataTable :value="heatmapData" size="small">
+            <Column field="name" header="Portfolio" frozen style="min-width: 9rem" />
+            <Column v-for="(m, i) in months" :key="m" :header="m" style="min-width: 4.5rem; text-align: center">
+              <template #body="{ data }">
+                <div class="heatmap-cell" :style="{ background: heatmapBg(data.returns[i]) }">
+                  <span :style="{ color: data.returns[i] >= 0 ? 'var(--p-green-600)' : 'var(--p-red-600)' }">
+                    {{ data.returns[i] >= 0 ? '+' : '' }}{{ data.returns[i].toFixed(1) }}
+                  </span>
+                </div>
+              </template>
+            </Column>
+          </AppDataTable>
+        </template>
+      </AppCard>
+    </Section>
 
     <!-- Column Filters (full width) -->
-    <AppCard class="section-gap">
-      <template #title>Column Filters</template>
-      <template #content>
-        <AppDataTable
-          v-model:filters="filters"
-          :value="filterableData"
-          paginator
-          :rows="8"
-          filter-display="row"
-          striped-rows
-          size="small"
-          :global-filter-fields="['instrument', 'sector', 'status']"
-        >
-          <template #header>
-            <InputText v-model="filters['global'].value" placeholder="Search..." class="filter-search" />
-          </template>
-          <Column field="instrument" header="Instrument" sortable :show-filter-menu="false">
-            <template #filter="{ filterModel, filterCallback }">
-              <InputText v-model="filterModel.value" @input="filterCallback()" placeholder="Filter..." class="filter-input" />
-            </template>
-          </Column>
-          <Column field="sector" header="Sector" sortable :show-filter-menu="false">
-            <template #filter="{ filterModel, filterCallback }">
-              <Select v-model="filterModel.value" @change="filterCallback()" :options="sectorOptions" placeholder="All" show-clear class="filter-input" />
-            </template>
-          </Column>
-          <Column field="weight" header="Weight" sortable>
-            <template #body="{ data }">{{ data.weight.toFixed(1) }}%</template>
-          </Column>
-          <Column field="pnl" header="P&L" sortable>
-            <template #body="{ data }">
-              <span :style="{ color: data.pnl >= 0 ? 'var(--p-green-500)' : 'var(--p-red-500)' }">
-                {{ fmtCurrency(+data.pnl) }}
-              </span>
-            </template>
-          </Column>
-          <Column field="status" header="Status" sortable :show-filter-menu="false">
-            <template #filter="{ filterModel, filterCallback }">
-              <Select v-model="filterModel.value" @change="filterCallback()" :options="statusFilterOptions" placeholder="All" show-clear class="filter-input" />
-            </template>
-            <template #body="{ data }">
-              <Tag :value="data.status" :severity="data.status === 'Active' ? 'success' : data.status === 'Watchlist' ? 'warn' : 'danger'" />
-            </template>
-          </Column>
-        </AppDataTable>
-      </template>
-    </AppCard>
-
-    <!-- TreeTable + Editable (2-col) -->
-    <div class="showcase-grid section-gap">
+    <Section>
       <AppCard>
-        <template #title>TreeTable</template>
-        <template #content>
-          <TreeTable :value="treeNodes" size="small">
-            <Column field="name" header="Name" expander />
-            <Column field="weight" header="Weight">
-              <template #body="{ node }">{{ node.data.weight.toFixed(1) }}%</template>
-            </Column>
-            <Column field="returnYtd" header="YTD Return">
-              <template #body="{ node }">
-                <span :style="{ color: node.data.returnYtd >= 0 ? 'var(--p-green-500)' : 'var(--p-red-500)' }">
-                  {{ fmtPct(node.data.returnYtd) }}
-                </span>
-              </template>
-            </Column>
-            <Column field="var95" header="VaR 95%">
-              <template #body="{ node }">{{ node.data.var95.toFixed(1) }}%</template>
-            </Column>
-          </TreeTable>
-        </template>
-      </AppCard>
-
-      <AppCard>
-        <template #title>Editable Cells</template>
+        <template #title>Column Filters</template>
         <template #content>
           <AppDataTable
-            v-model:editing-rows="editingRows"
-            :value="editableData"
-            edit-mode="row"
-            data-key="name"
+            v-model:filters="filters"
+            :value="filterableData"
+            paginator
+            :rows="8"
+            filter-display="row"
+            striped-rows
             size="small"
-            @row-edit-save="onRowEditSave"
+            :global-filter-fields="['instrument', 'sector', 'status']"
           >
-            <Column field="name" header="Asset Class" />
-            <Column field="current" header="Current %">
-              <template #body="{ data }">{{ data.current.toFixed(1) }}%</template>
-            </Column>
-            <Column field="target" header="Target %">
-              <template #body="{ data }">{{ data.target.toFixed(1) }}%</template>
-              <template #editor="{ data, field }">
-                <InputNumber v-model="data[field]" :min="0" :max="100" suffix="%" :min-fraction-digits="1" :max-fraction-digits="1" class="edit-input" />
+            <template #header>
+              <AppInputText v-model="filters['global'].value" placeholder="Search..." class="filter-search" />
+            </template>
+            <Column field="instrument" header="Instrument" sortable :show-filter-menu="false">
+              <template #filter="{ filterModel, filterCallback }">
+                <AppInputText v-model="filterModel.value" @input="filterCallback()" placeholder="Filter..." class="filter-input" />
               </template>
             </Column>
-            <Column field="limitMax" header="Limit Max">
-              <template #body="{ data }">{{ data.limitMax.toFixed(1) }}%</template>
-              <template #editor="{ data, field }">
-                <InputNumber v-model="data[field]" :min="0" :max="100" suffix="%" :min-fraction-digits="1" :max-fraction-digits="1" class="edit-input" />
+            <Column field="sector" header="Sector" sortable :show-filter-menu="false">
+              <template #filter="{ filterModel, filterCallback }">
+                <AppSelect v-model="filterModel.value" @change="filterCallback()" :options="sectorOptions" placeholder="All" show-clear class="filter-input" />
               </template>
             </Column>
-            <Column :row-editor="true" style="width: 5rem; text-align: center" />
-          </AppDataTable>
-          <div class="edit-footer">
-            Total target: <strong :class="{ 'over-limit': totalTarget > 100 }">{{ totalTarget.toFixed(1) }}%</strong>
-          </div>
-        </template>
-      </AppCard>
-    </div>
-
-    <!-- Paginated (full width) -->
-    <AppCard class="section-gap">
-      <template #title>Paginated</template>
-      <template #content>
-        <AppDataTable
-          :value="trades"
-          paginator
-          :rows="8"
-          :rows-per-page-options="[5, 8, 15]"
-          striped-rows
-          size="small"
-        >
-          <Column field="id" header="Trade ID" sortable />
-          <Column field="date" header="Date" sortable />
-          <Column field="instrument" header="Instrument" sortable />
-          <Column field="side" header="Side" sortable>
-            <template #body="{ data }">
-              <Tag :value="data.side" :severity="sideSeverity(data.side)" />
-            </template>
-          </Column>
-          <Column field="quantity" header="Qty" sortable />
-          <Column field="price" header="Price" sortable>
-            <template #body="{ data }">{{ fmtCurrency(data.price) }}</template>
-          </Column>
-          <Column field="status" header="Status" sortable>
-            <template #body="{ data }">
-              <Tag :value="data.status" :severity="statusSeverity(data.status)" />
-            </template>
-          </Column>
-        </AppDataTable>
-      </template>
-    </AppCard>
-
-    <!-- Frozen + Grouped (full width) -->
-    <AppCard class="section-gap">
-      <template #title>Frozen Columns</template>
-      <template #content>
-        <AppDataTable :value="riskMetrics" scrollable scroll-height="400px" striped-rows size="small">
-          <Column field="name" header="Portfolio" frozen style="min-width: 10rem" />
-          <Column field="aum" header="AuM (CHF k)" style="min-width: 8rem">
-            <template #body="{ data }">{{ fmtCurrency(data.aum) }}</template>
-          </Column>
-          <Column field="var95" header="VaR 95%" style="min-width: 7rem">
-            <template #body="{ data }">{{ data.var95.toFixed(1) }}%</template>
-          </Column>
-          <Column field="var99" header="VaR 99%" style="min-width: 7rem">
-            <template #body="{ data }">{{ data.var99.toFixed(1) }}%</template>
-          </Column>
-          <Column field="cvar" header="CVaR" style="min-width: 7rem">
-            <template #body="{ data }">{{ data.cvar.toFixed(1) }}%</template>
-          </Column>
-          <Column field="te" header="Track. Error" style="min-width: 8rem">
-            <template #body="{ data }">{{ data.te.toFixed(1) }}%</template>
-          </Column>
-          <Column field="beta" header="Beta" style="min-width: 6rem">
-            <template #body="{ data }">{{ data.beta.toFixed(2) }}</template>
-          </Column>
-          <Column field="sharpe" header="Sharpe" style="min-width: 6rem">
-            <template #body="{ data }">{{ data.sharpe.toFixed(2) }}</template>
-          </Column>
-          <Column field="sortino" header="Sortino" style="min-width: 7rem">
-            <template #body="{ data }">{{ data.sortino.toFixed(2) }}</template>
-          </Column>
-          <Column field="maxDd" header="Max DD" style="min-width: 7rem">
-            <template #body="{ data }">
-              <span style="color: var(--p-red-500)">{{ data.maxDd.toFixed(1) }}%</span>
-            </template>
-          </Column>
-          <Column field="volatility" header="Volatility" style="min-width: 7rem">
-            <template #body="{ data }">{{ data.volatility.toFixed(1) }}%</template>
-          </Column>
-        </AppDataTable>
-      </template>
-    </AppCard>
-
-    <!-- Expandable + Grouped Headers (2-col) -->
-    <div class="showcase-grid section-gap">
-      <AppCard>
-        <template #title>Expandable Rows</template>
-        <template #content>
-          <AppDataTable v-model:expanded-rows="expandedRows" :value="positions" data-key="name" size="small">
-            <Column expander style="width: 3rem" />
-            <Column field="name" header="Asset Class" />
-            <Column field="weight" header="Weight">
+            <Column field="weight" header="Weight" sortable>
               <template #body="{ data }">{{ data.weight.toFixed(1) }}%</template>
             </Column>
-            <Column field="returnYtd" header="YTD Return">
+            <Column field="pnl" header="P&L" sortable>
               <template #body="{ data }">
-                <span :style="{ color: data.returnYtd >= 0 ? 'var(--p-green-500)' : 'var(--p-red-500)' }">
-                  {{ fmtPct(data.returnYtd) }}
-                </span>
+                <ValueCell :value="+data.pnl" format="currency" />
               </template>
             </Column>
-            <template #expansion="{ data }">
-              <AppDataTable :value="data.children" size="small">
-                <Column field="name" header="Sub-Class" />
-                <Column field="weight" header="Weight">
-                  <template #body="{ data: child }">{{ child.weight.toFixed(1) }}%</template>
-                </Column>
-                <Column field="returnYtd" header="YTD Return">
-                  <template #body="{ data: child }">
-                    <span :style="{ color: child.returnYtd >= 0 ? 'var(--p-green-500)' : 'var(--p-red-500)' }">
-                      {{ fmtPct(child.returnYtd) }}
-                    </span>
-                  </template>
-                </Column>
-              </AppDataTable>
-            </template>
+            <Column field="status" header="Status" sortable :show-filter-menu="false">
+              <template #filter="{ filterModel, filterCallback }">
+                <AppSelect v-model="filterModel.value" @change="filterCallback()" :options="statusFilterOptions" placeholder="All" show-clear class="filter-input" />
+              </template>
+              <template #body="{ data }">
+                <AppTag :value="data.status" :severity="data.status === 'Active' ? 'success' : data.status === 'Watchlist' ? 'warn' : 'danger'" />
+              </template>
+            </Column>
           </AppDataTable>
         </template>
       </AppCard>
+    </Section>
 
+    <!-- TreeTable + Editable (2-col) -->
+    <Section>
+      <DashboardGrid>
+        <AppCard>
+          <template #title>TreeTable</template>
+          <template #content>
+            <TreeTable :value="treeNodes" size="small">
+              <Column field="name" header="Name" expander />
+              <Column field="weight" header="Weight">
+                <template #body="{ node }">{{ node.data.weight.toFixed(1) }}%</template>
+              </Column>
+              <Column field="returnYtd" header="YTD Return">
+                <template #body="{ node }">
+                  <ValueCell :value="node.data.returnYtd" format="percent" />
+                </template>
+              </Column>
+              <Column field="var95" header="VaR 95%">
+                <template #body="{ node }">{{ node.data.var95.toFixed(1) }}%</template>
+              </Column>
+            </TreeTable>
+          </template>
+        </AppCard>
+
+        <AppCard>
+          <template #title>Editable Cells</template>
+          <template #content>
+            <AppDataTable
+              v-model:editing-rows="editingRows"
+              :value="editableData"
+              edit-mode="row"
+              data-key="name"
+              size="small"
+              @row-edit-save="onRowEditSave"
+            >
+              <Column field="name" header="Asset Class" />
+              <Column field="current" header="Current %">
+                <template #body="{ data }">{{ data.current.toFixed(1) }}%</template>
+              </Column>
+              <Column field="target" header="Target %">
+                <template #body="{ data }">{{ data.target.toFixed(1) }}%</template>
+                <template #editor="{ data, field }">
+                  <InputNumber v-model="data[field]" :min="0" :max="100" suffix="%" :min-fraction-digits="1" :max-fraction-digits="1" class="edit-input" />
+                </template>
+              </Column>
+              <Column field="limitMax" header="Limit Max">
+                <template #body="{ data }">{{ data.limitMax.toFixed(1) }}%</template>
+                <template #editor="{ data, field }">
+                  <InputNumber v-model="data[field]" :min="0" :max="100" suffix="%" :min-fraction-digits="1" :max-fraction-digits="1" class="edit-input" />
+                </template>
+              </Column>
+              <Column :row-editor="true" style="width: 5rem; text-align: center" />
+            </AppDataTable>
+            <div class="edit-footer">
+              Total target: <strong :class="{ 'over-limit': totalTarget > 100 }">{{ totalTarget.toFixed(1) }}%</strong>
+            </div>
+          </template>
+        </AppCard>
+      </DashboardGrid>
+    </Section>
+
+    <!-- Paginated (full width) -->
+    <Section>
       <AppCard>
-        <template #title>Grouped Headers</template>
+        <template #title>Paginated</template>
         <template #content>
-          <AppDataTable :value="groupedData" size="small">
-            <ColumnGroup type="header">
-              <Row>
-                <Column header="Portfolio" :rowspan="2" />
-                <Column header="Value at Risk (%)" :colspan="4" />
-                <Column header="Stress Test (%)" :colspan="4" />
-              </Row>
-              <Row>
-                <Column header="Market" sortable field="mktVar" />
-                <Column header="Credit" sortable field="credVar" />
-                <Column header="Liquidity" sortable field="liqVar" />
-                <Column header="Total" sortable field="totalVar" />
-                <Column header="Market" sortable field="mktStress" />
-                <Column header="Credit" sortable field="credStress" />
-                <Column header="Liquidity" sortable field="liqStress" />
-                <Column header="Total" sortable field="totalStress" />
-              </Row>
-            </ColumnGroup>
-            <Column field="name" />
-            <Column field="mktVar">
-              <template #body="{ data }">{{ data.mktVar.toFixed(1) }}</template>
-            </Column>
-            <Column field="credVar">
-              <template #body="{ data }">{{ data.credVar.toFixed(1) }}</template>
-            </Column>
-            <Column field="liqVar">
-              <template #body="{ data }">{{ data.liqVar.toFixed(1) }}</template>
-            </Column>
-            <Column field="totalVar">
-              <template #body="{ data }"><strong>{{ data.totalVar.toFixed(1) }}</strong></template>
-            </Column>
-            <Column field="mktStress">
+          <AppDataTable
+            :value="trades"
+            paginator
+            :rows="8"
+            :rows-per-page-options="[5, 8, 15]"
+            striped-rows
+            size="small"
+          >
+            <Column field="id" header="Trade ID" sortable />
+            <Column field="date" header="Date" sortable />
+            <Column field="instrument" header="Instrument" sortable />
+            <Column field="side" header="Side" sortable>
               <template #body="{ data }">
-                <span style="color: var(--p-red-500)">{{ data.mktStress.toFixed(1) }}</span>
+                <AppTag :value="data.side" :severity="sideSeverity(data.side)" />
               </template>
             </Column>
-            <Column field="credStress">
+            <Column field="quantity" header="Qty" sortable />
+            <Column field="price" header="Price" sortable>
               <template #body="{ data }">
-                <span style="color: var(--p-red-500)">{{ data.credStress.toFixed(1) }}</span>
+                <ValueCell :value="data.price" format="currency" :colored="false" />
               </template>
             </Column>
-            <Column field="liqStress">
+            <Column field="status" header="Status" sortable>
               <template #body="{ data }">
-                <span style="color: var(--p-red-500)">{{ data.liqStress.toFixed(1) }}</span>
-              </template>
-            </Column>
-            <Column field="totalStress">
-              <template #body="{ data }">
-                <strong style="color: var(--p-red-500)">{{ data.totalStress.toFixed(1) }}</strong>
+                <AppTag :value="data.status" :severity="statusSeverity(data.status)" />
               </template>
             </Column>
           </AppDataTable>
         </template>
       </AppCard>
-    </div>
-  </div>
+    </Section>
+
+    <!-- Frozen + Grouped (full width) -->
+    <Section>
+      <AppCard>
+        <template #title>Frozen Columns</template>
+        <template #content>
+          <AppDataTable :value="riskMetrics" scrollable scroll-height="400px" striped-rows size="small">
+            <Column field="name" header="Portfolio" frozen style="min-width: 10rem" />
+            <Column field="aum" header="AuM (CHF k)" style="min-width: 8rem">
+              <template #body="{ data }">
+                <ValueCell :value="data.aum" format="currency" :colored="false" />
+              </template>
+            </Column>
+            <Column field="var95" header="VaR 95%" style="min-width: 7rem">
+              <template #body="{ data }">{{ data.var95.toFixed(1) }}%</template>
+            </Column>
+            <Column field="var99" header="VaR 99%" style="min-width: 7rem">
+              <template #body="{ data }">{{ data.var99.toFixed(1) }}%</template>
+            </Column>
+            <Column field="cvar" header="CVaR" style="min-width: 7rem">
+              <template #body="{ data }">{{ data.cvar.toFixed(1) }}%</template>
+            </Column>
+            <Column field="te" header="Track. Error" style="min-width: 8rem">
+              <template #body="{ data }">{{ data.te.toFixed(1) }}%</template>
+            </Column>
+            <Column field="beta" header="Beta" style="min-width: 6rem">
+              <template #body="{ data }">{{ data.beta.toFixed(2) }}</template>
+            </Column>
+            <Column field="sharpe" header="Sharpe" style="min-width: 6rem">
+              <template #body="{ data }">{{ data.sharpe.toFixed(2) }}</template>
+            </Column>
+            <Column field="sortino" header="Sortino" style="min-width: 7rem">
+              <template #body="{ data }">{{ data.sortino.toFixed(2) }}</template>
+            </Column>
+            <Column field="maxDd" header="Max DD" style="min-width: 7rem">
+              <template #body="{ data }">
+                <ValueCell :value="data.maxDd" format="number" :decimals="1" :sign="false" always-negative />
+              </template>
+            </Column>
+            <Column field="volatility" header="Volatility" style="min-width: 7rem">
+              <template #body="{ data }">{{ data.volatility.toFixed(1) }}%</template>
+            </Column>
+          </AppDataTable>
+        </template>
+      </AppCard>
+    </Section>
+
+    <!-- Expandable + Grouped Headers (2-col) -->
+    <Section>
+      <DashboardGrid>
+        <AppCard>
+          <template #title>Expandable Rows</template>
+          <template #content>
+            <AppDataTable v-model:expanded-rows="expandedRows" :value="positions" data-key="name" size="small">
+              <Column expander style="width: 3rem" />
+              <Column field="name" header="Asset Class" />
+              <Column field="weight" header="Weight">
+                <template #body="{ data }">{{ data.weight.toFixed(1) }}%</template>
+              </Column>
+              <Column field="returnYtd" header="YTD Return">
+                <template #body="{ data }">
+                  <ValueCell :value="data.returnYtd" format="percent" />
+                </template>
+              </Column>
+              <template #expansion="{ data }">
+                <AppDataTable :value="data.children" size="small">
+                  <Column field="name" header="Sub-Class" />
+                  <Column field="weight" header="Weight">
+                    <template #body="{ data: child }">{{ child.weight.toFixed(1) }}%</template>
+                  </Column>
+                  <Column field="returnYtd" header="YTD Return">
+                    <template #body="{ data: child }">
+                      <ValueCell :value="child.returnYtd" format="percent" />
+                    </template>
+                  </Column>
+                </AppDataTable>
+              </template>
+            </AppDataTable>
+          </template>
+        </AppCard>
+
+        <AppCard>
+          <template #title>Grouped Headers</template>
+          <template #content>
+            <AppDataTable :value="groupedData" size="small">
+              <ColumnGroup type="header">
+                <Row>
+                  <Column header="Portfolio" :rowspan="2" />
+                  <Column header="Value at Risk (%)" :colspan="4" />
+                  <Column header="Stress Test (%)" :colspan="4" />
+                </Row>
+                <Row>
+                  <Column header="Market" sortable field="mktVar" />
+                  <Column header="Credit" sortable field="credVar" />
+                  <Column header="Liquidity" sortable field="liqVar" />
+                  <Column header="Total" sortable field="totalVar" />
+                  <Column header="Market" sortable field="mktStress" />
+                  <Column header="Credit" sortable field="credStress" />
+                  <Column header="Liquidity" sortable field="liqStress" />
+                  <Column header="Total" sortable field="totalStress" />
+                </Row>
+              </ColumnGroup>
+              <Column field="name" />
+              <Column field="mktVar">
+                <template #body="{ data }">{{ data.mktVar.toFixed(1) }}</template>
+              </Column>
+              <Column field="credVar">
+                <template #body="{ data }">{{ data.credVar.toFixed(1) }}</template>
+              </Column>
+              <Column field="liqVar">
+                <template #body="{ data }">{{ data.liqVar.toFixed(1) }}</template>
+              </Column>
+              <Column field="totalVar">
+                <template #body="{ data }"><strong>{{ data.totalVar.toFixed(1) }}</strong></template>
+              </Column>
+              <Column field="mktStress">
+                <template #body="{ data }">
+                  <ValueCell :value="data.mktStress" format="number" :decimals="1" :sign="false" always-negative />
+                </template>
+              </Column>
+              <Column field="credStress">
+                <template #body="{ data }">
+                  <ValueCell :value="data.credStress" format="number" :decimals="1" :sign="false" always-negative />
+                </template>
+              </Column>
+              <Column field="liqStress">
+                <template #body="{ data }">
+                  <ValueCell :value="data.liqStress" format="number" :decimals="1" :sign="false" always-negative />
+                </template>
+              </Column>
+              <Column field="totalStress">
+                <template #body="{ data }">
+                  <strong><ValueCell :value="data.totalStress" format="number" :decimals="1" :sign="false" always-negative /></strong>
+                </template>
+              </Column>
+            </AppDataTable>
+          </template>
+        </AppCard>
+      </DashboardGrid>
+    </Section>
+  </ShowcaseLayout>
 </template>
 
 <style scoped>
-.showcase {
-  max-width: 1400px;
-}
-
-.section-gap {
-  margin-top: var(--app-space-lg);
-}
-
-.showcase-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--app-space-lg);
-}
-
-@media (max-width: 768px) {
-  .showcase-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
 /* Sparkline SVG */
 .sparkline {
   display: block;

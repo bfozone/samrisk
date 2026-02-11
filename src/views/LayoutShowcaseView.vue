@@ -1,7 +1,8 @@
 <script setup lang="ts">
+import ShowcaseLayout from '@/components/ShowcaseLayout.vue'
+import DashboardGrid from '@/components/DashboardGrid.vue'
 import AppCard from '@/components/base/AppCard.vue'
 import ChartCard from '@/components/ChartCard.vue'
-import DashboardGrid from '@/components/DashboardGrid.vue'
 import { gaugeChart } from '@/charts'
 import { uiColorPresets } from '@/ui/config'
 
@@ -13,7 +14,7 @@ const gaugeOption = gaugeChart({
 </script>
 
 <template>
-  <div class="showcase">
+  <ShowcaseLayout>
     <!-- Grid Columns -->
     <h3 class="section-title">Grid Columns</h3>
 
@@ -37,14 +38,10 @@ const gaugeOption = gaugeChart({
       <ChartCard title="Default (350px)" :option="gaugeOption" />
       <ChartCard title="Large (480px)" :option="gaugeOption" size="lg" />
     </DashboardGrid>
-  </div>
+  </ShowcaseLayout>
 </template>
 
 <style scoped>
-.showcase {
-  max-width: 1400px;
-}
-
 .section-title {
   margin-bottom: var(--app-space-md);
 }

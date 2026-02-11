@@ -47,6 +47,10 @@ body {
   --app-color-warning: #EAA159;
   --app-color-info: #61828E;
 
+  /* Value colors (tables / numeric display) */
+  --app-color-value-positive: var(--p-green-500);
+  --app-color-value-negative: var(--p-red-500);
+
   /* Layout */
   --app-content-padding: 1.5rem;
   --app-sidebar-width-expanded: 250px;
@@ -214,4 +218,18 @@ textarea {
 .analytics-empty-state p {
   font-size: 0.9375rem;
   max-width: 28rem;
+}
+
+/* -- Utility classes -------------------------------- */
+
+.text-positive { color: var(--app-color-value-positive); }
+.text-negative { color: var(--app-color-value-negative); }
+.text-warning  { color: var(--app-color-warning); }
+.text-info     { color: var(--app-color-info); }
+.text-muted    { color: var(--p-surface-400); }
+.text-sm       { font-size: 0.875rem; }
+
+.placeholder-hint {
+  color: var(--p-surface-400);
+  font-size: 0.875rem;
 }

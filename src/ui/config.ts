@@ -15,6 +15,17 @@ export const uiComponentDefaults = {
   chartCard: {
     size: 'default' as const,
   },
+  valueCell: {
+    currencyCode: 'CHF',
+    locale: 'de-CH',
+  },
+  select: {
+    size: undefined as 'small' | 'large' | undefined,
+  },
+  tag: {},
+  inputText: {
+    size: undefined as 'small' | 'large' | undefined,
+  },
 } as const
 
 export const uiColorPresets = {

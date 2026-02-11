@@ -15,10 +15,3 @@ const analytics = useAnalyticsContext()
     </div>
   </div>
 </template>
-
-<style scoped>
-.placeholder-hint {
-  color: var(--p-surface-400);
-  font-size: 0.875rem;
-}
-</style>

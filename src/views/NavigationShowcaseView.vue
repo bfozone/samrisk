@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
+import ShowcaseLayout from '@/components/ShowcaseLayout.vue'
+import DashboardGrid from '@/components/DashboardGrid.vue'
+import DashboardGridItem from '@/components/DashboardGridItem.vue'
+import FlexStack from '@/components/base/FlexStack.vue'
 import AppCard from '@/components/base/AppCard.vue'
 import AppButton from '@/components/base/AppButton.vue'
 import AppDataTable from '@/components/base/AppDataTable.vue'
@@ -55,16 +59,16 @@ const meterValues = [
 </script>
 
 <template>
-  <div class="showcase">
-    <div class="showcase-grid">
+  <ShowcaseLayout>
+    <DashboardGrid>
       <AppCard>
         <template #title>Breadcrumb</template>
         <template #content>
-          <div class="demo-stack">
+          <FlexStack>
             <Breadcrumb :home="home" :model="breadcrumbItems" />
             <Breadcrumb :home="home" :model="[{ label: 'Portfolios' }, { label: 'All Funds' }]" />
             <Breadcrumb :home="home" :model="[{ label: 'Reports' }, { label: 'Monthly' }, { label: 'Jan 2025' }]" />
-          </div>
+          </FlexStack>
         </template>
       </AppCard>
 
@@ -90,92 +94,64 @@ const meterValues = [
         </template>
       </AppCard>
 
-      <AppCard class="span-2">
-        <template #title>Stepper</template>
-        <template #content>
-          <Stepper value="1" linear>
-            <StepList>
-              <Step value="1">Select Portfolio</Step>
-              <Step value="2">Configure Parameters</Step>
-              <Step value="3">Review & Generate</Step>
-            </StepList>
-            <StepPanels>
-              <StepPanel v-slot="{ activateCallback }" value="1">
-                <div class="step-content">
-                  <p>Choose the portfolio for risk report generation. Select from active portfolios with at least 30 days of history.</p>
-                  <div class="step-actions">
-                    <AppButton label="Next" icon="pi pi-arrow-right" icon-pos="right" @click="activateCallback('2')" />
+      <DashboardGridItem :span="2">
+        <AppCard>
+          <template #title>Stepper</template>
+          <template #content>
+            <Stepper value="1" linear>
+              <StepList>
+                <Step value="1">Select Portfolio</Step>
+                <Step value="2">Configure Parameters</Step>
+                <Step value="3">Review & Generate</Step>
+              </StepList>
+              <StepPanels>
+                <StepPanel v-slot="{ activateCallback }" value="1">
+                  <div class="step-content">
+                    <p>Choose the portfolio for risk report generation. Select from active portfolios with at least 30 days of history.</p>
+                    <div class="step-actions">
+                      <AppButton label="Next" icon="pi pi-arrow-right" icon-pos="right" @click="activateCallback('2')" />
+                    </div>
                   </div>
-                </div>
-              </StepPanel>
-              <StepPanel v-slot="{ activateCallback }" value="2">
-                <div class="step-content">
-                  <p>Set the confidence level, lookback window, and benchmark for risk calculations. Defaults are 95% VaR with 252-day lookback.</p>
-                  <div class="step-actions">
-                    <AppButton label="Back" severity="secondary" icon="pi pi-arrow-left" @click="activateCallback('1')" />
-                    <AppButton label="Next" icon="pi pi-arrow-right" icon-pos="right" @click="activateCallback('3')" />
+                </StepPanel>
+                <StepPanel v-slot="{ activateCallback }" value="2">
+                  <div class="step-content">
+                    <p>Set the confidence level, lookback window, and benchmark for risk calculations. Defaults are 95% VaR with 252-day lookback.</p>
+                    <div class="step-actions">
+                      <AppButton label="Back" severity="secondary" icon="pi pi-arrow-left" @click="activateCallback('1')" />
+                      <AppButton label="Next" icon="pi pi-arrow-right" icon-pos="right" @click="activateCallback('3')" />
+                    </div>
                   </div>
-                </div>
-              </StepPanel>
-              <StepPanel v-slot="{ activateCallback }" value="3">
-                <div class="step-content">
-                  <p>Review your selections and generate the report. Processing typically takes 2-5 minutes depending on portfolio complexity.</p>
-                  <div class="step-actions">
-                    <AppButton label="Back" severity="secondary" icon="pi pi-arrow-left" @click="activateCallback('2')" />
-                    <AppButton label="Generate Report" icon="pi pi-file" severity="success" />
+                </StepPanel>
+                <StepPanel v-slot="{ activateCallback }" value="3">
+                  <div class="step-content">
+                    <p>Review your selections and generate the report. Processing typically takes 2-5 minutes depending on portfolio complexity.</p>
+                    <div class="step-actions">
+                      <AppButton label="Back" severity="secondary" icon="pi pi-arrow-left" @click="activateCallback('2')" />
+                      <AppButton label="Generate Report" icon="pi pi-file" severity="success" />
+                    </div>
                   </div>
-                </div>
-              </StepPanel>
-            </StepPanels>
-          </Stepper>
-        </template>
-      </AppCard>
+                </StepPanel>
+              </StepPanels>
+            </Stepper>
+          </template>
+        </AppCard>
+      </DashboardGridItem>
 
-      <AppCard class="span-2">
-        <template #title>Meter Group</template>
-        <template #content>
-          <div class="demo-stack">
-            <MeterGroup :value="meterValues" />
-          </div>
-        </template>
-      </AppCard>
-    </div>
-  </div>
+      <DashboardGridItem :span="2">
+        <AppCard>
+          <template #title>Meter Group</template>
+          <template #content>
+            <FlexStack>
+              <MeterGroup :value="meterValues" />
+            </FlexStack>
+          </template>
+        </AppCard>
+      </DashboardGridItem>
+    </DashboardGrid>
+  </ShowcaseLayout>
 </template>
 
 <style scoped>
-.showcase {
-  max-width: 1400px;
-}
-
-.showcase-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--app-space-lg);
-}
-
-@media (max-width: 768px) {
-  .showcase-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-.span-2 {
-  grid-column: span 2;
-}
-
-@media (max-width: 768px) {
-  .span-2 {
-    grid-column: span 1;
-  }
-}
-
-.demo-stack {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
 .demo-hint {
   font-size: 0.75rem;
   color: var(--p-surface-400);

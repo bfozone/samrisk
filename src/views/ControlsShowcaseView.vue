@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
+import ShowcaseLayout from '@/components/ShowcaseLayout.vue'
+import DashboardGrid from '@/components/DashboardGrid.vue'
+import FlexRow from '@/components/base/FlexRow.vue'
 import AppCard from '@/components/base/AppCard.vue'
 import AppButton from '@/components/base/AppButton.vue'
-import Select from 'primevue/select'
+import AppSelect from '@/components/base/AppSelect.vue'
 import MultiSelect from 'primevue/multiselect'
 import SelectButton from 'primevue/selectbutton'
 import ToggleSwitch from 'primevue/toggleswitch'
@@ -42,39 +45,39 @@ function removeChip(label: string) {
 </script>
 
 <template>
-  <div class="showcase">
-    <div class="showcase-grid">
+  <ShowcaseLayout>
+    <DashboardGrid>
       <AppCard>
         <template #title>Buttons</template>
         <template #content>
-          <div class="demo-row">
+          <FlexRow>
             <AppButton label="Primary" />
             <AppButton label="Secondary" severity="secondary" />
             <AppButton label="Outlined" outlined />
             <AppButton label="Text" text />
-          </div>
-          <div class="demo-row">
+          </FlexRow>
+          <FlexRow class="demo-row-gap">
             <AppButton label="Success" severity="success" />
             <AppButton label="Warning" severity="warn" />
             <AppButton label="Danger" severity="danger" />
-          </div>
-          <div class="demo-row">
+          </FlexRow>
+          <FlexRow class="demo-row-gap">
             <AppButton icon="pi pi-check" aria-label="Check" />
             <AppButton icon="pi pi-bookmark" severity="secondary" outlined aria-label="Bookmark" />
             <AppButton icon="pi pi-search" severity="success" rounded aria-label="Search" />
-          </div>
-          <div class="demo-row">
+          </FlexRow>
+          <FlexRow class="demo-row-gap">
             <AppButton label="Small" size="small" />
             <AppButton label="Normal" />
             <AppButton label="Large" size="large" />
-          </div>
+          </FlexRow>
         </template>
       </AppCard>
 
       <AppCard>
         <template #title>Select</template>
         <template #content>
-          <Select
+          <AppSelect
             v-model="selectedPortfolio"
             :options="portfolioOptions"
             option-label="label"
@@ -139,7 +142,7 @@ function removeChip(label: string) {
       <AppCard>
         <template #title>Filter Chips</template>
         <template #content>
-          <div class="demo-row">
+          <FlexRow>
             <Chip
               v-for="item in chipItems"
               :key="item"
@@ -147,38 +150,15 @@ function removeChip(label: string) {
               removable
               @remove="removeChip(item)"
             />
-          </div>
+          </FlexRow>
         </template>
       </AppCard>
-    </div>
-  </div>
+    </DashboardGrid>
+  </ShowcaseLayout>
 </template>
 
 <style scoped>
-.showcase {
-  max-width: 1400px;
-}
-
-.showcase-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--app-space-lg);
-}
-
-@media (max-width: 768px) {
-  .showcase-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-.demo-row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.demo-row + .demo-row {
+.demo-row-gap {
   margin-top: 0.75rem;
 }
 

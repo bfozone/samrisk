@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
+import ShowcaseLayout from '@/components/ShowcaseLayout.vue'
+import DashboardGrid from '@/components/DashboardGrid.vue'
+import FlexStack from '@/components/base/FlexStack.vue'
 import AppCard from '@/components/base/AppCard.vue'
-import InputText from 'primevue/inputtext'
+import AppInputText from '@/components/base/AppInputText.vue'
 import Textarea from 'primevue/textarea'
 import AutoComplete from 'primevue/autocomplete'
 import InputGroup from 'primevue/inputgroup'
@@ -14,6 +17,7 @@ import InputNumber from 'primevue/inputnumber'
 import FloatLabel from 'primevue/floatlabel'
 import IconField from 'primevue/iconfield'
 import InputIcon from 'primevue/inputicon'
+import InputText from 'primevue/inputtext'
 
 // --- InputText ---
 const name = ref('')
@@ -57,46 +61,46 @@ const searchQuery = ref('')
 </script>
 
 <template>
-  <div class="showcase">
-    <div class="showcase-grid">
+  <ShowcaseLayout>
+    <DashboardGrid>
       <AppCard>
         <template #title>Text Inputs</template>
         <template #content>
-          <div class="demo-stack">
+          <FlexStack gap="lg">
             <FloatLabel>
-              <InputText id="name" v-model="name" class="demo-input" />
+              <AppInputText id="name" v-model="name" class="demo-input" />
               <label for="name">Portfolio Name</label>
             </FloatLabel>
             <FloatLabel>
-              <InputText id="email" v-model="email" class="demo-input" />
+              <AppInputText id="email" v-model="email" class="demo-input" />
               <label for="email">Contact Email</label>
             </FloatLabel>
             <IconField>
               <InputIcon class="pi pi-search" />
-              <InputText v-model="searchQuery" placeholder="Search holdings..." class="demo-input" />
+              <AppInputText v-model="searchQuery" placeholder="Search holdings..." class="demo-input" />
             </IconField>
-            <InputText placeholder="Disabled" disabled class="demo-input" />
-            <InputText placeholder="Invalid input" invalid class="demo-input" />
-          </div>
+            <AppInputText placeholder="Disabled" disabled class="demo-input" />
+            <AppInputText placeholder="Invalid input" invalid class="demo-input" />
+          </FlexStack>
         </template>
       </AppCard>
 
       <AppCard>
         <template #title>Textarea</template>
         <template #content>
-          <div class="demo-stack">
+          <FlexStack gap="lg">
             <FloatLabel>
               <Textarea id="notes" v-model="notes" rows="4" class="demo-input" auto-resize />
               <label for="notes">Risk Commentary</label>
             </FloatLabel>
-          </div>
+          </FlexStack>
         </template>
       </AppCard>
 
       <AppCard>
         <template #title>AutoComplete</template>
         <template #content>
-          <div class="demo-stack">
+          <FlexStack gap="lg">
             <AutoComplete
               v-model="selectedIssuer"
               :suggestions="filteredIssuers"
@@ -105,14 +109,14 @@ const searchQuery = ref('')
               @complete="searchIssuers"
             />
             <span class="demo-hint">Try typing "A", "Swiss", or "UBS"</span>
-          </div>
+          </FlexStack>
         </template>
       </AppCard>
 
       <AppCard>
         <template #title>Input Groups</template>
         <template #content>
-          <div class="demo-stack">
+          <FlexStack gap="lg">
             <InputGroup>
               <InputGroupAddon>CHF</InputGroupAddon>
               <InputNumber v-model="amount" placeholder="Amount" />
@@ -128,14 +132,14 @@ const searchQuery = ref('')
               <InputGroupAddon><i class="pi pi-arrow-right" /></InputGroupAddon>
               <InputText placeholder="YYYY-MM-DD" />
             </InputGroup>
-          </div>
+          </FlexStack>
         </template>
       </AppCard>
 
       <AppCard>
         <template #title>Date Picker</template>
         <template #content>
-          <div class="demo-stack">
+          <FlexStack gap="lg">
             <FloatLabel>
               <DatePicker id="single" v-model="singleDate" date-format="dd.mm.yy" show-icon class="demo-input" />
               <label for="single">Valuation Date</label>
@@ -144,14 +148,14 @@ const searchQuery = ref('')
               <DatePicker id="range" v-model="dateRange" selection-mode="range" date-format="dd.mm.yy" show-icon class="demo-input" />
               <label for="range">Date Range</label>
             </FloatLabel>
-          </div>
+          </FlexStack>
         </template>
       </AppCard>
 
       <AppCard>
         <template #title>Slider</template>
         <template #content>
-          <div class="demo-stack">
+          <FlexStack gap="lg">
             <div>
               <span class="demo-label">Confidence Level: {{ confidence }}%</span>
               <Slider v-model="confidence" :min="80" :max="99" />
@@ -160,7 +164,7 @@ const searchQuery = ref('')
               <span class="demo-label">Weight Range: {{ rangeValues[0] }}% - {{ rangeValues[1] }}%</span>
               <Slider v-model="rangeValues" range :min="0" :max="100" />
             </div>
-          </div>
+          </FlexStack>
         </template>
       </AppCard>
 
@@ -179,35 +183,13 @@ const searchQuery = ref('')
           </div>
         </template>
       </AppCard>
-    </div>
-  </div>
+    </DashboardGrid>
+  </ShowcaseLayout>
 </template>
 
 <style scoped>
-.showcase {
-  max-width: 1400px;
-}
-
-.showcase-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--app-space-lg);
-}
-
-@media (max-width: 768px) {
-  .showcase-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
 .demo-input {
   width: 100%;
-}
-
-.demo-stack {
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
 }
 
 .demo-label {

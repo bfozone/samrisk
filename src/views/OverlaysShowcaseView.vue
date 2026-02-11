@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
+import ShowcaseLayout from '@/components/ShowcaseLayout.vue'
+import DashboardGrid from '@/components/DashboardGrid.vue'
 import AppCard from '@/components/base/AppCard.vue'
 import AppButton from '@/components/base/AppButton.vue'
 import Dialog from 'primevue/dialog'
@@ -24,8 +26,8 @@ function togglePopover(event: Event) {
 </script>
 
 <template>
-  <div class="showcase">
-    <div class="showcase-grid">
+  <ShowcaseLayout>
+    <DashboardGrid>
       <AppCard>
         <template #title>Dialog</template>
         <template #content>
@@ -104,27 +106,11 @@ function togglePopover(event: Event) {
           </Accordion>
         </template>
       </AppCard>
-    </div>
-  </div>
+    </DashboardGrid>
+  </ShowcaseLayout>
 </template>
 
 <style scoped>
-.showcase {
-  max-width: 1400px;
-}
-
-.showcase-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--app-space-lg);
-}
-
-@media (max-width: 768px) {
-  .showcase-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
 .popover-content {
   display: flex;
   flex-direction: column;

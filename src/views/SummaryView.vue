@@ -4,8 +4,7 @@ import { useAnalyticsContext } from '@/stores/analytics'
 import ChartCard from '@/components/ChartCard.vue'
 import StatCard from '@/components/StatCard.vue'
 import { useVaR, useExposures, useAuM, useTrackingError, usePnL, useLiquidity } from '@/composables/useRisk'
-import { chartColors } from '@/theme/preset'
-import type { EChartsOption } from 'echarts'
+import { lineChart, barChart, pieChart, formatValue } from '@/charts'
 
 const analytics = useAnalyticsContext()
 const portfolioId = computed(() => analytics.portfolioId ?? '')
@@ -19,15 +18,7 @@ const { data: liqData, isLoading: liqLoading } = useLiquidity(portfolioId)
 
 const anyLoading = computed(() => aumLoading.value || pnlLoading.value || varLoading.value || teLoading.value)
 
-// --- Formatters ---
-
-function fmtEur(v: number): string {
-  const abs = Math.abs(v)
-  if (abs >= 1_000_000_000) return `${(v / 1_000_000_000).toFixed(1)}B`
-  if (abs >= 1_000_000) return `${(v / 1_000_000).toFixed(1)}M`
-  if (abs >= 1_000) return `${(v / 1_000).toFixed(0)}K`
-  return v.toFixed(0)
-}
+// --- Formatters (stat cards only) ---
 
 function fmtPct(v: number): string {
   return `${v >= 0 ? '+' : ''}${v.toFixed(2)}%`
@@ -42,7 +33,7 @@ const aumStat = computed(() => {
   const prev = items[items.length - 2]!
   const pctChange = ((latest.aum - prev.aum) / prev.aum) * 100
   return {
-    value: `EUR ${fmtEur(latest.aum)}`,
+    value: formatValue(latest.aum, 'currency'),
     change: fmtPct(pctChange),
     trend: pctChange > 0.01 ? 'up' as const : pctChange < -0.01 ? 'down' as const : 'flat' as const,
   }
@@ -54,8 +45,8 @@ const pnlStat = computed(() => {
   const latest = items[items.length - 1]!
   const v = latest.daily
   return {
-    value: `EUR ${v >= 0 ? '+' : ''}${fmtEur(v)}`,
-    change: `MTD ${fmtEur(latest.mtd)}`,
+    value: `${v >= 0 ? '+' : ''}${formatValue(v, 'currency')}`,
+    change: `MTD ${formatValue(latest.mtd, 'currency')}`,
     trend: v > 0 ? 'up' as const : v < 0 ? 'down' as const : 'flat' as const,
   }
 })
@@ -86,112 +77,64 @@ const teStat = computed(() => {
 
 // --- Charts ---
 
-const aumChartOption = computed<EChartsOption>(() => {
+const aumChartOption = computed(() => {
   const items = aumData.value ?? []
-  return {
-    color: [chartColors.tealDark],
-    tooltip: { trigger: 'axis', valueFormatter: (v) => `EUR ${fmtEur(v as number)}` },
-    xAxis: { type: 'category', data: items.map((d) => d.date), boundaryGap: false },
-    yAxis: { type: 'value', axisLabel: { formatter: (v: number) => fmtEur(v) } },
-    series: [{
-      name: 'AuM',
-      type: 'line',
-      data: items.map((d) => d.aum),
-      smooth: true,
-      showSymbol: false,
-      areaStyle: { opacity: 0.15 },
-    }],
-    grid: { left: 60, right: 16, top: 16, bottom: 28 },
-  }
+  return lineChart({
+    categories: items.map((d) => d.date),
+    series: [{ name: 'AuM', data: items.map((d) => d.aum), area: true }],
+    format: 'currency',
+  }, { color: ['#2C5969'] })
 })
 
-const pnlChartOption = computed<EChartsOption>(() => {
+const pnlChartOption = computed(() => {
   const items = pnlData.value ?? []
-  return {
-    color: [chartColors.olive],
-    tooltip: { trigger: 'axis', valueFormatter: (v) => `EUR ${fmtEur(v as number)}` },
-    xAxis: { type: 'category', data: items.map((d) => d.date), boundaryGap: false },
-    yAxis: { type: 'value', axisLabel: { formatter: (v: number) => fmtEur(v) } },
-    series: [{
-      name: 'Cumulative P&L',
-      type: 'line',
-      data: items.map((d) => d.cumulative),
-      smooth: true,
-      showSymbol: false,
-      markLine: {
-        silent: true,
-        symbol: 'none',
-        lineStyle: { color: chartColors.grey, type: 'dashed' },
-        data: [{ yAxis: 0 }],
-      },
-    }],
-    grid: { left: 60, right: 16, top: 16, bottom: 28 },
-  }
+  return lineChart({
+    categories: items.map((d) => d.date),
+    series: [{ name: 'Cumulative P&L', data: items.map((d) => d.cumulative) }],
+    format: 'currency',
+    zeroLine: true,
+  }, { color: ['#A5B077'] })
 })
 
-const varChartOption = computed<EChartsOption>(() => {
+const varChartOption = computed(() => {
   const items = varData.value ?? []
-  return {
-    color: [chartColors.red, chartColors.info],
-    tooltip: { trigger: 'axis' },
-    xAxis: { type: 'category', data: items.map((d) => d.date), boundaryGap: false },
-    yAxis: { type: 'value', name: 'VaR (%)' },
+  return lineChart({
+    categories: items.map((d) => d.date),
     series: [
-      { name: 'VaR 95%', type: 'line', data: items.map((d) => d.var95), smooth: true, showSymbol: false },
-      { name: 'VaR 99%', type: 'line', data: items.map((d) => d.var99), smooth: true, showSymbol: false },
+      { name: 'VaR 95%', data: items.map((d) => d.var95) },
+      { name: 'VaR 99%', data: items.map((d) => d.var99) },
     ],
-    grid: { left: 48, right: 16, top: 32, bottom: 28 },
-  }
+  }, { color: ['#ee000c', '#61828E'], yAxis: { name: 'VaR (%)' } })
 })
 
-const exposureChartOption = computed<EChartsOption>(() => {
+const exposureChartOption = computed(() => {
   const items = exposureData.value ?? []
-  return {
-    color: chartColors.series,
-    tooltip: { trigger: 'item' },
-    series: [{
-      type: 'pie',
-      radius: ['40%', '70%'],
-      data: items.map((d) => ({ value: d.percentage, name: d.category })),
-      label: { show: true, formatter: '{b}: {d}%' },
-    }],
-  }
+  return pieChart({
+    data: items.map((d) => ({ value: d.percentage, name: d.category })),
+  })
 })
 
-const teChartOption = computed<EChartsOption>(() => {
+const teChartOption = computed(() => {
   const items = teData.value ?? []
-  return {
-    color: [chartColors.amber, chartColors.teal],
-    tooltip: { trigger: 'axis' },
-    xAxis: { type: 'category', data: items.map((d) => d.date), boundaryGap: false },
-    yAxis: [
-      { type: 'value', name: 'TE (%)', position: 'left' },
-      { type: 'value', name: 'Info Ratio', position: 'right' },
-    ],
+  return lineChart({
+    categories: items.map((d) => d.date),
     series: [
-      { name: 'Tracking Error', type: 'line', data: items.map((d) => d.te), smooth: true, showSymbol: false, yAxisIndex: 0 },
-      { name: 'Info Ratio', type: 'line', data: items.map((d) => d.infoRatio), smooth: true, showSymbol: false, yAxisIndex: 1 },
+      { name: 'Tracking Error', data: items.map((d) => d.te) },
+      { name: 'Info Ratio', data: items.map((d) => d.infoRatio), yAxisIndex: 1 },
     ],
-    grid: { left: 48, right: 48, top: 32, bottom: 28 },
-  }
+    format: 'percent',
+    rightFormat: 'number',
+  }, { color: ['#EAA159', '#61828E'], yAxis: [{ name: 'TE (%)' }, { name: 'Info Ratio' }] })
 })
 
-const liqChartOption = computed<EChartsOption>(() => {
+const liqChartOption = computed(() => {
   const items = liqData.value ?? []
-  return {
-    color: [chartColors.tealDark],
-    tooltip: { trigger: 'axis', valueFormatter: (v) => `${v}%` },
-    xAxis: { type: 'value', max: 100, axisLabel: { formatter: '{value}%' } },
-    yAxis: { type: 'category', data: items.map((d) => d.horizon) },
-    series: [{
-      name: 'Liquidity',
-      type: 'bar',
-      data: items.map((d) => d.percentage),
-      barMaxWidth: 28,
-      label: { show: true, position: 'right', formatter: '{c}%' },
-    }],
-    grid: { left: 80, right: 48, top: 8, bottom: 28, containLabel: false },
-  }
+  return barChart({
+    categories: items.map((d) => d.horizon),
+    series: [{ name: 'Liquidity', data: items.map((d) => d.percentage) }],
+    format: 'percent',
+    horizontal: true,
+  }, { color: ['#2C5969'] })
 })
 </script>
 

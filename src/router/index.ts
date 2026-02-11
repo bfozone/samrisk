@@ -59,6 +59,48 @@ const router = createRouter({
       meta: { title: 'Reports' },
     },
     {
+      path: '/showcase',
+      name: 'showcase',
+      component: () => import('@/views/ShowcaseView.vue'),
+      meta: { title: 'Charts' },
+    },
+    {
+      path: '/showcase/controls',
+      name: 'showcase-controls',
+      component: () => import('@/views/ControlsShowcaseView.vue'),
+      meta: { title: 'Controls' },
+    },
+    {
+      path: '/showcase/feedback',
+      name: 'showcase-feedback',
+      component: () => import('@/views/FeedbackShowcaseView.vue'),
+      meta: { title: 'Feedback' },
+    },
+    {
+      path: '/showcase/overlays',
+      name: 'showcase-overlays',
+      component: () => import('@/views/OverlaysShowcaseView.vue'),
+      meta: { title: 'Overlays' },
+    },
+    {
+      path: '/showcase/tables',
+      name: 'showcase-tables',
+      component: () => import('@/views/TablesShowcaseView.vue'),
+      meta: { title: 'Tables' },
+    },
+    {
+      path: '/showcase/forms',
+      name: 'showcase-forms',
+      component: () => import('@/views/FormsShowcaseView.vue'),
+      meta: { title: 'Forms' },
+    },
+    {
+      path: '/showcase/navigation',
+      name: 'showcase-navigation',
+      component: () => import('@/views/NavigationShowcaseView.vue'),
+      meta: { title: 'Navigation' },
+    },
+    {
       path: '/:pathMatch(.*)*',
       name: 'not-found',
       component: () => import('@/views/NotFoundView.vue'),

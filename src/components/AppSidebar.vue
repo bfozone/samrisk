@@ -22,6 +22,13 @@ const navItems = [
   { label: 'Risk', icon: 'pi pi-shield', to: '/risk' },
   { label: 'Portfolios', icon: 'pi pi-briefcase', to: '/portfolios', section: 'Management' },
   { label: 'Reports', icon: 'pi pi-file', to: '/reports' },
+  { label: 'Charts', icon: 'pi pi-chart-bar', to: '/showcase', section: 'Showcase' },
+  { label: 'Controls', icon: 'pi pi-sliders-h', to: '/showcase/controls' },
+  { label: 'Feedback', icon: 'pi pi-comment', to: '/showcase/feedback' },
+  { label: 'Overlays', icon: 'pi pi-clone', to: '/showcase/overlays' },
+  { label: 'Tables', icon: 'pi pi-table', to: '/showcase/tables' },
+  { label: 'Forms', icon: 'pi pi-pen-to-square', to: '/showcase/forms' },
+  { label: 'Navigation', icon: 'pi pi-compass', to: '/showcase/navigation' },
 ]
 
 const showLabels = computed(() => appStore.sidebarExpanded || (appStore.isMobile && appStore.mobileOpen))
@@ -30,7 +37,10 @@ const showTooltip = computed(() => appStore.sidebarCollapsed && !appStore.isMobi
 const env = import.meta.env.MODE === 'production' ? 'PROD' : 'DEV'
 
 function isActive(to: string) {
-  return route.path === to || route.path.startsWith(to + '/')
+  if (route.path === to) return true
+  if (!route.path.startsWith(to + '/')) return false
+  return !navItems.some(item => item.to !== to && item.to.length > to.length
+    && (route.path === item.to || route.path.startsWith(item.to + '/')))
 }
 
 const analyticsRoutes = new Set(['/summary', '/guidelines', '/performance', '/risk'])
@@ -250,7 +260,7 @@ function navigate(to: string) {
 
 .env-tag.dev {
   background: rgba(238, 0, 12, 0.15);
-  color: var(--p-primary-color);
+  color: #ee000c;
 }
 
 .env-tag.prod {
@@ -381,7 +391,7 @@ function navigate(to: string) {
 }
 
 .nav-item.active .nav-icon {
-  color: var(--p-primary-color);
+  color: #ee000c;
 }
 
 .nav-icon {

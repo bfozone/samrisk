@@ -2,6 +2,7 @@ import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import { VueQueryPlugin } from '@tanstack/vue-query'
 import PrimeVue from 'primevue/config'
+import ToastService from 'primevue/toastservice'
 import RiskAppPreset from './theme/preset'
 import router from './router'
 import App from './App.vue'
@@ -21,9 +22,13 @@ async function bootstrap() {
   app.use(createPinia())
   app.use(router)
   app.use(VueQueryPlugin)
+  app.use(ToastService)
   app.use(PrimeVue, {
     theme: {
       preset: RiskAppPreset,
+      options: {
+        darkModeSelector: '.p-dark',
+      },
     },
   })
 

@@ -46,31 +46,31 @@ const RiskAppPreset = definePreset(Aura, {
   },
   semantic: {
     primary: {
-      50: '{brand.50}',
-      100: '{brand.100}',
-      200: '{brand.200}',
-      300: '{brand.300}',
-      400: '{brand.400}',
-      500: '{brand.500}',
-      600: '{brand.600}',
-      700: '{brand.700}',
-      800: '{brand.800}',
-      900: '{brand.900}',
-      950: '{brand.950}',
+      50: '{shark.50}',
+      100: '{shark.100}',
+      200: '{shark.200}',
+      300: '{shark.300}',
+      400: '{shark.400}',
+      500: '{shark.500}',
+      600: '{shark.600}',
+      700: '{shark.700}',
+      800: '{shark.800}',
+      900: '{shark.900}',
+      950: '{shark.950}',
     },
     colorScheme: {
       light: {
         primary: {
-          color: '{brand.500}',
+          color: '{shark.900}',
           inverseColor: '#ffffff',
-          hoverColor: '{brand.600}',
-          activeColor: '{brand.700}',
+          hoverColor: '{shark.800}',
+          activeColor: '{shark.950}',
         },
         highlight: {
-          background: '{brand.50}',
-          focusBackground: '{brand.100}',
-          color: '{brand.500}',
-          focusColor: '{brand.600}',
+          background: '{shark.50}',
+          focusBackground: '{shark.100}',
+          color: '{shark.900}',
+          focusColor: '{shark.950}',
         },
         surface: {
           0: '#ffffff',
@@ -123,15 +123,15 @@ const RiskAppPreset = definePreset(Aura, {
         light: {
           root: {
             primary: {
-              background: '{brand.500}',
-              hoverBackground: '{brand.600}',
-              activeBackground: '{brand.700}',
+              background: '{shark.900}',
+              hoverBackground: '{shark.800}',
+              activeBackground: '{shark.950}',
               color: '#ffffff',
               hoverColor: '#ffffff',
               activeColor: '#ffffff',
-              borderColor: '{brand.500}',
-              hoverBorderColor: '{brand.600}',
-              activeBorderColor: '{brand.700}',
+              borderColor: '{shark.900}',
+              hoverBorderColor: '{shark.800}',
+              activeBorderColor: '{shark.950}',
             },
             secondary: {
               background: '#ffffff',
@@ -165,7 +165,7 @@ const RiskAppPreset = definePreset(Aura, {
       root: {
         borderColor: '{shark.300}',
         hoverBorderColor: '{shark.400}',
-        focusBorderColor: '{brand.500}',
+        focusBorderColor: '{shark.900}',
         invalidBorderColor: '{brand.500}',
         paddingX: '0.875rem',
         paddingY: '0.625rem',
@@ -175,7 +175,7 @@ const RiskAppPreset = definePreset(Aura, {
       root: {
         borderColor: '{shark.300}',
         hoverBorderColor: '{shark.400}',
-        focusBorderColor: '{brand.500}',
+        focusBorderColor: '{shark.900}',
         invalidBorderColor: '{brand.500}',
       },
     },
@@ -183,7 +183,7 @@ const RiskAppPreset = definePreset(Aura, {
       root: {
         borderColor: '{shark.300}',
         hoverBorderColor: '{shark.400}',
-        focusBorderColor: '{brand.500}',
+        focusBorderColor: '{shark.900}',
         invalidBorderColor: '{brand.500}',
       },
     },
@@ -252,15 +252,15 @@ export const chartColors = {
   warning: '#EAA159',
   info: '#61828E',
 
-  // Series palette for multi-series charts
+  // Series palette for multi-series charts (red reserved for negative semantics)
   series: [
-    '#ee000c', // red
     '#2C5969', // teal
     '#A5B077', // olive
     '#EAA159', // amber
+    '#61828E', // light teal
     '#e87c78', // rose
     '#586038', // dark olive
     '#e38121', // dark amber
-    '#61828E', // light teal
+    '#ee000c', // red (last - avoid as default series color)
   ],
 }

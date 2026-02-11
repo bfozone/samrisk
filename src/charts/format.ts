@@ -11,7 +11,7 @@ function compactNumber(v: number): string {
 export function formatValue(v: number, style: FormatStyle): string {
   switch (style) {
     case 'currency':
-      return `CHF ${compactNumber(v)}`
+      return `EUR ${compactNumber(v)}`
     case 'percent':
       return `${v.toFixed(2)}%`
     case 'number':

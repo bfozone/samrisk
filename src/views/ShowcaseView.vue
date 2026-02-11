@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import ChartCard from '@/components/ChartCard.vue'
+import DashboardGrid from '@/components/DashboardGrid.vue'
+import { uiColorPresets } from '@/ui/config'
 import {
   lineChart, barChart, pieChart, treemapChart, sunburstChart, heatmapChart,
   scatterChart, candlestickChart, boxplotChart, radarChart, gaugeChart, sankeyChart, treeChart,
@@ -197,11 +199,7 @@ const radarOption = radarChart({
 const gaugeOption = gaugeChart({
   value: 73,
   name: 'VaR Limit',
-  thresholds: [
-    [0.6, '#A5B077'],
-    [0.8, '#EAA159'],
-    [1, '#ee000c'],
-  ],
+  thresholds: uiColorPresets.gaugeThresholds,
 })
 
 // --- Sankey: Exposure Flow ---
@@ -301,14 +299,14 @@ const calendarHeatmapOption = calendarHeatmapChart({
   year: '2025',
   min: -2,
   max: 2,
-  colorRange: ['#ee000c', '#A5B077'],
+  colorRange: uiColorPresets.calendarHeatmapRange,
   format: (v: number) => `${v >= 0 ? '+' : ''}${v.toFixed(2)}%`,
 })
 </script>
 
 <template>
   <div class="showcase">
-    <div class="showcase-grid">
+    <DashboardGrid>
       <ChartCard title="Line - Time Series" :option="lineTimeSeriesOption" />
       <ChartCard title="Line - Dual Axis" :option="lineDualAxisOption" />
       <ChartCard title="Bar - Vertical Stacked" :option="barStackedOption" />
@@ -326,25 +324,13 @@ const calendarHeatmapOption = calendarHeatmapChart({
       <ChartCard title="Sankey - Exposure Flow" :option="sankeyOption" />
       <ChartCard title="Tree - Fund Structure" :option="treeOption" />
       <ChartCard title="Radar - Multi-Fund Comparison" :option="radarComparisonOption" />
-      <ChartCard title="Calendar Heatmap - Daily P&L" :option="calendarHeatmapOption" height="220px" />
-    </div>
+      <ChartCard title="Calendar Heatmap - Daily P&L" :option="calendarHeatmapOption" size="sm" />
+    </DashboardGrid>
   </div>
 </template>
 
 <style scoped>
 .showcase {
   max-width: 1400px;
-}
-
-.showcase-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--app-space-lg);
-}
-
-@media (max-width: 768px) {
-  .showcase-grid {
-    grid-template-columns: 1fr;
-  }
 }
 </style>

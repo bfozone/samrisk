@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-import Card from 'primevue/card'
-import Button from 'primevue/button'
+import AppCard from '@/components/base/AppCard.vue'
+import AppButton from '@/components/base/AppButton.vue'
 import Select from 'primevue/select'
 import MultiSelect from 'primevue/multiselect'
 import SelectButton from 'primevue/selectbutton'
@@ -44,34 +44,34 @@ function removeChip(label: string) {
 <template>
   <div class="showcase">
     <div class="showcase-grid">
-      <Card>
+      <AppCard>
         <template #title>Buttons</template>
         <template #content>
           <div class="demo-row">
-            <Button label="Primary" />
-            <Button label="Secondary" severity="secondary" />
-            <Button label="Outlined" outlined />
-            <Button label="Text" text />
+            <AppButton label="Primary" />
+            <AppButton label="Secondary" severity="secondary" />
+            <AppButton label="Outlined" outlined />
+            <AppButton label="Text" text />
           </div>
           <div class="demo-row">
-            <Button label="Success" severity="success" />
-            <Button label="Warning" severity="warn" />
-            <Button label="Danger" severity="danger" />
+            <AppButton label="Success" severity="success" />
+            <AppButton label="Warning" severity="warn" />
+            <AppButton label="Danger" severity="danger" />
           </div>
           <div class="demo-row">
-            <Button icon="pi pi-check" aria-label="Check" />
-            <Button icon="pi pi-bookmark" severity="secondary" outlined aria-label="Bookmark" />
-            <Button icon="pi pi-search" severity="success" rounded aria-label="Search" />
+            <AppButton icon="pi pi-check" aria-label="Check" />
+            <AppButton icon="pi pi-bookmark" severity="secondary" outlined aria-label="Bookmark" />
+            <AppButton icon="pi pi-search" severity="success" rounded aria-label="Search" />
           </div>
           <div class="demo-row">
-            <Button label="Small" size="small" />
-            <Button label="Normal" />
-            <Button label="Large" size="large" />
+            <AppButton label="Small" size="small" />
+            <AppButton label="Normal" />
+            <AppButton label="Large" size="large" />
           </div>
         </template>
-      </Card>
+      </AppCard>
 
-      <Card>
+      <AppCard>
         <template #title>Select</template>
         <template #content>
           <Select
@@ -83,9 +83,9 @@ function removeChip(label: string) {
             class="demo-input"
           />
         </template>
-      </Card>
+      </AppCard>
 
-      <Card>
+      <AppCard>
         <template #title>MultiSelect</template>
         <template #content>
           <MultiSelect
@@ -98,16 +98,16 @@ function removeChip(label: string) {
             class="demo-input"
           />
         </template>
-      </Card>
+      </AppCard>
 
-      <Card>
+      <AppCard>
         <template #title>Segmented Toggle</template>
         <template #content>
           <SelectButton v-model="selectedFrequency" :options="frequencyOptions" />
         </template>
-      </Card>
+      </AppCard>
 
-      <Card>
+      <AppCard>
         <template #title>Toggle Switch</template>
         <template #content>
           <div class="demo-toggles">
@@ -121,9 +121,9 @@ function removeChip(label: string) {
             </div>
           </div>
         </template>
-      </Card>
+      </AppCard>
 
-      <Card>
+      <AppCard>
         <template #title>Number Input</template>
         <template #content>
           <InputNumber
@@ -134,9 +134,9 @@ function removeChip(label: string) {
             class="demo-input"
           />
         </template>
-      </Card>
+      </AppCard>
 
-      <Card>
+      <AppCard>
         <template #title>Filter Chips</template>
         <template #content>
           <div class="demo-row">
@@ -149,7 +149,7 @@ function removeChip(label: string) {
             />
           </div>
         </template>
-      </Card>
+      </AppCard>
     </div>
   </div>
 </template>

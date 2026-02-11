@@ -2,8 +2,8 @@
 import { ref, computed } from 'vue'
 import { FilterMatchMode } from '@primevue/core/api'
 
-import Card from 'primevue/card'
-import DataTable from 'primevue/datatable'
+import AppCard from '@/components/base/AppCard.vue'
+import AppDataTable from '@/components/base/AppDataTable.vue'
 import Column from 'primevue/column'
 import ColumnGroup from 'primevue/columngroup'
 import Row from 'primevue/row'
@@ -295,10 +295,10 @@ const totalTarget = computed(() => editableData.value.reduce((s, r) => s + r.tar
   <div class="showcase">
     <!-- Basic + Selection (2-col) -->
     <div class="showcase-grid">
-      <Card>
+      <AppCard>
         <template #title>Basic with Sorting</template>
         <template #content>
-          <DataTable :value="holdings" striped-rows sort-field="weight" :sort-order="-1" size="small">
+          <AppDataTable :value="holdings" striped-rows sort-field="weight" :sort-order="-1" size="small">
             <Column field="name" header="Instrument" sortable />
             <Column field="asset" header="Asset Class" sortable />
             <Column field="sector" header="Sector" sortable />
@@ -312,14 +312,14 @@ const totalTarget = computed(() => editableData.value.reduce((s, r) => s + r.tar
                 </span>
               </template>
             </Column>
-          </DataTable>
+          </AppDataTable>
         </template>
-      </Card>
+      </AppCard>
 
-      <Card>
+      <AppCard>
         <template #title>Row Selection</template>
         <template #content>
-          <DataTable v-model:selection="selectedOrders" :value="orders" data-key="id" size="small">
+          <AppDataTable v-model:selection="selectedOrders" :value="orders" data-key="id" size="small">
             <Column selection-mode="multiple" header-style="width: 3rem" />
             <Column field="id" header="Order ID" />
             <Column field="portfolio" header="Portfolio" />
@@ -332,16 +332,16 @@ const totalTarget = computed(() => editableData.value.reduce((s, r) => s + r.tar
             <Column field="notional" header="Notional">
               <template #body="{ data }">{{ fmtCurrency(data.notional) }}</template>
             </Column>
-          </DataTable>
+          </AppDataTable>
         </template>
-      </Card>
+      </AppCard>
     </div>
 
     <!-- Sparklines + Inline Bars (full width) -->
-    <Card class="section-gap">
+    <AppCard class="section-gap">
       <template #title>Sparklines + Inline Bars</template>
       <template #content>
-        <DataTable :value="sparklineData" striped-rows size="small">
+        <AppDataTable :value="sparklineData" striped-rows size="small">
           <Column field="name" header="Portfolio" sortable />
           <Column field="aum" header="AuM" sortable>
             <template #body="{ data }">{{ fmtCurrency(data.aum) }}</template>
@@ -375,15 +375,15 @@ const totalTarget = computed(() => editableData.value.reduce((s, r) => s + r.tar
               </div>
             </template>
           </Column>
-        </DataTable>
+        </AppDataTable>
       </template>
-    </Card>
+    </AppCard>
 
     <!-- Heatmap Cells (full width) -->
-    <Card class="section-gap">
+    <AppCard class="section-gap">
       <template #title>Heatmap Cells</template>
       <template #content>
-        <DataTable :value="heatmapData" size="small">
+        <AppDataTable :value="heatmapData" size="small">
           <Column field="name" header="Portfolio" frozen style="min-width: 9rem" />
           <Column v-for="(m, i) in months" :key="m" :header="m" style="min-width: 4.5rem; text-align: center">
             <template #body="{ data }">
@@ -394,15 +394,15 @@ const totalTarget = computed(() => editableData.value.reduce((s, r) => s + r.tar
               </div>
             </template>
           </Column>
-        </DataTable>
+        </AppDataTable>
       </template>
-    </Card>
+    </AppCard>
 
     <!-- Column Filters (full width) -->
-    <Card class="section-gap">
+    <AppCard class="section-gap">
       <template #title>Column Filters</template>
       <template #content>
-        <DataTable
+        <AppDataTable
           v-model:filters="filters"
           :value="filterableData"
           paginator
@@ -443,13 +443,13 @@ const totalTarget = computed(() => editableData.value.reduce((s, r) => s + r.tar
               <Tag :value="data.status" :severity="data.status === 'Active' ? 'success' : data.status === 'Watchlist' ? 'warn' : 'danger'" />
             </template>
           </Column>
-        </DataTable>
+        </AppDataTable>
       </template>
-    </Card>
+    </AppCard>
 
     <!-- TreeTable + Editable (2-col) -->
     <div class="showcase-grid section-gap">
-      <Card>
+      <AppCard>
         <template #title>TreeTable</template>
         <template #content>
           <TreeTable :value="treeNodes" size="small">
@@ -469,12 +469,12 @@ const totalTarget = computed(() => editableData.value.reduce((s, r) => s + r.tar
             </Column>
           </TreeTable>
         </template>
-      </Card>
+      </AppCard>
 
-      <Card>
+      <AppCard>
         <template #title>Editable Cells</template>
         <template #content>
-          <DataTable
+          <AppDataTable
             v-model:editing-rows="editingRows"
             :value="editableData"
             edit-mode="row"
@@ -499,19 +499,19 @@ const totalTarget = computed(() => editableData.value.reduce((s, r) => s + r.tar
               </template>
             </Column>
             <Column :row-editor="true" style="width: 5rem; text-align: center" />
-          </DataTable>
+          </AppDataTable>
           <div class="edit-footer">
             Total target: <strong :class="{ 'over-limit': totalTarget > 100 }">{{ totalTarget.toFixed(1) }}%</strong>
           </div>
         </template>
-      </Card>
+      </AppCard>
     </div>
 
     <!-- Paginated (full width) -->
-    <Card class="section-gap">
+    <AppCard class="section-gap">
       <template #title>Paginated</template>
       <template #content>
-        <DataTable
+        <AppDataTable
           :value="trades"
           paginator
           :rows="8"
@@ -536,15 +536,15 @@ const totalTarget = computed(() => editableData.value.reduce((s, r) => s + r.tar
               <Tag :value="data.status" :severity="statusSeverity(data.status)" />
             </template>
           </Column>
-        </DataTable>
+        </AppDataTable>
       </template>
-    </Card>
+    </AppCard>
 
     <!-- Frozen + Grouped (full width) -->
-    <Card class="section-gap">
+    <AppCard class="section-gap">
       <template #title>Frozen Columns</template>
       <template #content>
-        <DataTable :value="riskMetrics" scrollable scroll-height="400px" striped-rows size="small">
+        <AppDataTable :value="riskMetrics" scrollable scroll-height="400px" striped-rows size="small">
           <Column field="name" header="Portfolio" frozen style="min-width: 10rem" />
           <Column field="aum" header="AuM (CHF k)" style="min-width: 8rem">
             <template #body="{ data }">{{ fmtCurrency(data.aum) }}</template>
@@ -578,16 +578,16 @@ const totalTarget = computed(() => editableData.value.reduce((s, r) => s + r.tar
           <Column field="volatility" header="Volatility" style="min-width: 7rem">
             <template #body="{ data }">{{ data.volatility.toFixed(1) }}%</template>
           </Column>
-        </DataTable>
+        </AppDataTable>
       </template>
-    </Card>
+    </AppCard>
 
     <!-- Expandable + Grouped Headers (2-col) -->
     <div class="showcase-grid section-gap">
-      <Card>
+      <AppCard>
         <template #title>Expandable Rows</template>
         <template #content>
-          <DataTable v-model:expanded-rows="expandedRows" :value="positions" data-key="name" size="small">
+          <AppDataTable v-model:expanded-rows="expandedRows" :value="positions" data-key="name" size="small">
             <Column expander style="width: 3rem" />
             <Column field="name" header="Asset Class" />
             <Column field="weight" header="Weight">
@@ -601,7 +601,7 @@ const totalTarget = computed(() => editableData.value.reduce((s, r) => s + r.tar
               </template>
             </Column>
             <template #expansion="{ data }">
-              <DataTable :value="data.children" size="small">
+              <AppDataTable :value="data.children" size="small">
                 <Column field="name" header="Sub-Class" />
                 <Column field="weight" header="Weight">
                   <template #body="{ data: child }">{{ child.weight.toFixed(1) }}%</template>
@@ -613,16 +613,16 @@ const totalTarget = computed(() => editableData.value.reduce((s, r) => s + r.tar
                     </span>
                   </template>
                 </Column>
-              </DataTable>
+              </AppDataTable>
             </template>
-          </DataTable>
+          </AppDataTable>
         </template>
-      </Card>
+      </AppCard>
 
-      <Card>
+      <AppCard>
         <template #title>Grouped Headers</template>
         <template #content>
-          <DataTable :value="groupedData" size="small">
+          <AppDataTable :value="groupedData" size="small">
             <ColumnGroup type="header">
               <Row>
                 <Column header="Portfolio" :rowspan="2" />
@@ -673,9 +673,9 @@ const totalTarget = computed(() => editableData.value.reduce((s, r) => s + r.tar
                 <strong style="color: var(--p-red-500)">{{ data.totalStress.toFixed(1) }}</strong>
               </template>
             </Column>
-          </DataTable>
+          </AppDataTable>
         </template>
-      </Card>
+      </AppCard>
     </div>
   </div>
 </template>

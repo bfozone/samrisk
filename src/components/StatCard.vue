@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import Card from 'primevue/card'
 import Skeleton from 'primevue/skeleton'
+import AppCard from '@/components/base/AppCard.vue'
 
 defineProps<{
   label: string
@@ -12,7 +12,7 @@ defineProps<{
 </script>
 
 <template>
-  <Card class="stat-card">
+  <AppCard class="stat-card" compact>
     <template #content>
       <Skeleton v-if="loading" height="3.5rem" width="100%" />
       <template v-else>
@@ -25,7 +25,7 @@ defineProps<{
         </span>
       </template>
     </template>
-  </Card>
+  </AppCard>
 </template>
 
 <style scoped>

@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { useToast } from 'primevue/usetoast'
 
-import Card from 'primevue/card'
-import Button from 'primevue/button'
+import AppCard from '@/components/base/AppCard.vue'
+import AppButton from '@/components/base/AppButton.vue'
 import Tag from 'primevue/tag'
 import Message from 'primevue/message'
 import Toast from 'primevue/toast'
@@ -14,7 +14,7 @@ const toast = useToast()
 <template>
   <div class="showcase">
     <div class="showcase-grid">
-      <Card>
+      <AppCard>
         <template #title>Tags</template>
         <template #content>
           <div class="demo-row">
@@ -25,9 +25,9 @@ const toast = useToast()
             <Tag value="In Review" severity="secondary" />
           </div>
         </template>
-      </Card>
+      </AppCard>
 
-      <Card>
+      <AppCard>
         <template #title>Messages</template>
         <template #content>
           <div class="demo-stack">
@@ -37,23 +37,23 @@ const toast = useToast()
             <Message severity="success">Risk report generated successfully</Message>
           </div>
         </template>
-      </Card>
+      </AppCard>
 
-      <Card>
+      <AppCard>
         <template #title>Toast</template>
         <template #content>
           <Toast />
           <div class="demo-row">
-            <Button
+            <AppButton
               label="Show Notification"
               icon="pi pi-bell"
               @click="toast.add({ severity: 'info', summary: 'Risk Alert', detail: 'VaR breach detected on Growth Fund', life: 3000 })"
             />
           </div>
         </template>
-      </Card>
+      </AppCard>
 
-      <Card>
+      <AppCard>
         <template #title>Progress</template>
         <template #content>
           <div class="demo-stack">
@@ -67,7 +67,7 @@ const toast = useToast()
             </div>
           </div>
         </template>
-      </Card>
+      </AppCard>
     </div>
   </div>
 </template>

@@ -1,16 +1,21 @@
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount } from 'vue'
-import Card from 'primevue/card'
+import { computed, ref, onMounted, onBeforeUnmount } from 'vue'
 import Skeleton from 'primevue/skeleton'
 import VChart from 'vue-echarts'
 import type { EChartsOption } from 'echarts'
+import AppCard from '@/components/base/AppCard.vue'
 
-defineProps<{
+const SIZE_MAP = { sm: '220px', default: '350px', lg: '480px' } as const
+
+const props = defineProps<{
   title: string
   option: EChartsOption
   height?: string
+  size?: 'sm' | 'default' | 'lg'
   loading?: boolean
 }>()
+
+const resolvedHeight = computed(() => props.height ?? SIZE_MAP[props.size ?? 'default'])
 
 const wrapperRef = ref<HTMLElement>()
 const visible = ref(false)
@@ -36,12 +41,12 @@ onBeforeUnmount(() => {
 
 <template>
   <div ref="wrapperRef">
-    <Card>
+    <AppCard>
       <template #title>{{ title }}</template>
       <template #content>
-        <Skeleton v-if="loading || !visible" :style="{ height: height || '350px', width: '100%' }" />
-        <VChart v-else :option="option" :style="{ height: height || '350px', width: '100%' }" autoresize />
+        <Skeleton v-if="loading || !visible" :style="{ height: resolvedHeight, width: '100%' }" />
+        <VChart v-else :option="option" :style="{ height: resolvedHeight, width: '100%' }" autoresize />
       </template>
-    </Card>
+    </AppCard>
   </div>
 </template>

@@ -1,4 +1,4 @@
-import { watch } from 'vue'
+import { onScopeDispose, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useAnalyticsContext } from '@/stores/analytics'
 
@@ -7,7 +7,7 @@ export function useAnalyticsSync() {
   const route = useRoute()
   const analytics = useAnalyticsContext()
 
-  router.afterEach((to) => {
+  const removeAfterEach = router.afterEach((to) => {
     if (!to.meta.analyticsRoute) return
 
     const urlId = to.params.portfolioId as string | undefined
@@ -16,6 +16,10 @@ export function useAnalyticsSync() {
     } else if (analytics.portfolioId) {
       router.replace({ name: to.name!, params: { portfolioId: analytics.portfolioId } })
     }
+  })
+
+  onScopeDispose(() => {
+    removeAfterEach()
   })
 
   watch(

@@ -7,6 +7,17 @@ declare module 'vue-router' {
   }
 }
 
+const ensureShowcaseCharts = async () => {
+  await Promise.all([
+    import('@/plugins/echarts'),
+    import('@/plugins/echarts-showcase'),
+  ])
+}
+
+const ensureAnalyticsCharts = async () => {
+  await import('@/plugins/echarts')
+}
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -26,6 +37,7 @@ const router = createRouter({
       path: '/summary/:portfolioId?',
       name: 'summary',
       component: () => import('@/views/SummaryView.vue'),
+      beforeEnter: ensureAnalyticsCharts,
       meta: { title: 'Summary', analyticsRoute: true },
     },
     {
@@ -62,6 +74,7 @@ const router = createRouter({
       path: '/showcase',
       name: 'showcase',
       component: () => import('@/views/ShowcaseView.vue'),
+      beforeEnter: ensureShowcaseCharts,
       meta: { title: 'Charts' },
     },
     {
@@ -99,6 +112,13 @@ const router = createRouter({
       name: 'showcase-navigation',
       component: () => import('@/views/NavigationShowcaseView.vue'),
       meta: { title: 'Navigation' },
+    },
+    {
+      path: '/showcase/layout',
+      name: 'showcase-layout',
+      component: () => import('@/views/LayoutShowcaseView.vue'),
+      beforeEnter: ensureShowcaseCharts,
+      meta: { title: 'Layout' },
     },
     {
       path: '/:pathMatch(.*)*',

@@ -4,7 +4,7 @@ import { useRoute } from 'vue-router'
 import { useAppStore } from '@/stores/app'
 import { useAnalyticsContext } from '@/stores/analytics'
 import { usePortfolios } from '@/composables/usePortfolios'
-import Button from 'primevue/button'
+import AppButton from '@/components/base/AppButton.vue'
 import Select from 'primevue/select'
 import DatePicker from 'primevue/datepicker'
 
@@ -16,10 +16,22 @@ const { data: portfolios } = usePortfolios()
 const isAnalyticsRoute = computed(() => !!route.meta.analyticsRoute)
 const pageTitle = computed(() => (route.meta.title as string) ?? '')
 
+function parseIsoDate(date: string): Date {
+  const [year = 1970, month = 1, day = 1] = date.split('-').map((part) => Number(part))
+  return new Date(year, month - 1, day)
+}
+
+function formatIsoDate(date: Date): string {
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
+}
+
 const dateModel = computed({
-  get: () => (analytics.asOfDate ? new Date(analytics.asOfDate) : null),
+  get: () => (analytics.asOfDate ? parseIsoDate(analytics.asOfDate) : null),
   set: (val: Date | null) => {
-    analytics.selectDate(val ? val.toISOString().slice(0, 10) : null)
+    analytics.selectDate(val ? formatIsoDate(val) : null)
   },
 })
 </script>
@@ -27,7 +39,7 @@ const dateModel = computed({
 <template>
   <header class="app-topbar">
     <div class="topbar-left">
-      <Button
+      <AppButton
         v-if="appStore.isMobile"
         icon="pi pi-bars"
         text

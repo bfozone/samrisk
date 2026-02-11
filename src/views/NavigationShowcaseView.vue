@@ -1,16 +1,17 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-import Card from 'primevue/card'
+import AppCard from '@/components/base/AppCard.vue'
+import AppButton from '@/components/base/AppButton.vue'
+import AppDataTable from '@/components/base/AppDataTable.vue'
+import { uiColorPresets } from '@/ui/config'
 import Breadcrumb from 'primevue/breadcrumb'
 import Stepper from 'primevue/stepper'
 import StepList from 'primevue/steplist'
 import StepPanels from 'primevue/steppanels'
 import Step from 'primevue/step'
 import StepPanel from 'primevue/steppanel'
-import Button from 'primevue/button'
 import ContextMenu from 'primevue/contextmenu'
-import DataTable from 'primevue/datatable'
 import Column from 'primevue/column'
 import MeterGroup from 'primevue/metergroup'
 
@@ -46,17 +47,17 @@ function onRowContextMenu(event: { originalEvent: Event }) {
 
 // --- MeterGroup ---
 const meterValues = [
-  { label: 'Equities', value: 45, color: '#2C5969' },
-  { label: 'Fixed Income', value: 30, color: '#A5B077' },
-  { label: 'Alternatives', value: 15, color: '#EAA159' },
-  { label: 'Cash', value: 10, color: '#61828E' },
+  { label: 'Equities', value: 45, color: uiColorPresets.meterPalette[0] },
+  { label: 'Fixed Income', value: 30, color: uiColorPresets.meterPalette[1] },
+  { label: 'Alternatives', value: 15, color: uiColorPresets.meterPalette[2] },
+  { label: 'Cash', value: 10, color: uiColorPresets.meterPalette[3] },
 ]
 </script>
 
 <template>
   <div class="showcase">
     <div class="showcase-grid">
-      <Card>
+      <AppCard>
         <template #title>Breadcrumb</template>
         <template #content>
           <div class="demo-stack">
@@ -65,14 +66,14 @@ const meterValues = [
             <Breadcrumb :home="home" :model="[{ label: 'Reports' }, { label: 'Monthly' }, { label: 'Jan 2025' }]" />
           </div>
         </template>
-      </Card>
+      </AppCard>
 
-      <Card>
+      <AppCard>
         <template #title>Context Menu</template>
         <template #content>
           <span class="demo-hint">Right-click a row to see the context menu</span>
           <ContextMenu ref="contextMenu" :model="contextMenuItems" />
-          <DataTable
+          <AppDataTable
             v-model:selection="selectedRow"
             :value="contextTableData"
             selection-mode="single"
@@ -85,11 +86,11 @@ const meterValues = [
             <Column field="weight" header="Weight %">
               <template #body="{ data }">{{ data.weight.toFixed(1) }}%</template>
             </Column>
-          </DataTable>
+          </AppDataTable>
         </template>
-      </Card>
+      </AppCard>
 
-      <Card class="span-2">
+      <AppCard class="span-2">
         <template #title>Stepper</template>
         <template #content>
           <Stepper value="1" linear>
@@ -103,7 +104,7 @@ const meterValues = [
                 <div class="step-content">
                   <p>Choose the portfolio for risk report generation. Select from active portfolios with at least 30 days of history.</p>
                   <div class="step-actions">
-                    <Button label="Next" icon="pi pi-arrow-right" icon-pos="right" @click="activateCallback('2')" />
+                    <AppButton label="Next" icon="pi pi-arrow-right" icon-pos="right" @click="activateCallback('2')" />
                   </div>
                 </div>
               </StepPanel>
@@ -111,8 +112,8 @@ const meterValues = [
                 <div class="step-content">
                   <p>Set the confidence level, lookback window, and benchmark for risk calculations. Defaults are 95% VaR with 252-day lookback.</p>
                   <div class="step-actions">
-                    <Button label="Back" severity="secondary" icon="pi pi-arrow-left" @click="activateCallback('1')" />
-                    <Button label="Next" icon="pi pi-arrow-right" icon-pos="right" @click="activateCallback('3')" />
+                    <AppButton label="Back" severity="secondary" icon="pi pi-arrow-left" @click="activateCallback('1')" />
+                    <AppButton label="Next" icon="pi pi-arrow-right" icon-pos="right" @click="activateCallback('3')" />
                   </div>
                 </div>
               </StepPanel>
@@ -120,24 +121,24 @@ const meterValues = [
                 <div class="step-content">
                   <p>Review your selections and generate the report. Processing typically takes 2-5 minutes depending on portfolio complexity.</p>
                   <div class="step-actions">
-                    <Button label="Back" severity="secondary" icon="pi pi-arrow-left" @click="activateCallback('2')" />
-                    <Button label="Generate Report" icon="pi pi-file" severity="success" />
+                    <AppButton label="Back" severity="secondary" icon="pi pi-arrow-left" @click="activateCallback('2')" />
+                    <AppButton label="Generate Report" icon="pi pi-file" severity="success" />
                   </div>
                 </div>
               </StepPanel>
             </StepPanels>
           </Stepper>
         </template>
-      </Card>
+      </AppCard>
 
-      <Card class="span-2">
+      <AppCard class="span-2">
         <template #title>Meter Group</template>
         <template #content>
           <div class="demo-stack">
             <MeterGroup :value="meterValues" />
           </div>
         </template>
-      </Card>
+      </AppCard>
     </div>
   </div>
 </template>

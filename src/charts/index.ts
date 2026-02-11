@@ -13,6 +13,8 @@ export { sankeyChart } from './sankey'
 export { treeChart } from './tree'
 export { calendarHeatmapChart } from './calendarHeatmap'
 
+export { metricTrend, pnlTrend, riskTrend, dualMetric, allocationDonut, liquidityProfile } from './presets'
+
 export { formatValue, axisFormatter, tooltipValueFormatter } from './format'
 
 export type {

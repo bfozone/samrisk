@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-import Card from 'primevue/card'
-import Button from 'primevue/button'
+import AppCard from '@/components/base/AppCard.vue'
+import AppButton from '@/components/base/AppButton.vue'
 import Dialog from 'primevue/dialog'
 import Popover from 'primevue/popover'
 import Tabs from 'primevue/tabs'
@@ -26,24 +26,24 @@ function togglePopover(event: Event) {
 <template>
   <div class="showcase">
     <div class="showcase-grid">
-      <Card>
+      <AppCard>
         <template #title>Dialog</template>
         <template #content>
-          <Button label="Open Dialog" icon="pi pi-external-link" @click="dialogVisible = true" />
+          <AppButton label="Open Dialog" icon="pi pi-external-link" @click="dialogVisible = true" />
           <Dialog v-model:visible="dialogVisible" header="Confirm Action" modal :style="{ width: '28rem' }">
             <p>Are you sure you want to recalculate the risk metrics for all portfolios?</p>
             <template #footer>
-              <Button label="Cancel" text @click="dialogVisible = false" />
-              <Button label="Confirm" @click="dialogVisible = false" />
+              <AppButton label="Cancel" text @click="dialogVisible = false" />
+              <AppButton label="Confirm" @click="dialogVisible = false" />
             </template>
           </Dialog>
         </template>
-      </Card>
+      </AppCard>
 
-      <Card>
+      <AppCard>
         <template #title>Popover</template>
         <template #content>
-          <Button label="Show Details" icon="pi pi-info-circle" outlined @click="togglePopover" />
+          <AppButton label="Show Details" icon="pi pi-info-circle" outlined @click="togglePopover" />
           <Popover ref="popoverRef">
             <div class="popover-content">
               <p><strong>Portfolio:</strong> Growth Fund</p>
@@ -53,9 +53,9 @@ function togglePopover(event: Event) {
             </div>
           </Popover>
         </template>
-      </Card>
+      </AppCard>
 
-      <Card>
+      <AppCard>
         <template #title>Tabs</template>
         <template #content>
           <Tabs value="0">
@@ -77,9 +77,9 @@ function togglePopover(event: Event) {
             </TabPanels>
           </Tabs>
         </template>
-      </Card>
+      </AppCard>
 
-      <Card>
+      <AppCard>
         <template #title>Accordion</template>
         <template #content>
           <Accordion value="0">
@@ -103,7 +103,7 @@ function togglePopover(event: Event) {
             </AccordionPanel>
           </Accordion>
         </template>
-      </Card>
+      </AppCard>
     </div>
   </div>
 </template>

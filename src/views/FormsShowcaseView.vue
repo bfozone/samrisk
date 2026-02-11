@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-import Card from 'primevue/card'
+import AppCard from '@/components/base/AppCard.vue'
 import InputText from 'primevue/inputtext'
 import Textarea from 'primevue/textarea'
 import AutoComplete from 'primevue/autocomplete'
@@ -59,7 +59,7 @@ const searchQuery = ref('')
 <template>
   <div class="showcase">
     <div class="showcase-grid">
-      <Card>
+      <AppCard>
         <template #title>Text Inputs</template>
         <template #content>
           <div class="demo-stack">
@@ -79,9 +79,9 @@ const searchQuery = ref('')
             <InputText placeholder="Invalid input" invalid class="demo-input" />
           </div>
         </template>
-      </Card>
+      </AppCard>
 
-      <Card>
+      <AppCard>
         <template #title>Textarea</template>
         <template #content>
           <div class="demo-stack">
@@ -91,9 +91,9 @@ const searchQuery = ref('')
             </FloatLabel>
           </div>
         </template>
-      </Card>
+      </AppCard>
 
-      <Card>
+      <AppCard>
         <template #title>AutoComplete</template>
         <template #content>
           <div class="demo-stack">
@@ -107,9 +107,9 @@ const searchQuery = ref('')
             <span class="demo-hint">Try typing "A", "Swiss", or "UBS"</span>
           </div>
         </template>
-      </Card>
+      </AppCard>
 
-      <Card>
+      <AppCard>
         <template #title>Input Groups</template>
         <template #content>
           <div class="demo-stack">
@@ -130,9 +130,9 @@ const searchQuery = ref('')
             </InputGroup>
           </div>
         </template>
-      </Card>
+      </AppCard>
 
-      <Card>
+      <AppCard>
         <template #title>Date Picker</template>
         <template #content>
           <div class="demo-stack">
@@ -146,9 +146,9 @@ const searchQuery = ref('')
             </FloatLabel>
           </div>
         </template>
-      </Card>
+      </AppCard>
 
-      <Card>
+      <AppCard>
         <template #title>Slider</template>
         <template #content>
           <div class="demo-stack">
@@ -162,9 +162,9 @@ const searchQuery = ref('')
             </div>
           </div>
         </template>
-      </Card>
+      </AppCard>
 
-      <Card>
+      <AppCard>
         <template #title>Knob</template>
         <template #content>
           <div class="demo-knobs">
@@ -178,7 +178,7 @@ const searchQuery = ref('')
             </div>
           </div>
         </template>
-      </Card>
+      </AppCard>
     </div>
   </div>
 </template>

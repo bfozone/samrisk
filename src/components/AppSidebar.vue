@@ -29,6 +29,7 @@ const navItems = [
   { label: 'Tables', icon: 'pi pi-table', to: '/showcase/tables' },
   { label: 'Forms', icon: 'pi pi-pen-to-square', to: '/showcase/forms' },
   { label: 'Navigation', icon: 'pi pi-compass', to: '/showcase/navigation' },
+  { label: 'Layout', icon: 'pi pi-objects-column', to: '/showcase/layout' },
 ]
 
 const showLabels = computed(() => appStore.sidebarExpanded || (appStore.isMobile && appStore.mobileOpen))

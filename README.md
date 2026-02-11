@@ -52,10 +52,17 @@ Copy `.env.example` and adjust as needed:
 Currently implemented views:
 
 - `/` (Welcome)
-- `/dashboard/:portfolioId?` (Dashboard mock charts)
+- `/overview`
+- `/summary/:portfolioId?`
+- `/performance/:portfolioId?`
+- `/guidelines/:portfolioId?`
+- `/risk/:portfolioId?`
+- `/portfolios`
+- `/reports`
+- `/showcase` + `/showcase/*`
 - `/:pathMatch(.*)*` (Not Found)
 
-Some sidebar links are intentional placeholders and currently route to 404 until corresponding pages are implemented.
+Analytics routes already support portfolio context in the URL; non-summary analytics pages are currently placeholder content.
 
 ## API Error Handling Strategy
 
@@ -68,6 +75,18 @@ Some sidebar links are intentional placeholders and currently route to 404 until
 - unknown API errors
 
 You can connect this to future auth refresh/login redirect and toast/notification systems using `configureApiErrorHandlers(...)`.
+
+## UI System
+
+To keep feature work low-effort and stylistically consistent, prefer app wrappers over direct PrimeVue primitives:
+
+- `AppButton` (`src/components/base/AppButton.vue`)
+- `AppCard` (`src/components/base/AppCard.vue`)
+- `AppDataTable` (`src/components/base/AppDataTable.vue`)
+- `PresetChartCard` (`src/components/charts/PresetChartCard.vue`) for semantic chart presets
+
+Default behavior and semantic color presets are centralized in `src/ui/config.ts`.
+Core theme tokens remain in `src/theme/preset.ts` and global CSS tokens in `src/assets/main.css`.
 
 ## Container Build
 

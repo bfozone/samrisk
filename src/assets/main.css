@@ -41,11 +41,18 @@ body {
   --app-transition-base: 0.2s ease;
   --app-transition-slow: 0.3s ease;
 
+  /* Semantic colors */
+  --app-color-positive: #A5B077;
+  --app-color-negative: #ee000c;
+  --app-color-warning: #EAA159;
+  --app-color-info: #61828E;
+
   /* Layout */
   --app-content-padding: 1.5rem;
   --app-sidebar-width-expanded: 250px;
   --app-sidebar-width-collapsed: 64px;
   --app-breakpoint-mobile: 768px;
+  --app-card-padding-compact: 1rem;
 }
 
 @media (max-width: 768px) {

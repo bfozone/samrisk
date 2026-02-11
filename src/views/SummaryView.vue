@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useAnalyticsContext } from '@/stores/analytics'
-import ChartCard from '@/components/ChartCard.vue'
+import PresetChartCard from '@/components/charts/PresetChartCard.vue'
 import StatCard from '@/components/StatCard.vue'
+import DashboardGrid from '@/components/DashboardGrid.vue'
 import { useVaR, useExposures, useAuM, useTrackingError, usePnL, useLiquidity } from '@/composables/useRisk'
-import { lineChart, barChart, pieChart, formatValue } from '@/charts'
+import { formatValue, type LineChartConfig, type PieChartConfig, type BarChartConfig } from '@/charts'
 
 const analytics = useAnalyticsContext()
 const portfolioId = computed(() => analytics.portfolioId ?? '')
@@ -16,7 +17,25 @@ const { data: teData, isLoading: teLoading } = useTrackingError(portfolioId)
 const { data: pnlData, isLoading: pnlLoading } = usePnL(portfolioId)
 const { data: liqData, isLoading: liqLoading } = useLiquidity(portfolioId)
 
-const anyLoading = computed(() => aumLoading.value || pnlLoading.value || varLoading.value || teLoading.value)
+const anyLoading = computed(() =>
+  aumLoading.value
+  || pnlLoading.value
+  || varLoading.value
+  || teLoading.value
+  || exposureLoading.value
+  || liqLoading.value,
+)
+
+function byAsOfDate<T extends { date: string }>(items: T[]): T[] {
+  const asOfDate = analytics.asOfDate
+  if (!asOfDate) return items
+  return items.filter((item) => item.date <= asOfDate)
+}
+
+const aumSeries = computed(() => byAsOfDate(aumData.value ?? []))
+const pnlSeries = computed(() => byAsOfDate(pnlData.value ?? []))
+const varSeries = computed(() => byAsOfDate(varData.value ?? []))
+const teSeries = computed(() => byAsOfDate(teData.value ?? []))
 
 // --- Formatters (stat cards only) ---
 
@@ -27,7 +46,7 @@ function fmtPct(v: number): string {
 // --- Stat cards ---
 
 const aumStat = computed(() => {
-  const items = aumData.value ?? []
+  const items = aumSeries.value
   if (items.length < 2) return { value: '-', change: '', trend: 'flat' as const }
   const latest = items[items.length - 1]!
   const prev = items[items.length - 2]!
@@ -40,7 +59,7 @@ const aumStat = computed(() => {
 })
 
 const pnlStat = computed(() => {
-  const items = pnlData.value ?? []
+  const items = pnlSeries.value
   if (!items.length) return { value: '-', change: '', trend: 'flat' as const }
   const latest = items[items.length - 1]!
   const v = latest.daily
@@ -52,7 +71,7 @@ const pnlStat = computed(() => {
 })
 
 const varStat = computed(() => {
-  const items = varData.value ?? []
+  const items = varSeries.value
   if (items.length < 2) return { value: '-', change: '', trend: 'flat' as const }
   const latest = items[items.length - 1]!
   const prev = items[items.length - 2]!
@@ -65,7 +84,7 @@ const varStat = computed(() => {
 })
 
 const teStat = computed(() => {
-  const items = teData.value ?? []
+  const items = teSeries.value
   if (!items.length) return { value: '-', change: '', trend: 'flat' as const }
   const latest = items[items.length - 1]!
   return {
@@ -77,46 +96,45 @@ const teStat = computed(() => {
 
 // --- Charts ---
 
-const aumChartOption = computed(() => {
-  const items = aumData.value ?? []
-  return lineChart({
+const aumChartConfig = computed<LineChartConfig>(() => {
+  const items = aumSeries.value
+  return {
     categories: items.map((d) => d.date),
     series: [{ name: 'AuM', data: items.map((d) => d.aum), area: true }],
     format: 'currency',
-  }, { color: ['#2C5969'] })
+  }
 })
 
-const pnlChartOption = computed(() => {
-  const items = pnlData.value ?? []
-  return lineChart({
+const pnlChartConfig = computed<Omit<LineChartConfig, 'zeroLine'>>(() => {
+  const items = pnlSeries.value
+  return {
     categories: items.map((d) => d.date),
     series: [{ name: 'Cumulative P&L', data: items.map((d) => d.cumulative) }],
     format: 'currency',
-    zeroLine: true,
-  }, { color: ['#A5B077'] })
+  }
 })
 
-const varChartOption = computed(() => {
-  const items = varData.value ?? []
-  return lineChart({
+const varChartConfig = computed<LineChartConfig>(() => {
+  const items = varSeries.value
+  return {
     categories: items.map((d) => d.date),
     series: [
       { name: 'VaR 95%', data: items.map((d) => d.var95) },
       { name: 'VaR 99%', data: items.map((d) => d.var99) },
     ],
-  }, { color: ['#ee000c', '#61828E'], yAxis: { name: 'VaR (%)' } })
+  }
 })
 
-const exposureChartOption = computed(() => {
+const exposureChartConfig = computed<PieChartConfig>(() => {
   const items = exposureData.value ?? []
-  return pieChart({
+  return {
     data: items.map((d) => ({ value: d.percentage, name: d.category })),
-  })
+  }
 })
 
-const teChartOption = computed(() => {
-  const items = teData.value ?? []
-  return lineChart({
+const teChartConfig = computed<LineChartConfig>(() => {
+  const items = teSeries.value
+  return {
     categories: items.map((d) => d.date),
     series: [
       { name: 'Tracking Error', data: items.map((d) => d.te) },
@@ -124,17 +142,16 @@ const teChartOption = computed(() => {
     ],
     format: 'percent',
     rightFormat: 'number',
-  }, { color: ['#EAA159', '#61828E'], yAxis: [{ name: 'TE (%)' }, { name: 'Info Ratio' }] })
+  }
 })
 
-const liqChartOption = computed(() => {
+const liqChartConfig = computed<Omit<BarChartConfig, 'horizontal'>>(() => {
   const items = liqData.value ?? []
-  return barChart({
+  return {
     categories: items.map((d) => d.horizon),
     series: [{ name: 'Liquidity', data: items.map((d) => d.percentage) }],
     format: 'percent',
-    horizontal: true,
-  }, { color: ['#2C5969'] })
+  }
 })
 </script>
 
@@ -142,30 +159,42 @@ const liqChartOption = computed(() => {
   <div class="dashboard">
     <template v-if="analytics.hasPortfolio">
       <!-- KPI cards -->
-      <div class="stat-row">
+      <DashboardGrid :columns="4" gap="md">
         <StatCard label="AuM" :value="aumStat.value" :change="aumStat.change" :trend="aumStat.trend" :loading="anyLoading" />
         <StatCard label="Daily P&L" :value="pnlStat.value" :change="pnlStat.change" :trend="pnlStat.trend" :loading="anyLoading" />
         <StatCard label="VaR 95%" :value="varStat.value" :change="varStat.change" :trend="varStat.trend" :loading="anyLoading" />
         <StatCard label="Tracking Error" :value="teStat.value" :change="teStat.change" :trend="teStat.trend" :loading="anyLoading" />
-      </div>
+      </DashboardGrid>
 
       <!-- AuM + P&L -->
-      <div class="chart-row">
-        <ChartCard title="AuM" :option="aumChartOption" :loading="aumLoading" />
-        <ChartCard title="Cumulative P&L" :option="pnlChartOption" :loading="pnlLoading" />
-      </div>
+      <DashboardGrid>
+        <PresetChartCard title="AuM" preset="metricTrend" :config="aumChartConfig" :loading="aumLoading" />
+        <PresetChartCard title="Cumulative P&L" preset="pnlTrend" :config="pnlChartConfig" :loading="pnlLoading" />
+      </DashboardGrid>
 
       <!-- VaR + Allocation -->
-      <div class="chart-row">
-        <ChartCard title="Value at Risk" :option="varChartOption" :loading="varLoading" />
-        <ChartCard title="Asset Allocation" :option="exposureChartOption" :loading="exposureLoading" />
-      </div>
+      <DashboardGrid>
+        <PresetChartCard
+          title="Value at Risk"
+          preset="riskTrend"
+          :config="varChartConfig"
+          :overrides="{ yAxis: { name: 'VaR (%)' } }"
+          :loading="varLoading"
+        />
+        <PresetChartCard title="Asset Allocation" preset="allocationDonut" :config="exposureChartConfig" :loading="exposureLoading" />
+      </DashboardGrid>
 
       <!-- TE + Liquidity -->
-      <div class="chart-row">
-        <ChartCard title="Tracking Error & Info Ratio" :option="teChartOption" :loading="teLoading" />
-        <ChartCard title="Liquidity Profile" :option="liqChartOption" :loading="liqLoading" />
-      </div>
+      <DashboardGrid>
+        <PresetChartCard
+          title="Tracking Error & Info Ratio"
+          preset="dualMetric"
+          :config="teChartConfig"
+          :overrides="{ yAxis: [{ name: 'TE (%)' }, { name: 'Info Ratio' }] }"
+          :loading="teLoading"
+        />
+        <PresetChartCard title="Liquidity Profile" preset="liquidityProfile" :config="liqChartConfig" :loading="liqLoading" />
+      </DashboardGrid>
     </template>
     <div v-else class="analytics-empty-state">
       <i class="pi pi-briefcase" />
@@ -173,35 +202,3 @@ const liqChartOption = computed(() => {
     </div>
   </div>
 </template>
-
-<style scoped>
-.stat-row {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: var(--app-space-md);
-  margin-bottom: var(--app-space-lg);
-}
-
-.chart-row {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--app-space-lg);
-  margin-bottom: var(--app-space-lg);
-}
-
-@media (max-width: 1024px) {
-  .stat-row {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 768px) {
-  .stat-row {
-    grid-template-columns: 1fr;
-  }
-
-  .chart-row {
-    grid-template-columns: 1fr;
-  }
-}
-</style>

@@ -9,7 +9,6 @@ import App from './App.vue'
 
 import 'primeicons/primeicons.css'
 import './assets/main.css'
-import './plugins/echarts'
 
 async function bootstrap() {
   if (import.meta.env.DEV) {

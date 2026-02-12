@@ -20,11 +20,12 @@ export interface CalendarHeatmapConfig {
 }
 
 export function calendarHeatmapChart(config: CalendarHeatmapConfig, overrides?: ChartOverrides): EChartsOption {
+  const values = config.data.map(d => d[1])
   const {
     data,
     year,
-    min = Math.min(...data.map(d => d[1])),
-    max = Math.max(...data.map(d => d[1])),
+    min = values.length ? Math.min(...values) : 0,
+    max = values.length ? Math.max(...values) : 1,
     colorRange = [chartColors.tealBg, chartColors.tealDark],
     format = (v: number) => v.toFixed(1),
   } = config

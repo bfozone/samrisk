@@ -16,22 +16,24 @@ const { data: portfolios } = usePortfolios()
 const isAnalyticsRoute = computed(() => !!route.meta.analyticsRoute)
 const pageTitle = computed(() => (route.meta.title as string) ?? '')
 
-function parseIsoDate(date: string): Date {
-  const [year = 1970, month = 1, day = 1] = date.split('-').map((part) => Number(part))
-  return new Date(year, month - 1, day)
+/** Parse YYYY-MM-DD to local Date (avoids UTC midnight shift from Date.parse) */
+function parseLocalDate(iso: string): Date | null {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso)
+  if (!m) return null
+  return new Date(+m[1]!, +m[2]! - 1, +m[3]!)
 }
 
-function formatIsoDate(date: Date): string {
-  const year = date.getFullYear()
-  const month = String(date.getMonth() + 1).padStart(2, '0')
-  const day = String(date.getDate()).padStart(2, '0')
-  return `${year}-${month}-${day}`
+function toIsoDate(date: Date): string {
+  const y = date.getFullYear()
+  const m = String(date.getMonth() + 1).padStart(2, '0')
+  const d = String(date.getDate()).padStart(2, '0')
+  return `${y}-${m}-${d}`
 }
 
 const dateModel = computed({
-  get: () => (analytics.asOfDate ? parseIsoDate(analytics.asOfDate) : null),
+  get: () => (analytics.asOfDate ? parseLocalDate(analytics.asOfDate) : null),
   set: (val: Date | null) => {
-    analytics.selectDate(val ? formatIsoDate(val) : null)
+    analytics.selectDate(val ? toIsoDate(val) : null)
   },
 })
 </script>

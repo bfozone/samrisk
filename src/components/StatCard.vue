@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import Skeleton from 'primevue/skeleton'
 import AppCard from '@/components/base/AppCard.vue'
+import QueryError from '@/components/base/QueryError.vue'
 
 defineProps<{
   label: string
@@ -8,6 +9,8 @@ defineProps<{
   change?: string
   trend?: 'up' | 'down' | 'flat'
   loading?: boolean
+  error?: boolean
+  onRetry?: () => void
 }>()
 </script>
 
@@ -15,6 +18,7 @@ defineProps<{
   <AppCard class="stat-card" compact>
     <template #content>
       <Skeleton v-if="loading" height="3.5rem" width="100%" />
+      <QueryError v-else-if="error" :on-retry="onRetry" />
       <template v-else>
         <span class="stat-label">{{ label }}</span>
         <span class="stat-value">{{ value }}</span>

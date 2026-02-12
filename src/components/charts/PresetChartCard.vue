@@ -17,6 +17,8 @@ type PresetPayload =
 const props = defineProps<{
   title: string
   loading?: boolean
+  error?: boolean
+  onRetry?: () => void
   height?: string
   size?: 'sm' | 'default' | 'lg'
   overrides?: ChartOverrides
@@ -47,6 +49,8 @@ const resolvedSize = computed(() => props.size ?? uiComponentDefaults.chartCard.
     :title="title"
     :option="option"
     :loading="loading"
+    :error="error"
+    :on-retry="onRetry"
     :height="height"
     :size="resolvedSize"
   />

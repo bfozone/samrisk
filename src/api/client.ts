@@ -1,5 +1,6 @@
 import axios from 'axios'
 import type { AxiosError } from 'axios'
+import * as v from 'valibot'
 
 export type ApiErrorKind = 'unauthorized' | 'forbidden' | 'server' | 'network' | 'unknown'
 
@@ -35,10 +36,10 @@ const defaultHandlers: ApiErrorHandlers = {
   },
 }
 
-const errorHandlers: ApiErrorHandlers = { ...defaultHandlers }
+let errorHandlers: Readonly<ApiErrorHandlers> = { ...defaultHandlers }
 
 export function configureApiErrorHandlers(handlers: Partial<ApiErrorHandlers>) {
-  Object.assign(errorHandlers, handlers)
+  errorHandlers = { ...errorHandlers, ...handlers }
 }
 
 function classifyError(error: AxiosError): ApiErrorContext {
@@ -75,11 +76,26 @@ function handleApiError(context: ApiErrorContext) {
   }
 }
 
+let getAuthToken: (() => string | null) | null = null
+
+/** Register a token provider for the Authorization header (e.g. from an auth composable). */
+export function configureAuthToken(provider: () => string | null) {
+  getAuthToken = provider
+}
+
 const apiClient = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL || '/api',
   headers: {
     'Content-Type': 'application/json',
   },
+})
+
+apiClient.interceptors.request.use((config) => {
+  const token = getAuthToken?.()
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`
+  }
+  return config
 })
 
 apiClient.interceptors.response.use(
@@ -93,5 +109,14 @@ apiClient.interceptors.response.use(
     return Promise.reject(error)
   },
 )
+
+/** Validate API response data against a valibot schema. */
+export function parse<T>(schema: v.GenericSchema<T>, data: unknown): T {
+  return v.parse(schema, data)
+}
+
+export function parseArray<T>(schema: v.GenericSchema<T>, data: unknown): T[] {
+  return v.parse(v.array(schema), data)
+}
 
 export default apiClient

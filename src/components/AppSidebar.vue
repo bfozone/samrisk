@@ -48,10 +48,9 @@ function isActive(to: string) {
     && (route.path === item.to || route.path.startsWith(item.to + '/')))
 }
 
-const analyticsRoutes = new Set(['/summary', '/performance', '/market-risk', '/liquidity-risk', '/credit-risk', '/esg'])
-
 function navigate(to: string) {
-  const target = analyticsRoutes.has(to) && analytics.portfolioId
+  const resolved = router.resolve(to)
+  const target = resolved.meta.analyticsRoute && analytics.portfolioId
     ? `${to}/${analytics.portfolioId}`
     : to
   router.push(target)

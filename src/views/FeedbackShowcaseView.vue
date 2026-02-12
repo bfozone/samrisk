@@ -8,6 +8,8 @@ import FlexStack from '@/components/base/FlexStack.vue'
 import AppCard from '@/components/base/AppCard.vue'
 import AppButton from '@/components/base/AppButton.vue'
 import AppTag from '@/components/base/AppTag.vue'
+import InfoCard from '@/components/base/InfoCard.vue'
+import QueryError from '@/components/base/QueryError.vue'
 import Message from 'primevue/message'
 import Toast from 'primevue/toast'
 import ProgressBar from 'primevue/progressbar'
@@ -69,6 +71,40 @@ const toast = useToast()
               <span class="demo-label">Indeterminate</span>
               <ProgressBar mode="indeterminate" style="height: 6px" />
             </div>
+          </FlexStack>
+        </template>
+      </AppCard>
+    </DashboardGrid>
+
+    <DashboardGrid>
+      <AppCard>
+        <template #title>Info Cards</template>
+        <template #content>
+          <FlexStack gap="sm">
+            <InfoCard severity="error" title="Limit breach">
+              VaR 95% exceeds the approved risk budget by 12%. Immediate action required.
+            </InfoCard>
+            <InfoCard severity="warn" title="Approaching threshold">
+              Credit exposure to Issuer XYZ is at 78% of the single-name limit.
+            </InfoCard>
+            <InfoCard severity="success" title="Report published">
+              Monthly risk report for January 2025 has been generated and distributed.
+            </InfoCard>
+            <InfoCard severity="info" title="Data refresh">
+              Portfolio positions updated as of 2025-01-15 09:00 UTC.
+            </InfoCard>
+          </FlexStack>
+        </template>
+      </AppCard>
+
+      <AppCard>
+        <template #title>Query Error State</template>
+        <template #content>
+          <FlexStack gap="md">
+            <span class="demo-label">Default (with retry)</span>
+            <QueryError :on-retry="() => {}" />
+            <span class="demo-label">Custom message (no retry)</span>
+            <QueryError message="No positions found for this portfolio" />
           </FlexStack>
         </template>
       </AppCard>

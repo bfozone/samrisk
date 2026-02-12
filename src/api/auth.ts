@@ -1,7 +1,7 @@
-import apiClient from './client'
-import type { User } from '@/types'
+import apiClient, { parse } from './client'
+import { UserSchema } from './schemas'
 
-export async function getCurrentUser(): Promise<User> {
-  const { data } = await apiClient.get<User>('/auth/me')
-  return data
+export async function getCurrentUser() {
+  const { data } = await apiClient.get('/auth/me')
+  return parse(UserSchema, data)
 }

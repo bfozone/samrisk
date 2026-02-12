@@ -10,12 +10,12 @@ import { formatValue, type LineChartConfig, type PieChartConfig, type BarChartCo
 const analytics = useAnalyticsContext()
 const portfolioId = computed(() => analytics.portfolioId ?? '')
 
-const { data: varData, isLoading: varLoading } = useVaR(portfolioId)
-const { data: exposureData, isLoading: exposureLoading } = useExposures(portfolioId)
-const { data: aumData, isLoading: aumLoading } = useAuM(portfolioId)
-const { data: teData, isLoading: teLoading } = useTrackingError(portfolioId)
-const { data: pnlData, isLoading: pnlLoading } = usePnL(portfolioId)
-const { data: liqData, isLoading: liqLoading } = useLiquidity(portfolioId)
+const { data: varData, isLoading: varLoading, isError: varError, refetch: varRefetch } = useVaR(portfolioId)
+const { data: exposureData, isLoading: exposureLoading, isError: exposureError, refetch: exposureRefetch } = useExposures(portfolioId)
+const { data: aumData, isLoading: aumLoading, isError: aumError, refetch: aumRefetch } = useAuM(portfolioId)
+const { data: teData, isLoading: teLoading, isError: teError, refetch: teRefetch } = useTrackingError(portfolioId)
+const { data: pnlData, isLoading: pnlLoading, isError: pnlError, refetch: pnlRefetch } = usePnL(portfolioId)
+const { data: liqData, isLoading: liqLoading, isError: liqError, refetch: liqRefetch } = useLiquidity(portfolioId)
 
 const anyLoading = computed(() =>
   aumLoading.value
@@ -24,6 +24,13 @@ const anyLoading = computed(() =>
   || teLoading.value
   || exposureLoading.value
   || liqLoading.value,
+)
+
+const anyError = computed(() =>
+  aumError.value
+  || pnlError.value
+  || varError.value
+  || teError.value,
 )
 
 function byAsOfDate<T extends { date: string }>(items: T[]): T[] {
@@ -160,16 +167,16 @@ const liqChartConfig = computed<Omit<BarChartConfig, 'horizontal'>>(() => {
     <template v-if="analytics.hasPortfolio">
       <!-- KPI cards -->
       <DashboardGrid :columns="4" gap="md">
-        <StatCard label="AuM" :value="aumStat.value" :change="aumStat.change" :trend="aumStat.trend" :loading="anyLoading" />
-        <StatCard label="Daily P&L" :value="pnlStat.value" :change="pnlStat.change" :trend="pnlStat.trend" :loading="anyLoading" />
-        <StatCard label="VaR 95%" :value="varStat.value" :change="varStat.change" :trend="varStat.trend" :loading="anyLoading" />
-        <StatCard label="Tracking Error" :value="teStat.value" :change="teStat.change" :trend="teStat.trend" :loading="anyLoading" />
+        <StatCard label="AuM" :value="aumStat.value" :change="aumStat.change" :trend="aumStat.trend" :loading="anyLoading" :error="anyError" />
+        <StatCard label="Daily P&L" :value="pnlStat.value" :change="pnlStat.change" :trend="pnlStat.trend" :loading="anyLoading" :error="anyError" />
+        <StatCard label="VaR 95%" :value="varStat.value" :change="varStat.change" :trend="varStat.trend" :loading="anyLoading" :error="anyError" />
+        <StatCard label="Tracking Error" :value="teStat.value" :change="teStat.change" :trend="teStat.trend" :loading="anyLoading" :error="anyError" />
       </DashboardGrid>
 
       <!-- AuM + P&L -->
       <DashboardGrid>
-        <PresetChartCard title="AuM" preset="metricTrend" :config="aumChartConfig" :loading="aumLoading" />
-        <PresetChartCard title="Cumulative P&L" preset="pnlTrend" :config="pnlChartConfig" :loading="pnlLoading" />
+        <PresetChartCard title="AuM" preset="metricTrend" :config="aumChartConfig" :loading="aumLoading" :error="aumError" :on-retry="aumRefetch" />
+        <PresetChartCard title="Cumulative P&L" preset="pnlTrend" :config="pnlChartConfig" :loading="pnlLoading" :error="pnlError" :on-retry="pnlRefetch" />
       </DashboardGrid>
 
       <!-- VaR + Allocation -->
@@ -180,8 +187,10 @@ const liqChartConfig = computed<Omit<BarChartConfig, 'horizontal'>>(() => {
           :config="varChartConfig"
           :overrides="{ yAxis: { name: 'VaR (%)' } }"
           :loading="varLoading"
+          :error="varError"
+          :on-retry="varRefetch"
         />
-        <PresetChartCard title="Asset Allocation" preset="allocationDonut" :config="exposureChartConfig" :loading="exposureLoading" />
+        <PresetChartCard title="Asset Allocation" preset="allocationDonut" :config="exposureChartConfig" :loading="exposureLoading" :error="exposureError" :on-retry="exposureRefetch" />
       </DashboardGrid>
 
       <!-- TE + Liquidity -->
@@ -192,8 +201,10 @@ const liqChartConfig = computed<Omit<BarChartConfig, 'horizontal'>>(() => {
           :config="teChartConfig"
           :overrides="{ yAxis: [{ name: 'TE (%)' }, { name: 'Info Ratio' }] }"
           :loading="teLoading"
+          :error="teError"
+          :on-retry="teRefetch"
         />
-        <PresetChartCard title="Liquidity Profile" preset="liquidityProfile" :config="liqChartConfig" :loading="liqLoading" />
+        <PresetChartCard title="Liquidity Profile" preset="liquidityProfile" :config="liqChartConfig" :loading="liqLoading" :error="liqError" :on-retry="liqRefetch" />
       </DashboardGrid>
     </template>
     <div v-else class="analytics-empty-state">

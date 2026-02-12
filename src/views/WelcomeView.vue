@@ -24,7 +24,7 @@ const today = computed(() =>
 <template>
   <div class="welcome">
     <p class="welcome-greeting">
-      {{ greeting }}<span v-if="user">, {{ user.name.split(' ')[0] }}</span>
+      {{ greeting }}<span v-if="user?.name">, {{ user.name.split(' ')[0] }}</span>
     </p>
     <p class="welcome-subtitle">Welcome to the Sustainable Asset Management Risk Platform</p>
     <p class="welcome-date">{{ today }}</p>

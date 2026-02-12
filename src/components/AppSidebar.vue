@@ -126,12 +126,12 @@ function navigate(to: string) {
       </nav>
 
       <!-- User section -->
-      <div v-if="user" class="sidebar-user">
-        <div class="user-avatar">{{ user.initials }}</div>
+      <div class="sidebar-user">
+        <div class="user-avatar">{{ user?.initials ?? '?' }}</div>
         <Transition name="label">
           <div v-if="showLabels" class="user-info">
-            <span class="user-name">{{ user.name }}</span>
-            <span class="user-role">{{ user.role }}</span>
+            <span class="user-name">{{ user?.name ?? 'Unidentified User' }}</span>
+            <span class="user-role">{{ user?.role ?? 'No session' }}</span>
           </div>
         </Transition>
       </div>

@@ -16,7 +16,7 @@ withDefaults(defineProps<{
       alignItems: align,
     }"
   >
-    <slot />
+    <slot></slot>
   </div>
 </template>
 

@@ -18,11 +18,11 @@ const icons: Record<string, string> = {
   <AppCard class="info-card" :class="`info-card-${severity}`" compact>
     <template #content>
       <div class="info-card-header">
-        <i :class="icons[severity]" />
+        <i :class="icons[severity]"></i>
         <span v-if="title" class="info-card-title">{{ title }}</span>
       </div>
       <div v-if="$slots.default" class="info-card-body">
-        <slot />
+        <slot></slot>
       </div>
     </template>
   </AppCard>

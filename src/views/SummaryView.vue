@@ -208,7 +208,7 @@ const liqChartConfig = computed<Omit<BarChartConfig, 'horizontal'>>(() => {
       </DashboardGrid>
     </template>
     <div v-else class="analytics-empty-state">
-      <i class="pi pi-briefcase" />
+      <i class="pi pi-briefcase"></i>
       <p>Select a portfolio from the topbar to view summary analytics</p>
     </div>
   </div>

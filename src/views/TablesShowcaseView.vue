@@ -365,7 +365,7 @@ const totalTarget = computed(() => editableData.value.reduce((s, r) => s + r.tar
             <Column field="weight" header="Weight" sortable style="min-width: 12rem">
               <template #body="{ data }">
                 <div class="inline-bar-cell">
-                  <div class="inline-bar" :style="{ width: (data.weight / maxWeight * 100) + '%' }" />
+                  <div class="inline-bar" :style="{ width: (data.weight / maxWeight * 100) + '%' }"></div>
                   <span class="inline-bar-label">{{ data.weight.toFixed(1) }}%</span>
                 </div>
               </template>
@@ -416,12 +416,12 @@ const totalTarget = computed(() => editableData.value.reduce((s, r) => s + r.tar
             </template>
             <Column field="instrument" header="Instrument" sortable :show-filter-menu="false">
               <template #filter="{ filterModel, filterCallback }">
-                <AppInputText v-model="filterModel.value" @input="filterCallback()" placeholder="Filter..." class="filter-input" />
+                <AppInputText v-model="filterModel.value" placeholder="Filter..." class="filter-input" @input="filterCallback()" />
               </template>
             </Column>
             <Column field="sector" header="Sector" sortable :show-filter-menu="false">
               <template #filter="{ filterModel, filterCallback }">
-                <AppSelect v-model="filterModel.value" @change="filterCallback()" :options="sectorOptions" placeholder="All" show-clear class="filter-input" />
+                <AppSelect v-model="filterModel.value" :options="sectorOptions" placeholder="All" show-clear class="filter-input" @change="filterCallback()" />
               </template>
             </Column>
             <Column field="weight" header="Weight" sortable>
@@ -434,7 +434,7 @@ const totalTarget = computed(() => editableData.value.reduce((s, r) => s + r.tar
             </Column>
             <Column field="status" header="Status" sortable :show-filter-menu="false">
               <template #filter="{ filterModel, filterCallback }">
-                <AppSelect v-model="filterModel.value" @change="filterCallback()" :options="statusFilterOptions" placeholder="All" show-clear class="filter-input" />
+                <AppSelect v-model="filterModel.value" :options="statusFilterOptions" placeholder="All" show-clear class="filter-input" @change="filterCallback()" />
               </template>
               <template #body="{ data }">
                 <AppTag :value="data.status" :severity="data.status === 'Active' ? 'success' : data.status === 'Watchlist' ? 'warn' : 'danger'" />

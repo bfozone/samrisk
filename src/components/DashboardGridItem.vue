@@ -8,7 +8,7 @@ withDefaults(defineProps<{
 
 <template>
   <div class="dashboard-grid-item" :class="`span-${span}`">
-    <slot />
+    <slot></slot>
   </div>
 </template>
 

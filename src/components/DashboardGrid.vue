@@ -10,7 +10,7 @@ defineProps<{
     class="dashboard-grid"
     :class="[`cols-${columns ?? 2}`, `gap-${gap ?? 'lg'}`]"
   >
-    <slot />
+    <slot></slot>
   </div>
 </template>
 

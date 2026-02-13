@@ -47,8 +47,9 @@ const dateModel = computed({
         text
         rounded
         severity="secondary"
-        @click="appStore.toggleSidebar()"
+        aria-label="Open navigation menu"
         class="topbar-toggle"
+        @click="appStore.toggleSidebar()"
       />
       <h1 class="topbar-title">{{ pageTitle }}</h1>
     </div>
@@ -56,12 +57,12 @@ const dateModel = computed({
     <div v-if="isAnalyticsRoute" class="topbar-right">
       <AppSelect
         :modelValue="analytics.portfolioId"
-        @update:modelValue="analytics.selectPortfolio($event)"
         :options="portfolios ?? []"
         optionLabel="name"
         optionValue="id"
         placeholder="Select portfolio"
         class="topbar-portfolio-select"
+        @update:modelValue="analytics.selectPortfolio($event)"
       />
       <DatePicker
         v-model="dateModel"

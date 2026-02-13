@@ -8,6 +8,6 @@ withDefaults(defineProps<{
 
 <template>
   <div :style="{ marginTop: `var(--app-space-${spacing})` }">
-    <slot />
+    <slot></slot>
   </div>
 </template>

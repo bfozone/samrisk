@@ -45,7 +45,7 @@ const resolvedStripedRows = computed(() => props.stripedRows ?? uiComponentDefau
       :key="String(slotName)"
       #[slotName]="slotProps"
     >
-      <slot :name="slotName" v-bind="slotProps ?? {}" />
+      <slot :name="slotName" v-bind="slotProps ?? {}"></slot>
     </template>
   </DataTable>
 </template>

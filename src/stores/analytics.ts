@@ -1,9 +1,10 @@
 import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
+import { computed } from 'vue'
+import { useLocalStorage } from '@vueuse/core'
 
 export const useAnalyticsContext = defineStore('analytics', () => {
-  const portfolioId = ref<string | null>(null)
-  const asOfDate = ref<string | null>(null)
+  const portfolioId = useLocalStorage<string | null>('samrisk-portfolio-id', null)
+  const asOfDate = useLocalStorage<string | null>('samrisk-as-of-date', null)
 
   const hasPortfolio = computed(() => portfolioId.value !== null)
 

@@ -1,6 +1,6 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
-import { VueQueryPlugin } from '@tanstack/vue-query'
+import { VueQueryPlugin, QueryClient } from '@tanstack/vue-query'
 import PrimeVue from 'primevue/config'
 import ToastService from 'primevue/toastservice'
 import RiskAppPreset from './theme/preset'
@@ -20,7 +20,15 @@ async function bootstrap() {
 
   app.use(createPinia())
   app.use(router)
-  app.use(VueQueryPlugin)
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        staleTime: 2 * 60 * 1000,
+        refetchOnWindowFocus: false,
+      },
+    },
+  })
+  app.use(VueQueryPlugin, { queryClient })
   app.use(ToastService)
   app.use(PrimeVue, {
     theme: {

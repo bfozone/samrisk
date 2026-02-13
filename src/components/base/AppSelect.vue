@@ -30,7 +30,7 @@ const resolvedSize = computed(() => props.size ?? uiComponentDefaults.select.siz
       :key="String(slotName)"
       #[slotName]="slotProps"
     >
-      <slot :name="slotName" v-bind="slotProps ?? {}" />
+      <slot :name="slotName" v-bind="slotProps ?? {}"></slot>
     </template>
   </Select>
 </template>

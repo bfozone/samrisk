@@ -19,7 +19,7 @@ withDefaults(defineProps<{
       flexWrap: wrap ? 'wrap' : 'nowrap',
     }"
   >
-    <slot />
+    <slot></slot>
   </div>
 </template>
 

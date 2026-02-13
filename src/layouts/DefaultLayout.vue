@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import AppSidebar from '@/components/AppSidebar.vue'
 import AppTopbar from '@/components/AppTopbar.vue'
+import Toast from 'primevue/toast'
 import { useAnalyticsSync } from '@/composables/useAnalyticsSync'
+import { useApiToast } from '@/composables/useApiToast'
 
 useAnalyticsSync()
+useApiToast()
 </script>
 
 <template>
@@ -15,6 +18,7 @@ useAnalyticsSync()
         <router-view />
       </main>
     </div>
+    <Toast position="top-right" />
   </div>
 </template>
 

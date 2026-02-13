@@ -9,7 +9,7 @@ defineProps<{
 
 <template>
   <div class="query-error">
-    <i class="pi pi-exclamation-circle" />
+    <i class="pi pi-exclamation-circle"></i>
     <span class="query-error-message">{{ message ?? 'Failed to load data' }}</span>
     <AppButton
       v-if="onRetry"

@@ -23,8 +23,8 @@ defineProps<{
         <span class="stat-label">{{ label }}</span>
         <span class="stat-value">{{ value }}</span>
         <span v-if="change" class="stat-change" :class="trend">
-          <i v-if="trend === 'up'" class="pi pi-arrow-up" />
-          <i v-else-if="trend === 'down'" class="pi pi-arrow-down" />
+          <i v-if="trend === 'up'" class="pi pi-arrow-up"></i>
+          <i v-else-if="trend === 'down'" class="pi pi-arrow-down"></i>
           {{ change }}
         </span>
       </template>

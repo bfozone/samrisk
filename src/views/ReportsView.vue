@@ -1,8 +1,5 @@
-<script setup lang="ts">
-</script>
-
 <template>
-  <div class="reports">
+  <div>
     <p class="placeholder-hint">Report generation and regulatory exports</p>
   </div>
 </template>

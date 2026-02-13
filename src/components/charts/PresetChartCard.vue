@@ -24,6 +24,7 @@ const props = defineProps<{
   overrides?: ChartOverrides
 } & PresetPayload>()
 
+// eslint-disable-next-line vue/return-in-computed-property -- switch is exhaustive via discriminated union
 const option = computed<EChartsOption>(() => {
   switch (props.preset) {
     case 'metricTrend':

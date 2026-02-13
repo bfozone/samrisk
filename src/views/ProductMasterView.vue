@@ -1,8 +1,5 @@
-<script setup lang="ts">
-</script>
-
 <template>
-  <div class="product-master">
+  <div>
     <p class="placeholder-hint">Product catalogue and fund structures</p>
   </div>
 </template>

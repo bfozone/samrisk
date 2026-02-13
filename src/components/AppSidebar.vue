@@ -14,6 +14,12 @@ const route = useRoute()
 const router = useRouter()
 const { data: user } = useCurrentUser()
 
+function onKeydown(e: KeyboardEvent) {
+  if (e.key === 'Escape' && appStore.isMobile && appStore.mobileOpen) {
+    appStore.closeMobile()
+  }
+}
+
 const navItems = [
   { label: 'Summary', icon: 'pi pi-th-large', to: '/summary', section: 'Analytics' },
   { label: 'Performance', icon: 'pi pi-chart-line', to: '/performance' },
@@ -64,8 +70,9 @@ function navigate(to: string) {
     <div
       v-if="appStore.isMobile && appStore.mobileOpen"
       class="sidebar-backdrop"
+      role="presentation"
       @click="appStore.closeMobile()"
-    />
+    ></div>
   </Transition>
 
   <aside
@@ -74,6 +81,8 @@ function navigate(to: string) {
       ? (appStore.mobileOpen ? 'mobile-open' : 'mobile-closed')
       : (appStore.sidebarExpanded ? 'expanded' : 'collapsed')
     "
+    aria-label="Main navigation"
+    @keydown="onKeydown"
   >
     <div class="sidebar-inner">
       <!-- Header -->
@@ -94,8 +103,8 @@ function navigate(to: string) {
       </div>
 
       <!-- Navigation -->
-      <nav class="sidebar-nav">
-        <ul class="nav-list">
+      <nav class="sidebar-nav" aria-label="Main navigation">
+        <ul class="nav-list" role="menubar" aria-orientation="vertical">
           <template v-for="item in navItems" :key="item.to">
             <!-- Section header -->
             <li v-if="item.section" class="nav-section" :class="{ 'nav-section-collapsed': !showLabels }">
@@ -105,14 +114,16 @@ function navigate(to: string) {
             </li>
 
             <!-- Nav item -->
-            <li>
+            <li role="none">
               <button
                 v-tooltip.right="showTooltip ? item.label : undefined"
+                role="menuitem"
                 class="nav-item"
                 :class="{ active: isActive(item.to) }"
+                :aria-current="isActive(item.to) ? 'page' : undefined"
                 @click="navigate(item.to)"
               >
-                <i :class="item.icon" class="nav-icon" />
+                <i :class="item.icon" class="nav-icon"></i>
                 <Transition name="label">
                   <span v-if="showLabels" class="nav-label">
                     {{ item.label }}
@@ -125,25 +136,25 @@ function navigate(to: string) {
       </nav>
 
       <!-- User section -->
-      <div class="sidebar-user">
-        <div class="user-avatar">{{ user?.initials ?? '?' }}</div>
+      <button class="sidebar-user" type="button" :aria-label="`User: ${user?.name ?? 'Unidentified User'}`">
+        <div class="user-avatar" aria-hidden="true">{{ user?.initials ?? '?' }}</div>
         <Transition name="label">
           <div v-if="showLabels" class="user-info">
             <span class="user-name">{{ user?.name ?? 'Unidentified User' }}</span>
             <span class="user-role">{{ user?.role ?? 'No session' }}</span>
           </div>
         </Transition>
-      </div>
+      </button>
     </div>
 
     <!-- Edge toggle (desktop only) -->
     <button
       v-if="!appStore.isMobile"
       class="sidebar-edge-toggle"
-      @click="appStore.toggleSidebar()"
       aria-label="Toggle sidebar"
+      @click="appStore.toggleSidebar()"
     >
-      <i :class="appStore.sidebarExpanded ? 'pi pi-chevron-left' : 'pi pi-chevron-right'" />
+      <i :class="appStore.sidebarExpanded ? 'pi pi-chevron-left' : 'pi pi-chevron-right'"></i>
     </button>
   </aside>
 </template>
@@ -418,12 +429,17 @@ function navigate(to: string) {
   display: flex;
   align-items: center;
   gap: 0.75rem;
+  border: none;
   border-top: 1px solid var(--p-surface-700);
+  background: transparent;
+  color: inherit;
+  font-family: inherit;
   flex-shrink: 0;
   overflow: hidden;
   white-space: nowrap;
   border-radius: 8px;
   cursor: pointer;
+  width: calc(100% - 1rem);
   transition: background-color var(--app-transition-fast);
 }
 

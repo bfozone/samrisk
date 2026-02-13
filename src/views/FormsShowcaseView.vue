@@ -122,14 +122,14 @@ const searchQuery = ref('')
               <InputNumber v-model="amount" placeholder="Amount" />
             </InputGroup>
             <InputGroup>
-              <InputGroupAddon><i class="pi pi-percentage" /></InputGroupAddon>
+              <InputGroupAddon><i class="pi pi-percentage"></i></InputGroupAddon>
               <InputNumber v-model="confidence" suffix="%" :min="0" :max="100" />
               <InputGroupAddon>confidence</InputGroupAddon>
             </InputGroup>
             <InputGroup>
-              <InputGroupAddon><i class="pi pi-calendar" /></InputGroupAddon>
+              <InputGroupAddon><i class="pi pi-calendar"></i></InputGroupAddon>
               <InputText placeholder="YYYY-MM-DD" />
-              <InputGroupAddon><i class="pi pi-arrow-right" /></InputGroupAddon>
+              <InputGroupAddon><i class="pi pi-arrow-right"></i></InputGroupAddon>
               <InputText placeholder="YYYY-MM-DD" />
             </InputGroup>
           </FlexStack>

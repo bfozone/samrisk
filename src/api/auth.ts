@@ -1,7 +1,11 @@
 import apiClient, { parse } from './client'
 import { UserSchema } from './schemas'
 
-export async function getCurrentUser() {
-  const { data } = await apiClient.get('/auth/me')
+export interface AuthQueryOptions {
+  signal?: AbortSignal
+}
+
+export async function getCurrentUser(options?: AuthQueryOptions) {
+  const { data } = await apiClient.get('/auth/me', { signal: options?.signal })
   return parse(UserSchema, data)
 }

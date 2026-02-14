@@ -131,12 +131,38 @@ const liquidityData: Record<string, LiquidityBucket[]> = {
   ],
 }
 
+// --- Helpers ---
+
+function filterByAsOf<T extends { date: string }>(items: T[], asOf: string | null): T[] {
+  if (!asOf) return items
+  return items.filter((item) => item.date <= asOf)
+}
+
+function getAsOf(request: Request): string | null {
+  const url = new URL(request.url)
+  return url.searchParams.get('asOf')
+}
+
 // --- Handlers ---
 
 export const riskHandlers = [
-  http.get('/api/risk/:id/var', ({ params }) => {
+  http.get('/api/risk/:id/summary', ({ params, request }) => {
+    const id = params.id as string
+    const asOf = getAsOf(request)
+    return HttpResponse.json({
+      aum: filterByAsOf(aumResults.filter((a) => a.portfolioId === id), asOf),
+      pnl: filterByAsOf(pnlResults.filter((p) => p.portfolioId === id), asOf),
+      var: filterByAsOf(varResults.filter((v) => v.portfolioId === id), asOf),
+      trackingError: filterByAsOf(trackingErrorResults.filter((t) => t.portfolioId === id), asOf),
+      exposures: exposures[id] ?? [],
+      liquidity: liquidityData[id] ?? [],
+    })
+  }),
+
+  http.get('/api/risk/:id/var', ({ params, request }) => {
+    const asOf = getAsOf(request)
     const filtered = varResults.filter((v) => v.portfolioId === params.id)
-    return HttpResponse.json(filtered)
+    return HttpResponse.json(filterByAsOf(filtered, asOf))
   }),
 
   http.get('/api/risk/:id/exposures', ({ params }) => {
@@ -144,19 +170,22 @@ export const riskHandlers = [
     return HttpResponse.json(data)
   }),
 
-  http.get('/api/risk/:id/aum', ({ params }) => {
+  http.get('/api/risk/:id/aum', ({ params, request }) => {
+    const asOf = getAsOf(request)
     const filtered = aumResults.filter((a) => a.portfolioId === params.id)
-    return HttpResponse.json(filtered)
+    return HttpResponse.json(filterByAsOf(filtered, asOf))
   }),
 
-  http.get('/api/risk/:id/tracking-error', ({ params }) => {
+  http.get('/api/risk/:id/tracking-error', ({ params, request }) => {
+    const asOf = getAsOf(request)
     const filtered = trackingErrorResults.filter((t) => t.portfolioId === params.id)
-    return HttpResponse.json(filtered)
+    return HttpResponse.json(filterByAsOf(filtered, asOf))
   }),
 
-  http.get('/api/risk/:id/pnl', ({ params }) => {
+  http.get('/api/risk/:id/pnl', ({ params, request }) => {
+    const asOf = getAsOf(request)
     const filtered = pnlResults.filter((p) => p.portfolioId === params.id)
-    return HttpResponse.json(filtered)
+    return HttpResponse.json(filterByAsOf(filtered, asOf))
   }),
 
   http.get('/api/risk/:id/liquidity', ({ params }) => {

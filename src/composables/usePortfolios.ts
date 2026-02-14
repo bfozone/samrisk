@@ -1,20 +1,23 @@
 import { useQuery } from '@tanstack/vue-query'
 import { getPortfolios, getPositions } from '@/api/portfolio'
+import type { PortfolioQueryOptions } from '@/api/portfolio'
 import type { MaybeRefOrGetter } from 'vue'
 import { toValue } from 'vue'
 
 export function usePortfolios() {
   return useQuery({
     queryKey: ['portfolios'],
-    queryFn: getPortfolios,
+    queryFn: ({ signal }) => getPortfolios({ signal }),
+    retry: 2,
+    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 10000),
   })
 }
 
-function usePortfolioQuery<T>(key: string, fetcher: (id: string) => Promise<T>) {
+function usePortfolioQuery<T>(key: string, fetcher: (id: string, options?: PortfolioQueryOptions) => Promise<T>) {
   return (portfolioId: MaybeRefOrGetter<string>) =>
     useQuery({
       queryKey: [key, portfolioId],
-      queryFn: () => fetcher(toValue(portfolioId)),
+      queryFn: ({ signal }) => fetcher(toValue(portfolioId), { signal }),
       enabled: () => !!toValue(portfolioId),
     })
 }

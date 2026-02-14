@@ -13,6 +13,7 @@
     "test:run": "vitest run"
   },
   "dependencies": {
+    "@azure/msal-browser": "^5.2.0",
     "@primevue/themes": "^4.5.4",
     "@tanstack/vue-query": "^5.92.9",
     "@vueuse/core": "^14.2.0",

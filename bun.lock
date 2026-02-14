@@ -5,6 +5,7 @@
     "": {
       "name": "risk-app",
       "dependencies": {
+        "@azure/msal-browser": "^5.2.0",
         "@primevue/themes": "^4.5.4",
         "@tanstack/vue-query": "^5.92.9",
         "@vueuse/core": "^14.2.0",
@@ -44,6 +45,10 @@
     "@asamuzakjp/dom-selector": ["@asamuzakjp/dom-selector@6.7.8", "", { "dependencies": { "@asamuzakjp/nwsapi": "^2.3.9", "bidi-js": "^1.0.3", "css-tree": "^3.1.0", "is-potential-custom-element-name": "^1.0.1", "lru-cache": "^11.2.5" } }, "sha512-stisC1nULNc9oH5lakAj8MH88ZxeGxzyWNDfbdCxvJSJIvDsHNZqYvscGTgy/ysgXWLJPt6K/4t0/GjvtKcFJQ=="],
 
     "@asamuzakjp/nwsapi": ["@asamuzakjp/nwsapi@2.3.9", "", {}, "sha512-n8GuYSrI9bF7FFZ/SjhwevlHc8xaVlb/7HmHelnc/PZXBD2ZR49NnN9sMMuDdEGPeeRQ5d0hqlSlEpgCX3Wl0Q=="],
+
+    "@azure/msal-browser": ["@azure/msal-browser@5.2.0", "", { "dependencies": { "@azure/msal-common": "16.0.4" } }, "sha512-YP2XEo6Bsi9urkyWxe5s2yl0ZJhJ46BJjUYIhXe6TUQguj460+wFioztwNAGgL33ECn/s3p0UK6CAQDJ5K7bnw=="],
+
+    "@azure/msal-common": ["@azure/msal-common@16.0.4", "", {}, "sha512-0KZ9/wbUyZN65JLAx5bGNfWjkD0kRMUgM99oSpZFg7wEOb3XcKIiHrFnIpgyc8zZ70fHodyh8JKEOel1oN24Gw=="],
 
     "@babel/helper-string-parser": ["@babel/helper-string-parser@7.27.1", "", {}, "sha512-qMlSxKbpRlAridDExk92nSobyDdpPijUq2DW6oDnUqd0iOGxmQjyqhMIihI9+zv4LPyZdRje2cavWPbCbWm3eA=="],
 

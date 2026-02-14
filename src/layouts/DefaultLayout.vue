@@ -1,25 +1,32 @@
 <script setup lang="ts">
 import AppSidebar from '@/components/AppSidebar.vue'
 import AppTopbar from '@/components/AppTopbar.vue'
+import BackendStatus from '@/components/BackendStatus.vue'
+import ErrorBoundary from '@/components/ErrorBoundary.vue'
 import Toast from 'primevue/toast'
+import { useToast } from 'primevue/usetoast'
 import { useAnalyticsSync } from '@/composables/useAnalyticsSync'
-import { useApiToast } from '@/composables/useApiToast'
+import { setToastRef } from '@/utils/toastRef'
 
 useAnalyticsSync()
-useApiToast()
+setToastRef(useToast())
 </script>
 
 <template>
-  <div class="app-layout">
-    <AppSidebar />
-    <div class="app-main">
-      <AppTopbar />
-      <main class="app-content">
-        <router-view />
-      </main>
+  <BackendStatus>
+    <div class="app-layout">
+      <AppSidebar />
+      <div class="app-main">
+        <AppTopbar />
+        <main class="app-content">
+          <ErrorBoundary>
+            <router-view />
+          </ErrorBoundary>
+        </main>
+      </div>
+      <Toast position="top-right" />
     </div>
-    <Toast position="top-right" />
-  </div>
+  </BackendStatus>
 </template>
 
 <style scoped>

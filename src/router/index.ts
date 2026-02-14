@@ -197,6 +197,20 @@ const router = createRouter({
   ],
 })
 
+const isMockMode = import.meta.env.VITE_USE_MOCK_API !== 'false'
+
+router.beforeEach(async () => {
+  if (isMockMode) return true
+  const { getMsalInstance } = await import('@/auth/msalInstance')
+  const { loginRequest } = await import('@/auth/msalConfig')
+  const msal = getMsalInstance()
+  if (!msal.getAllAccounts().length) {
+    await msal.loginRedirect(loginRequest)
+    return false
+  }
+  return true
+})
+
 router.afterEach((to) => {
   document.title = to.meta.title ? `${to.meta.title} - SAMRisk` : 'SAMRisk'
 })

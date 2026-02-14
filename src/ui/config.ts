@@ -16,7 +16,7 @@ export const uiComponentDefaults = {
     size: 'default' as const,
   },
   valueCell: {
-    currencyCode: 'CHF',
+    currencyCode: 'EUR',
     locale: 'de-CH',
   },
   select: {

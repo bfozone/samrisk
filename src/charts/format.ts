@@ -8,10 +8,10 @@ function compactNumber(v: number): string {
   return v.toFixed(0)
 }
 
-export function formatValue(v: number, style: FormatStyle): string {
+export function formatValue(v: number, style: FormatStyle, currency = 'EUR'): string {
   switch (style) {
     case 'currency':
-      return `EUR ${compactNumber(v)}`
+      return `${currency} ${compactNumber(v)}`
     case 'percent':
       return `${v.toFixed(2)}%`
     case 'number':
@@ -19,10 +19,10 @@ export function formatValue(v: number, style: FormatStyle): string {
   }
 }
 
-export function axisFormatter(style: FormatStyle): (v: number) => string {
+export function axisFormatter(style: FormatStyle, currency = 'EUR'): (v: number) => string {
   switch (style) {
     case 'currency':
-      return (v) => compactNumber(v)
+      return (v) => `${currency} ${compactNumber(v)}`
     case 'percent':
       return (v) => `${v}%`
     case 'number':
@@ -30,6 +30,6 @@ export function axisFormatter(style: FormatStyle): (v: number) => string {
   }
 }
 
-export function tooltipValueFormatter(style: FormatStyle): (v: unknown) => string {
-  return (v) => formatValue(v as number, style)
+export function tooltipValueFormatter(style: FormatStyle, currency = 'EUR'): (v: unknown) => string {
+  return (v) => formatValue(v as number, style, currency)
 }

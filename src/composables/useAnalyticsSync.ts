@@ -14,7 +14,7 @@ export function useAnalyticsSync() {
     if (urlId) {
       analytics.selectPortfolio(urlId)
     } else if (analytics.portfolioId) {
-      router.replace({ name: to.name!, params: { portfolioId: analytics.portfolioId } })
+      router.replace({ name: to.name!, params: { portfolioId: analytics.portfolioId }, query: to.query, hash: to.hash })
     }
   })
 
@@ -28,7 +28,7 @@ export function useAnalyticsSync() {
       if (!route.meta.analyticsRoute || !id) return
       const currentId = route.params.portfolioId as string | undefined
       if (currentId !== id) {
-        router.replace({ name: route.name!, params: { portfolioId: id } })
+        router.replace({ name: route.name!, params: { portfolioId: id }, query: route.query, hash: route.hash })
       }
     },
   )

@@ -10,10 +10,13 @@ export function usePortfolios() {
   })
 }
 
-export function usePositions(portfolioId: MaybeRefOrGetter<string>) {
-  return useQuery({
-    queryKey: ['positions', portfolioId],
-    queryFn: () => getPositions(toValue(portfolioId)),
-    enabled: () => !!toValue(portfolioId),
-  })
+function usePortfolioQuery<T>(key: string, fetcher: (id: string) => Promise<T>) {
+  return (portfolioId: MaybeRefOrGetter<string>) =>
+    useQuery({
+      queryKey: [key, portfolioId],
+      queryFn: () => fetcher(toValue(portfolioId)),
+      enabled: () => !!toValue(portfolioId),
+    })
 }
+
+export const usePositions = usePortfolioQuery('positions', getPositions)

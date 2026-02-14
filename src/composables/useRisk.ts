@@ -3,50 +3,18 @@ import { getVaR, getExposures, getAuM, getTrackingError, getPnL, getLiquidity } 
 import type { MaybeRefOrGetter } from 'vue'
 import { toValue } from 'vue'
 
-export function useVaR(portfolioId: MaybeRefOrGetter<string>) {
-  return useQuery({
-    queryKey: ['var', portfolioId],
-    queryFn: () => getVaR(toValue(portfolioId)),
-    enabled: () => !!toValue(portfolioId),
-  })
+function usePortfolioQuery<T>(key: string, fetcher: (id: string) => Promise<T>) {
+  return (portfolioId: MaybeRefOrGetter<string>) =>
+    useQuery({
+      queryKey: [key, portfolioId],
+      queryFn: () => fetcher(toValue(portfolioId)),
+      enabled: () => !!toValue(portfolioId),
+    })
 }
 
-export function useExposures(portfolioId: MaybeRefOrGetter<string>) {
-  return useQuery({
-    queryKey: ['exposures', portfolioId],
-    queryFn: () => getExposures(toValue(portfolioId)),
-    enabled: () => !!toValue(portfolioId),
-  })
-}
-
-export function useAuM(portfolioId: MaybeRefOrGetter<string>) {
-  return useQuery({
-    queryKey: ['aum', portfolioId],
-    queryFn: () => getAuM(toValue(portfolioId)),
-    enabled: () => !!toValue(portfolioId),
-  })
-}
-
-export function useTrackingError(portfolioId: MaybeRefOrGetter<string>) {
-  return useQuery({
-    queryKey: ['tracking-error', portfolioId],
-    queryFn: () => getTrackingError(toValue(portfolioId)),
-    enabled: () => !!toValue(portfolioId),
-  })
-}
-
-export function usePnL(portfolioId: MaybeRefOrGetter<string>) {
-  return useQuery({
-    queryKey: ['pnl', portfolioId],
-    queryFn: () => getPnL(toValue(portfolioId)),
-    enabled: () => !!toValue(portfolioId),
-  })
-}
-
-export function useLiquidity(portfolioId: MaybeRefOrGetter<string>) {
-  return useQuery({
-    queryKey: ['liquidity', portfolioId],
-    queryFn: () => getLiquidity(toValue(portfolioId)),
-    enabled: () => !!toValue(portfolioId),
-  })
-}
+export const useVaR = usePortfolioQuery('var', getVaR)
+export const useExposures = usePortfolioQuery('exposures', getExposures)
+export const useAuM = usePortfolioQuery('aum', getAuM)
+export const useTrackingError = usePortfolioQuery('tracking-error', getTrackingError)
+export const usePnL = usePortfolioQuery('pnl', getPnL)
+export const useLiquidity = usePortfolioQuery('liquidity', getLiquidity)

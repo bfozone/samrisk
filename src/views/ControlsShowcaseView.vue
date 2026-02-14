@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import Chip from 'primevue/chip'
 
-import ShowcaseLayout from '@/components/ShowcaseLayout.vue'
-import DashboardGrid from '@/components/DashboardGrid.vue'
-import FlexRow from '@/components/base/FlexRow.vue'
-import AppCard from '@/components/base/AppCard.vue'
-import AppButton from '@/components/base/AppButton.vue'
-import AppSelect from '@/components/base/AppSelect.vue'
+import InputNumber from 'primevue/inputnumber'
 import MultiSelect from 'primevue/multiselect'
 import SelectButton from 'primevue/selectbutton'
 import ToggleSwitch from 'primevue/toggleswitch'
-import InputNumber from 'primevue/inputnumber'
-import Chip from 'primevue/chip'
+import { ref } from 'vue'
+import AppButton from '@/components/base/AppButton.vue'
+import AppCard from '@/components/base/AppCard.vue'
+import AppSelect from '@/components/base/AppSelect.vue'
+import FlexRow from '@/components/base/FlexRow.vue'
+import DashboardGrid from '@/components/DashboardGrid.vue'
+import ShowcaseLayout from '@/components/ShowcaseLayout.vue'
 
 const selectedPortfolio = ref<string | null>(null)
 const portfolioOptions = [
@@ -48,7 +48,9 @@ function removeChip(label: string) {
   <ShowcaseLayout>
     <DashboardGrid>
       <AppCard>
-        <template #title>Buttons</template>
+        <template #title>
+          Buttons
+        </template>
         <template #content>
           <FlexRow>
             <AppButton label="Primary" />
@@ -75,7 +77,9 @@ function removeChip(label: string) {
       </AppCard>
 
       <AppCard>
-        <template #title>Select</template>
+        <template #title>
+          Select
+        </template>
         <template #content>
           <AppSelect
             v-model="selectedPortfolio"
@@ -89,7 +93,9 @@ function removeChip(label: string) {
       </AppCard>
 
       <AppCard>
-        <template #title>MultiSelect</template>
+        <template #title>
+          MultiSelect
+        </template>
         <template #content>
           <MultiSelect
             v-model="selectedAssetClasses"
@@ -104,14 +110,18 @@ function removeChip(label: string) {
       </AppCard>
 
       <AppCard>
-        <template #title>Segmented Toggle</template>
+        <template #title>
+          Segmented Toggle
+        </template>
         <template #content>
           <SelectButton v-model="selectedFrequency" :options="frequencyOptions" />
         </template>
       </AppCard>
 
       <AppCard>
-        <template #title>Toggle Switch</template>
+        <template #title>
+          Toggle Switch
+        </template>
         <template #content>
           <div class="demo-toggles">
             <div class="demo-toggle-row">
@@ -127,7 +137,9 @@ function removeChip(label: string) {
       </AppCard>
 
       <AppCard>
-        <template #title>Number Input</template>
+        <template #title>
+          Number Input
+        </template>
         <template #content>
           <InputNumber
             v-model="varThreshold"
@@ -140,7 +152,9 @@ function removeChip(label: string) {
       </AppCard>
 
       <AppCard>
-        <template #title>Filter Chips</template>
+        <template #title>
+          Filter Chips
+        </template>
         <template #content>
           <FlexRow>
             <Chip

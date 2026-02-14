@@ -13,12 +13,12 @@ export function useNavItems() {
 
   const navItems = computed<NavItem[]>(() =>
     router.getRoutes()
-      .filter((r) => r.meta.sidebar)
+      .filter(r => r.meta.sidebar)
       .sort((a, b) => a.meta.sidebar!.order - b.meta.sidebar!.order)
-      .map((r) => ({
+      .map(r => ({
         label: r.meta.title ?? '',
         icon: r.meta.sidebar!.icon,
-        to: r.path.replace(/\/:[\w]+\?$/, ''),
+        to: r.path.replace(/\/:\w+\?$/, ''),
         section: r.meta.sidebar!.section,
       })),
   )

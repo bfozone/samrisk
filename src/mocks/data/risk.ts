@@ -1,6 +1,6 @@
+import type { AuMSnapshot, ExposureBucket, LiquidityBucket, PnLResult, TrackingErrorResult, VaRResult } from '@/api/schemas'
 import { http, HttpResponse } from 'msw'
-import type { VaRResult, ExposureBucket, AuMSnapshot, TrackingErrorResult, PnLResult, LiquidityBucket } from '@/api/schemas'
-import { seededRandom, lastNWeekdays } from './seed'
+import { lastNWeekdays, seededRandom } from './seed'
 
 const tradingDays = lastNWeekdays(250)
 
@@ -53,8 +53,14 @@ function generatePnL(portfolioId: string, nav: number, dailyVol: number, seed: n
   return tradingDays.map((date) => {
     const month = date.slice(0, 7)
     const year = date.slice(0, 4)
-    if (month !== prevMonth) { mtd = 0; prevMonth = month }
-    if (year !== prevYear) { ytd = 0; prevYear = year }
+    if (month !== prevMonth) {
+      mtd = 0
+      prevMonth = month
+    }
+    if (year !== prevYear) {
+      ytd = 0
+      prevYear = year
+    }
     const daily = (rand() - 0.48) * dailyVol * nav
     mtd += daily
     ytd += daily
@@ -90,18 +96,18 @@ const pnlResults: PnLResult[] = [
 ]
 
 const exposures: Record<string, ExposureBucket[]> = {
-  '1': [
+  1: [
     { category: 'Equities', value: 175_000_000, percentage: 35 },
     { category: 'Fixed Income', value: 125_000_000, percentage: 25 },
     { category: 'Alternatives', value: 75_000_000, percentage: 15 },
     { category: 'Cash', value: 50_000_000, percentage: 10 },
     { category: 'Derivatives', value: 75_000_000, percentage: 15 },
   ],
-  '2': [
+  2: [
     { category: 'Equities', value: 232_500_000, percentage: 93 },
     { category: 'Cash', value: 17_500_000, percentage: 7 },
   ],
-  '3': [
+  3: [
     { category: 'Fixed Income', value: 245_000_000, percentage: 70 },
     { category: 'Derivatives', value: 87_500_000, percentage: 25 },
     { category: 'Cash', value: 17_500_000, percentage: 5 },
@@ -109,20 +115,20 @@ const exposures: Record<string, ExposureBucket[]> = {
 }
 
 const liquidityData: Record<string, LiquidityBucket[]> = {
-  '1': [
+  1: [
     { portfolioId: '1', horizon: '1 Day', value: 50_000_000, percentage: 10 },
     { portfolioId: '1', horizon: '2-7 Days', value: 175_000_000, percentage: 35 },
     { portfolioId: '1', horizon: '8-30 Days', value: 125_000_000, percentage: 25 },
     { portfolioId: '1', horizon: '31-90 Days', value: 75_000_000, percentage: 15 },
     { portfolioId: '1', horizon: '>90 Days', value: 75_000_000, percentage: 15 },
   ],
-  '2': [
+  2: [
     { portfolioId: '2', horizon: '1 Day', value: 17_500_000, percentage: 7 },
     { portfolioId: '2', horizon: '2-7 Days', value: 157_500_000, percentage: 63 },
     { portfolioId: '2', horizon: '8-30 Days', value: 62_500_000, percentage: 25 },
     { portfolioId: '2', horizon: '31-90 Days', value: 12_500_000, percentage: 5 },
   ],
-  '3': [
+  3: [
     { portfolioId: '3', horizon: '1 Day', value: 17_500_000, percentage: 5 },
     { portfolioId: '3', horizon: '2-7 Days', value: 84_000_000, percentage: 24 },
     { portfolioId: '3', horizon: '8-30 Days', value: 119_000_000, percentage: 34 },
@@ -134,8 +140,9 @@ const liquidityData: Record<string, LiquidityBucket[]> = {
 // --- Helpers ---
 
 function filterByAsOf<T extends { date: string }>(items: T[], asOf: string | null): T[] {
-  if (!asOf) return items
-  return items.filter((item) => item.date <= asOf)
+  if (!asOf)
+    return items
+  return items.filter(item => item.date <= asOf)
 }
 
 function getAsOf(request: Request): string | null {
@@ -150,10 +157,10 @@ export const riskHandlers = [
     const id = params.id as string
     const asOf = getAsOf(request)
     return HttpResponse.json({
-      aum: filterByAsOf(aumResults.filter((a) => a.portfolioId === id), asOf),
-      pnl: filterByAsOf(pnlResults.filter((p) => p.portfolioId === id), asOf),
-      var: filterByAsOf(varResults.filter((v) => v.portfolioId === id), asOf),
-      trackingError: filterByAsOf(trackingErrorResults.filter((t) => t.portfolioId === id), asOf),
+      aum: filterByAsOf(aumResults.filter(a => a.portfolioId === id), asOf),
+      pnl: filterByAsOf(pnlResults.filter(p => p.portfolioId === id), asOf),
+      var: filterByAsOf(varResults.filter(v => v.portfolioId === id), asOf),
+      trackingError: filterByAsOf(trackingErrorResults.filter(t => t.portfolioId === id), asOf),
       exposures: exposures[id] ?? [],
       liquidity: liquidityData[id] ?? [],
     })
@@ -161,7 +168,7 @@ export const riskHandlers = [
 
   http.get('/api/risk/:id/var', ({ params, request }) => {
     const asOf = getAsOf(request)
-    const filtered = varResults.filter((v) => v.portfolioId === params.id)
+    const filtered = varResults.filter(v => v.portfolioId === params.id)
     return HttpResponse.json(filterByAsOf(filtered, asOf))
   }),
 
@@ -172,19 +179,19 @@ export const riskHandlers = [
 
   http.get('/api/risk/:id/aum', ({ params, request }) => {
     const asOf = getAsOf(request)
-    const filtered = aumResults.filter((a) => a.portfolioId === params.id)
+    const filtered = aumResults.filter(a => a.portfolioId === params.id)
     return HttpResponse.json(filterByAsOf(filtered, asOf))
   }),
 
   http.get('/api/risk/:id/tracking-error', ({ params, request }) => {
     const asOf = getAsOf(request)
-    const filtered = trackingErrorResults.filter((t) => t.portfolioId === params.id)
+    const filtered = trackingErrorResults.filter(t => t.portfolioId === params.id)
     return HttpResponse.json(filterByAsOf(filtered, asOf))
   }),
 
   http.get('/api/risk/:id/pnl', ({ params, request }) => {
     const asOf = getAsOf(request)
-    const filtered = pnlResults.filter((p) => p.portfolioId === params.id)
+    const filtered = pnlResults.filter(p => p.portfolioId === params.id)
     return HttpResponse.json(filterByAsOf(filtered, asOf))
   }),
 

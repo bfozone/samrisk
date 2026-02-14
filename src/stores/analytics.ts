@@ -1,6 +1,6 @@
+import { useLocalStorage } from '@vueuse/core'
 import { defineStore } from 'pinia'
 import { computed } from 'vue'
-import { useLocalStorage } from '@vueuse/core'
 
 export const useAnalyticsContext = defineStore('analytics', () => {
   const portfolioId = useLocalStorage<string | null>('samrisk-portfolio-id', null)

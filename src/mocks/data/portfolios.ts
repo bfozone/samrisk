@@ -1,5 +1,5 @@
-import { http, HttpResponse } from 'msw'
 import type { Portfolio, Position } from '@/api/schemas'
+import { http, HttpResponse } from 'msw'
 
 const portfolios: Portfolio[] = [
   { id: '1', name: 'Global Multi-Asset', currency: 'EUR', navTotal: 500_000_000 },
@@ -37,7 +37,7 @@ export const portfolioHandlers = [
   http.get('/api/portfolios', () => HttpResponse.json(portfolios)),
 
   http.get('/api/portfolios/:id/positions', ({ params }) => {
-    const filtered = positions.filter((p) => p.portfolioId === params.id)
+    const filtered = positions.filter(p => p.portfolioId === params.id)
     return HttpResponse.json(filtered)
   }),
 ]

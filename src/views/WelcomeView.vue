@@ -6,8 +6,10 @@ const { data: user } = useCurrentUser()
 
 const greeting = computed(() => {
   const hour = new Date().getHours()
-  if (hour < 12) return 'Good morning'
-  if (hour < 18) return 'Good afternoon'
+  if (hour < 12)
+    return 'Good morning'
+  if (hour < 18)
+    return 'Good afternoon'
   return 'Good evening'
 })
 
@@ -26,8 +28,12 @@ const today = computed(() =>
     <p class="welcome-greeting">
       {{ greeting }}<span v-if="user?.name">, {{ user.name.split(' ')[0] }}</span>
     </p>
-    <p class="welcome-subtitle">Welcome to the Sustainable Asset Management Risk Platform</p>
-    <p class="welcome-date">{{ today }}</p>
+    <p class="welcome-subtitle">
+      Welcome to the Sustainable Asset Management Risk Platform
+    </p>
+    <p class="welcome-date">
+      {{ today }}
+    </p>
   </div>
 </template>
 

@@ -6,6 +6,8 @@ const route = useRoute()
 
 <template>
   <div>
-    <p class="placeholder-hint">{{ (route.meta.hint as string) ?? '' }}</p>
+    <p class="placeholder-hint">
+      {{ (route.meta.hint as string) ?? '' }}
+    </p>
   </div>
 </template>

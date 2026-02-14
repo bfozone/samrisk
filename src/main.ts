@@ -1,14 +1,14 @@
-import { createApp } from 'vue'
+import { QueryClient, VueQueryPlugin } from '@tanstack/vue-query'
+import axios from 'axios'
 import { createPinia } from 'pinia'
-import { VueQueryPlugin, QueryClient } from '@tanstack/vue-query'
 import PrimeVue from 'primevue/config'
 import ToastService from 'primevue/toastservice'
-import axios from 'axios'
-import RiskAppPreset from './theme/preset'
-import router from './router'
-import App from './App.vue'
+import { createApp } from 'vue'
 import { configureApiErrorHandlers, configureAuthToken } from '@/api/client'
 import { getToastRef } from '@/utils/toastRef'
+import App from './App.vue'
+import router from './router'
+import RiskAppPreset from './theme/preset'
 
 import 'primeicons/primeicons.css'
 import './assets/main.css'
@@ -76,13 +76,15 @@ async function bootstrap() {
         staleTime: 2 * 60 * 1000,
         refetchOnWindowFocus: false,
         retry: (failureCount, error) => {
-          if (axios.isAxiosError(error) && error.response?.status === 429) return failureCount < 3
+          if (axios.isAxiosError(error) && error.response?.status === 429)
+            return failureCount < 3
           return false
         },
         retryDelay: (attemptIndex, error) => {
           if (axios.isAxiosError(error)) {
-            const ra = parseInt(error.response?.headers?.['retry-after'] ?? '', 10)
-            if (!isNaN(ra)) return ra * 1000
+            const ra = Number.parseInt(error.response?.headers?.['retry-after'] ?? '', 10)
+            if (!Number.isNaN(ra))
+              return ra * 1000
           }
           return Math.min(1000 * 2 ** attemptIndex, 30000)
         },

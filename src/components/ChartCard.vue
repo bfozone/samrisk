@@ -1,12 +1,10 @@
 <script setup lang="ts">
-import { computed, ref, onMounted, onBeforeUnmount } from 'vue'
-import Skeleton from 'primevue/skeleton'
-import VChart from 'vue-echarts'
 import type { EChartsOption } from 'echarts'
+import Skeleton from 'primevue/skeleton'
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
+import VChart from 'vue-echarts'
 import AppCard from '@/components/base/AppCard.vue'
 import QueryError from '@/components/base/QueryError.vue'
-
-const SIZE_MAP = { sm: '220px', default: '350px', lg: '480px' } as const
 
 const props = defineProps<{
   title: string
@@ -17,6 +15,8 @@ const props = defineProps<{
   error?: boolean
   onRetry?: () => void
 }>()
+
+const SIZE_MAP = { sm: '220px', default: '350px', lg: '480px' } as const
 
 const resolvedHeight = computed(() => props.height ?? SIZE_MAP[props.size ?? 'default'])
 
@@ -34,7 +34,8 @@ onMounted(() => {
     },
     { rootMargin: '200px' },
   )
-  if (wrapperRef.value) observer.observe(wrapperRef.value)
+  if (wrapperRef.value)
+    observer.observe(wrapperRef.value)
 })
 
 onBeforeUnmount(() => {
@@ -45,7 +46,9 @@ onBeforeUnmount(() => {
 <template>
   <div ref="wrapperRef">
     <AppCard>
-      <template #title>{{ title }}</template>
+      <template #title>
+        {{ title }}
+      </template>
       <template #content>
         <Skeleton v-if="loading || !visible" :style="{ height: resolvedHeight, width: '100%' }" />
         <QueryError v-else-if="error" :on-retry="onRetry" :style="{ height: resolvedHeight }" />

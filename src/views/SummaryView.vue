@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import AnalyticsView from '@/components/AnalyticsView.vue'
+import PresetChartCard from '@/components/charts/PresetChartCard.vue'
 import DashboardGrid from '@/components/DashboardGrid.vue'
 import StatCard from '@/components/StatCard.vue'
-import PresetChartCard from '@/components/charts/PresetChartCard.vue'
 import { useSummaryMetrics } from './summary/useSummaryMetrics'
 
 const { statCards, chartRows } = useSummaryMetrics()

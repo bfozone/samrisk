@@ -1,23 +1,23 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-
-import ShowcaseLayout from '@/components/ShowcaseLayout.vue'
-import DashboardGrid from '@/components/DashboardGrid.vue'
-import FlexStack from '@/components/base/FlexStack.vue'
-import AppCard from '@/components/base/AppCard.vue'
-import AppInputText from '@/components/base/AppInputText.vue'
-import Textarea from 'primevue/textarea'
 import AutoComplete from 'primevue/autocomplete'
-import InputGroup from 'primevue/inputgroup'
-import InputGroupAddon from 'primevue/inputgroupaddon'
+
 import DatePicker from 'primevue/datepicker'
-import Slider from 'primevue/slider'
-import Knob from 'primevue/knob'
-import InputNumber from 'primevue/inputnumber'
 import FloatLabel from 'primevue/floatlabel'
 import IconField from 'primevue/iconfield'
+import InputGroup from 'primevue/inputgroup'
+import InputGroupAddon from 'primevue/inputgroupaddon'
 import InputIcon from 'primevue/inputicon'
+import InputNumber from 'primevue/inputnumber'
 import InputText from 'primevue/inputtext'
+import Knob from 'primevue/knob'
+import Slider from 'primevue/slider'
+import Textarea from 'primevue/textarea'
+import { ref } from 'vue'
+import AppCard from '@/components/base/AppCard.vue'
+import AppInputText from '@/components/base/AppInputText.vue'
+import FlexStack from '@/components/base/FlexStack.vue'
+import DashboardGrid from '@/components/DashboardGrid.vue'
+import ShowcaseLayout from '@/components/ShowcaseLayout.vue'
 
 // --- InputText ---
 const name = ref('')
@@ -30,13 +30,28 @@ const notes = ref('')
 const selectedIssuer = ref('')
 const filteredIssuers = ref<string[]>([])
 const allIssuers = [
-  'Apple Inc.', 'Alphabet Inc.', 'Amazon.com Inc.', 'ABB Ltd.',
-  'Microsoft Corp.', 'Meta Platforms', 'Morgan Stanley',
-  'Nestle SA', 'Novartis AG', 'Netflix Inc.',
-  'Roche Holding', 'Royal Dutch Shell', 'Raiffeisen',
-  'UBS Group AG', 'Unilever PLC', 'US Bancorp',
-  'Swiss Re AG', 'Swatch Group', 'Siemens AG',
-  'Credit Suisse', 'Coca-Cola Co.', 'Citigroup Inc.',
+  'Apple Inc.',
+  'Alphabet Inc.',
+  'Amazon.com Inc.',
+  'ABB Ltd.',
+  'Microsoft Corp.',
+  'Meta Platforms',
+  'Morgan Stanley',
+  'Nestle SA',
+  'Novartis AG',
+  'Netflix Inc.',
+  'Roche Holding',
+  'Royal Dutch Shell',
+  'Raiffeisen',
+  'UBS Group AG',
+  'Unilever PLC',
+  'US Bancorp',
+  'Swiss Re AG',
+  'Swatch Group',
+  'Siemens AG',
+  'Credit Suisse',
+  'Coca-Cola Co.',
+  'Citigroup Inc.',
 ]
 function searchIssuers(event: { query: string }) {
   const q = event.query.toLowerCase()
@@ -64,7 +79,9 @@ const searchQuery = ref('')
   <ShowcaseLayout>
     <DashboardGrid>
       <AppCard>
-        <template #title>Text Inputs</template>
+        <template #title>
+          Text Inputs
+        </template>
         <template #content>
           <FlexStack gap="lg">
             <FloatLabel>
@@ -86,7 +103,9 @@ const searchQuery = ref('')
       </AppCard>
 
       <AppCard>
-        <template #title>Textarea</template>
+        <template #title>
+          Textarea
+        </template>
         <template #content>
           <FlexStack gap="lg">
             <FloatLabel>
@@ -98,7 +117,9 @@ const searchQuery = ref('')
       </AppCard>
 
       <AppCard>
-        <template #title>AutoComplete</template>
+        <template #title>
+          AutoComplete
+        </template>
         <template #content>
           <FlexStack gap="lg">
             <AutoComplete
@@ -114,7 +135,9 @@ const searchQuery = ref('')
       </AppCard>
 
       <AppCard>
-        <template #title>Input Groups</template>
+        <template #title>
+          Input Groups
+        </template>
         <template #content>
           <FlexStack gap="lg">
             <InputGroup>
@@ -137,7 +160,9 @@ const searchQuery = ref('')
       </AppCard>
 
       <AppCard>
-        <template #title>Date Picker</template>
+        <template #title>
+          Date Picker
+        </template>
         <template #content>
           <FlexStack gap="lg">
             <FloatLabel>
@@ -153,7 +178,9 @@ const searchQuery = ref('')
       </AppCard>
 
       <AppCard>
-        <template #title>Slider</template>
+        <template #title>
+          Slider
+        </template>
         <template #content>
           <FlexStack gap="lg">
             <div>
@@ -169,7 +196,9 @@ const searchQuery = ref('')
       </AppCard>
 
       <AppCard>
-        <template #title>Knob</template>
+        <template #title>
+          Knob
+        </template>
         <template #content>
           <div class="demo-knobs">
             <div class="demo-knob-item">

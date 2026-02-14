@@ -1,18 +1,18 @@
 <script setup lang="ts">
-import { computed } from 'vue'
 import type { EChartsOption } from 'echarts'
-import type { LineChartConfig, PieChartConfig, BarChartConfig, ChartOverrides } from '@/charts'
-import { metricTrend, pnlTrend, riskTrend, dualMetric, allocationDonut, liquidityProfile } from '@/charts'
+import type { BarChartConfig, ChartOverrides, LineChartConfig, PieChartConfig } from '@/charts'
+import { computed } from 'vue'
+import { allocationDonut, dualMetric, liquidityProfile, metricTrend, pnlTrend, riskTrend } from '@/charts'
 import ChartCard from '@/components/ChartCard.vue'
 import { uiComponentDefaults } from '@/ui/config'
 
-type PresetPayload =
-  | { preset: 'metricTrend'; config: LineChartConfig }
-  | { preset: 'pnlTrend'; config: Omit<LineChartConfig, 'zeroLine'> }
-  | { preset: 'riskTrend'; config: LineChartConfig }
-  | { preset: 'dualMetric'; config: LineChartConfig }
-  | { preset: 'allocationDonut'; config: PieChartConfig }
-  | { preset: 'liquidityProfile'; config: Omit<BarChartConfig, 'horizontal'> }
+type PresetPayload
+  = | { preset: 'metricTrend', config: LineChartConfig }
+    | { preset: 'pnlTrend', config: Omit<LineChartConfig, 'zeroLine'> }
+    | { preset: 'riskTrend', config: LineChartConfig }
+    | { preset: 'dualMetric', config: LineChartConfig }
+    | { preset: 'allocationDonut', config: PieChartConfig }
+    | { preset: 'liquidityProfile', config: Omit<BarChartConfig, 'horizontal'> }
 
 const props = defineProps<{
   title: string

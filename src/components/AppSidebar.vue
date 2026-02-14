@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { useAppStore } from '@/stores/app'
-import { useAnalyticsContext } from '@/stores/analytics'
+import Tooltip from 'primevue/tooltip'
+import { computed } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { useCurrentUser } from '@/composables/useAuth'
 import { useNavItems } from '@/composables/useNavItems'
-import { useRoute, useRouter } from 'vue-router'
-import { computed } from 'vue'
-import Tooltip from 'primevue/tooltip'
+import { useAnalyticsContext } from '@/stores/analytics'
+import { useAppStore } from '@/stores/app'
 
 const vTooltip = Tooltip
 
@@ -28,19 +28,28 @@ const showTooltip = computed(() => appStore.sidebarCollapsed && !appStore.isMobi
 const env = import.meta.env.MODE === 'production' ? 'PROD' : 'DEV'
 
 function isActive(to: string) {
-  if (route.path === to) return true
-  if (!route.path.startsWith(to + '/')) return false
+  if (route.path === to)
+    return true
+  if (!route.path.startsWith(`${to}/`))
+    return false
   return !navItems.value.some(item => item.to !== to && item.to.length > to.length
-    && (route.path === item.to || route.path.startsWith(item.to + '/')))
+    && (route.path === item.to || route.path.startsWith(`${item.to}/`)))
 }
 
 function navigate(to: string) {
   const resolved = router.resolve(to)
-  const target = resolved.meta.analyticsRoute && analytics.portfolioId
-    ? `${to}/${analytics.portfolioId}`
-    : to
-  router.push(target)
-  if (appStore.isMobile) appStore.closeMobile()
+  if (resolved.meta.analyticsRoute && analytics.portfolioId) {
+    router.push({
+      name: resolved.name!,
+      params: { portfolioId: analytics.portfolioId },
+      query: { ...route.query },
+    })
+  }
+  else {
+    router.push(to)
+  }
+  if (appStore.isMobile)
+    appStore.closeMobile()
 }
 </script>
 
@@ -117,7 +126,9 @@ function navigate(to: string) {
 
       <!-- User section -->
       <button class="sidebar-user" type="button" :aria-label="`User: ${user?.name ?? 'Unidentified User'}`">
-        <div class="user-avatar" aria-hidden="true">{{ user?.initials ?? '?' }}</div>
+        <div class="user-avatar" aria-hidden="true">
+          {{ user?.initials ?? '?' }}
+        </div>
         <Transition name="label">
           <div v-if="showLabels" class="user-info">
             <span class="user-name">{{ user?.name ?? 'Unidentified User' }}</span>

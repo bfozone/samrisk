@@ -1,12 +1,12 @@
 <script setup lang="ts">
+import DatePicker from 'primevue/datepicker'
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
-import { useAppStore } from '@/stores/app'
-import { useAnalyticsContext } from '@/stores/analytics'
-import { usePortfolios } from '@/composables/usePortfolios'
 import AppButton from '@/components/base/AppButton.vue'
 import AppSelect from '@/components/base/AppSelect.vue'
-import DatePicker from 'primevue/datepicker'
+import { usePortfolios } from '@/composables/usePortfolios'
+import { useAnalyticsContext } from '@/stores/analytics'
+import { useAppStore } from '@/stores/app'
 
 const appStore = useAppStore()
 const analytics = useAnalyticsContext()
@@ -19,7 +19,8 @@ const pageTitle = computed(() => (route.meta.title as string) ?? '')
 /** Parse YYYY-MM-DD to local Date (avoids UTC midnight shift from Date.parse) */
 function parseLocalDate(iso: string): Date | null {
   const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso)
-  if (!m) return null
+  if (!m)
+    return null
   return new Date(+m[1]!, +m[2]! - 1, +m[3]!)
 }
 
@@ -51,7 +52,9 @@ const dateModel = computed({
         class="topbar-toggle"
         @click="appStore.toggleSidebar()"
       />
-      <h1 class="topbar-title">{{ pageTitle }}</h1>
+      <h1 class="topbar-title">
+        {{ pageTitle }}
+      </h1>
     </div>
 
     <div v-if="isAnalyticsRoute" class="topbar-right">

@@ -1,5 +1,5 @@
-import { http, HttpResponse } from 'msw'
 import type { User } from '@/api/schemas'
+import { http, HttpResponse } from 'msw'
 
 const currentUser: User = {
   id: '1',

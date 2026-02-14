@@ -1,8 +1,8 @@
 import type { EChartsOption } from 'echarts'
-import { chartColors } from '@/theme/preset'
-import { textStyle, tooltipItem, animation } from './defaults'
-import { deepMerge } from './merge'
 import type { ChartOverrides } from './types'
+import { chartColors } from '@/theme/preset'
+import { animation, textStyle, tooltipItem } from './defaults'
+import { deepMerge } from './merge'
 
 export interface CalendarHeatmapConfig {
   /** Data as [date-string, value] pairs, e.g. ['2025-01-15', 3.2] */

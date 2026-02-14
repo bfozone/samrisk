@@ -1,14 +1,19 @@
 import type { EChartsOption } from 'echarts'
-import type { HeatmapChartConfig, ChartOverrides } from './types'
+import type { ChartOverrides, HeatmapChartConfig } from './types'
 import { chartColors } from '@/theme/preset'
-import { formatValue } from './format'
 import {
-  textStyle, tooltipItem, cleanAxisLine, cleanAxisTick, cleanAxisLabel, animation,
+  animation,
+  cleanAxisLabel,
+  cleanAxisLine,
+  cleanAxisTick,
+  textStyle,
+  tooltipItem,
 } from './defaults'
+import { formatValue } from './format'
 import { deepMerge } from './merge'
 
 export function heatmapChart(config: HeatmapChartConfig, overrides?: ChartOverrides): EChartsOption {
-  const values = config.data.map((d) => d[2])
+  const values = config.data.map(d => d[2])
   const {
     xLabels,
     yLabels,

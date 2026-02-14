@@ -1,7 +1,7 @@
 import type { EChartsOption } from 'echarts'
-import type { GaugeChartConfig, ChartOverrides } from './types'
+import type { ChartOverrides, GaugeChartConfig } from './types'
 import { chartColors } from '@/theme/preset'
-import { textStyle, animation } from './defaults'
+import { animation, textStyle } from './defaults'
 import { deepMerge } from './merge'
 
 export function gaugeChart(config: GaugeChartConfig, overrides?: ChartOverrides): EChartsOption {
@@ -20,7 +20,7 @@ export function gaugeChart(config: GaugeChartConfig, overrides?: ChartOverrides)
   if (thresholds) {
     axisLine.lineStyle = {
       width: 16,
-      color: thresholds.map((t) => [t[0], t[1]]),
+      color: thresholds.map(t => [t[0], t[1]]),
     }
   }
 

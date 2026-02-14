@@ -1,9 +1,9 @@
 import type { EChartsOption } from 'echarts'
-import type { LineChartConfig, BarChartConfig, PieChartConfig, ChartOverrides } from './types'
-import { lineChart } from './line'
-import { barChart } from './bar'
-import { pieChart } from './pie'
+import type { BarChartConfig, ChartOverrides, LineChartConfig, PieChartConfig } from './types'
 import { chartColors } from '@/theme/preset'
+import { barChart } from './bar'
+import { lineChart } from './line'
+import { pieChart } from './pie'
 
 /** Single-metric trend (AuM, NAV) - dark teal */
 export function metricTrend(config: LineChartConfig, overrides?: ChartOverrides): EChartsOption {

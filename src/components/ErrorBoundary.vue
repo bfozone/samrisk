@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onErrorCaptured } from 'vue'
+import { onErrorCaptured, ref } from 'vue'
 import AppButton from '@/components/base/AppButton.vue'
 
 const hasError = ref(false)
@@ -21,12 +21,16 @@ function retry() {
   <div v-if="hasError" class="error-boundary">
     <div class="error-boundary-content">
       <i class="pi pi-exclamation-triangle error-boundary-icon"></i>
-      <h2 class="error-boundary-title">Something went wrong</h2>
-      <p class="error-boundary-detail">{{ errorMessage }}</p>
+      <h2 class="error-boundary-title">
+        Something went wrong
+      </h2>
+      <p class="error-boundary-detail">
+        {{ errorMessage }}
+      </p>
       <AppButton label="Retry" icon="pi pi-refresh" @click="retry" />
     </div>
   </div>
-  <slot v-else />
+  <slot v-else></slot>
 </template>
 
 <style scoped>

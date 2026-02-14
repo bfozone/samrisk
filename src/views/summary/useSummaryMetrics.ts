@@ -1,10 +1,18 @@
 import { computed } from 'vue'
-import { useAnalyticsContext } from '@/stores/analytics'
-import { useSummary } from '@/composables/useSummary'
 import { usePortfolioContext } from '@/composables/usePortfolioContext'
+import { useSummary } from '@/composables/useSummary'
+import { useAnalyticsContext } from '@/stores/analytics'
 import {
-  deriveAuMStat, derivePnLStat, deriveVaRStat, deriveTEStat,
-  buildAuMChart, buildPnLChart, buildVaRChart, buildExposureChart, buildTEChart, buildLiquidityChart,
+  buildAuMChart,
+  buildExposureChart,
+  buildLiquidityChart,
+  buildPnLChart,
+  buildTEChart,
+  buildVaRChart,
+  deriveAuMStat,
+  derivePnLStat,
+  deriveTEStat,
+  deriveVaRStat,
 } from './config'
 
 export function useSummaryMetrics() {

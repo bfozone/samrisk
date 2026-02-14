@@ -1,5 +1,6 @@
-import type { AuMSnapshot, PnLResult, VaRResult, TrackingErrorResult, ExposureBucket, LiquidityBucket } from '@/api/schemas'
-import { formatValue, type LineChartConfig, type PieChartConfig, type BarChartConfig } from '@/charts'
+import type { AuMSnapshot, ExposureBucket, LiquidityBucket, PnLResult, TrackingErrorResult, VaRResult } from '@/api/schemas'
+import type { BarChartConfig, LineChartConfig, PieChartConfig } from '@/charts'
+import { formatValue } from '@/charts'
 
 export interface StatCardData {
   label: string
@@ -15,7 +16,8 @@ function fmtPct(v: number): string {
 // --- Stat derivation ---
 
 export function deriveAuMStat(items: AuMSnapshot[], currency: string): StatCardData {
-  if (items.length < 2) return { label: 'AuM', value: '-', change: '', trend: 'flat' }
+  if (items.length < 2)
+    return { label: 'AuM', value: '-', change: '', trend: 'flat' }
   const latest = items[items.length - 1]!
   const prev = items[items.length - 2]!
   const pctChange = ((latest.aum - prev.aum) / prev.aum) * 100
@@ -28,7 +30,8 @@ export function deriveAuMStat(items: AuMSnapshot[], currency: string): StatCardD
 }
 
 export function derivePnLStat(items: PnLResult[], currency: string): StatCardData {
-  if (!items.length) return { label: 'Daily P&L', value: '-', change: '', trend: 'flat' }
+  if (!items.length)
+    return { label: 'Daily P&L', value: '-', change: '', trend: 'flat' }
   const latest = items[items.length - 1]!
   const v = latest.daily
   return {
@@ -40,7 +43,8 @@ export function derivePnLStat(items: PnLResult[], currency: string): StatCardDat
 }
 
 export function deriveVaRStat(items: VaRResult[]): StatCardData {
-  if (items.length < 2) return { label: 'VaR 95%', value: '-', change: '', trend: 'flat' }
+  if (items.length < 2)
+    return { label: 'VaR 95%', value: '-', change: '', trend: 'flat' }
   const latest = items[items.length - 1]!
   const prev = items[items.length - 2]!
   const diff = latest.var95 - prev.var95
@@ -53,7 +57,8 @@ export function deriveVaRStat(items: VaRResult[]): StatCardData {
 }
 
 export function deriveTEStat(items: TrackingErrorResult[]): StatCardData {
-  if (!items.length) return { label: 'Tracking Error', value: '-', change: '', trend: 'flat' }
+  if (!items.length)
+    return { label: 'Tracking Error', value: '-', change: '', trend: 'flat' }
   const latest = items[items.length - 1]!
   return {
     label: 'Tracking Error',
@@ -67,8 +72,8 @@ export function deriveTEStat(items: TrackingErrorResult[]): StatCardData {
 
 export function buildAuMChart(items: AuMSnapshot[], currency: string): LineChartConfig {
   return {
-    categories: items.map((d) => d.date),
-    series: [{ name: 'AuM', data: items.map((d) => d.aum), area: true }],
+    categories: items.map(d => d.date),
+    series: [{ name: 'AuM', data: items.map(d => d.aum), area: true }],
     format: 'currency',
     currency,
   }
@@ -76,8 +81,8 @@ export function buildAuMChart(items: AuMSnapshot[], currency: string): LineChart
 
 export function buildPnLChart(items: PnLResult[], currency: string): Omit<LineChartConfig, 'zeroLine'> {
   return {
-    categories: items.map((d) => d.date),
-    series: [{ name: 'Cumulative P&L', data: items.map((d) => d.cumulative) }],
+    categories: items.map(d => d.date),
+    series: [{ name: 'Cumulative P&L', data: items.map(d => d.cumulative) }],
     format: 'currency',
     currency,
   }
@@ -85,26 +90,26 @@ export function buildPnLChart(items: PnLResult[], currency: string): Omit<LineCh
 
 export function buildVaRChart(items: VaRResult[]): LineChartConfig {
   return {
-    categories: items.map((d) => d.date),
+    categories: items.map(d => d.date),
     series: [
-      { name: 'VaR 95%', data: items.map((d) => d.var95) },
-      { name: 'VaR 99%', data: items.map((d) => d.var99) },
+      { name: 'VaR 95%', data: items.map(d => d.var95) },
+      { name: 'VaR 99%', data: items.map(d => d.var99) },
     ],
   }
 }
 
 export function buildExposureChart(items: ExposureBucket[]): PieChartConfig {
   return {
-    data: items.map((d) => ({ value: d.percentage, name: d.category })),
+    data: items.map(d => ({ value: d.percentage, name: d.category })),
   }
 }
 
 export function buildTEChart(items: TrackingErrorResult[]): LineChartConfig {
   return {
-    categories: items.map((d) => d.date),
+    categories: items.map(d => d.date),
     series: [
-      { name: 'Tracking Error', data: items.map((d) => d.te) },
-      { name: 'Info Ratio', data: items.map((d) => d.infoRatio), yAxisIndex: 1 },
+      { name: 'Tracking Error', data: items.map(d => d.te) },
+      { name: 'Info Ratio', data: items.map(d => d.infoRatio), yAxisIndex: 1 },
     ],
     format: 'percent',
     rightFormat: 'number',
@@ -113,8 +118,8 @@ export function buildTEChart(items: TrackingErrorResult[]): LineChartConfig {
 
 export function buildLiquidityChart(items: LiquidityBucket[]): Omit<BarChartConfig, 'horizontal'> {
   return {
-    categories: items.map((d) => d.horizon),
-    series: [{ name: 'Liquidity', data: items.map((d) => d.percentage) }],
+    categories: items.map(d => d.horizon),
+    series: [{ name: 'Liquidity', data: items.map(d => d.percentage) }],
     format: 'percent',
   }
 }

@@ -1,10 +1,10 @@
 <script setup lang="ts">
+import Toast from 'primevue/toast'
+import { useToast } from 'primevue/usetoast'
 import AppSidebar from '@/components/AppSidebar.vue'
 import AppTopbar from '@/components/AppTopbar.vue'
 import BackendStatus from '@/components/BackendStatus.vue'
 import ErrorBoundary from '@/components/ErrorBoundary.vue'
-import Toast from 'primevue/toast'
-import { useToast } from 'primevue/usetoast'
 import { useAnalyticsSync } from '@/composables/useAnalyticsSync'
 import { setToastRef } from '@/utils/toastRef'
 

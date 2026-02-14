@@ -1,5 +1,5 @@
 import type { EChartsOption } from 'echarts'
-import type { TreeChartConfig, ChartOverrides } from './types'
+import type { ChartOverrides, TreeChartConfig } from './types'
 import { chartColors } from '@/theme/preset'
 import { textStyle, tooltipItem } from './defaults'
 import { deepMerge } from './merge'

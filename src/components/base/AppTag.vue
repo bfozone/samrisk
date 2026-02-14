@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import { useAttrs } from 'vue'
 import Tag from 'primevue/tag'
+import { useAttrs } from 'vue'
 
 defineOptions({ inheritAttrs: false })
-
-type TagSeverity = 'success' | 'info' | 'warn' | 'danger' | 'secondary' | 'contrast'
 
 defineProps<{
   severity?: TagSeverity
 }>()
+
+type TagSeverity = 'success' | 'info' | 'warn' | 'danger' | 'secondary' | 'contrast'
 
 const attrs = useAttrs()
 </script>

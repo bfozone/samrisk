@@ -1,6 +1,6 @@
+import { useLocalStorage, useMediaQuery } from '@vueuse/core'
 import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
-import { useMediaQuery, useLocalStorage } from '@vueuse/core'
+import { computed, ref } from 'vue'
 
 export const useAppStore = defineStore('app', () => {
   const sidebarExpanded = useLocalStorage('samrisk-sidebar-expanded', true)
@@ -12,7 +12,8 @@ export const useAppStore = defineStore('app', () => {
   function toggleSidebar() {
     if (isMobile.value) {
       mobileOpen.value = !mobileOpen.value
-    } else {
+    }
+    else {
       sidebarExpanded.value = !sidebarExpanded.value
     }
   }

@@ -1,11 +1,9 @@
 <script setup lang="ts">
-import { computed, useAttrs } from 'vue'
 import DataTable from 'primevue/datatable'
+import { computed, useAttrs } from 'vue'
 import { uiComponentDefaults } from '@/ui/config'
 
 defineOptions({ inheritAttrs: false })
-
-type DataTableSize = 'small' | 'large'
 
 const props = defineProps<{
   size?: DataTableSize
@@ -17,9 +15,11 @@ const emit = defineEmits([
   'update:filters',
   'update:expandedRows',
   'update:editingRows',
-  'row-contextmenu',
-  'row-edit-save',
+  'rowContextmenu',
+  'rowEditSave',
 ])
+
+type DataTableSize = 'small' | 'large'
 
 const attrs = useAttrs()
 
@@ -37,8 +37,8 @@ const resolvedStripedRows = computed(() => props.stripedRows ?? uiComponentDefau
     @update:filters="emit('update:filters', $event)"
     @update:expandedRows="emit('update:expandedRows', $event)"
     @update:editingRows="emit('update:editingRows', $event)"
-    @row-contextmenu="emit('row-contextmenu', $event)"
-    @row-edit-save="emit('row-edit-save', $event)"
+    @row-contextmenu="emit('rowContextmenu', $event)"
+    @row-edit-save="emit('rowEditSave', $event)"
   >
     <template
       v-for="(_, slotName) in $slots"

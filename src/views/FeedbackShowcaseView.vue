@@ -1,18 +1,18 @@
 <script setup lang="ts">
-import { useToast } from 'primevue/usetoast'
+import Message from 'primevue/message'
 
-import ShowcaseLayout from '@/components/ShowcaseLayout.vue'
-import DashboardGrid from '@/components/DashboardGrid.vue'
+import ProgressBar from 'primevue/progressbar'
+import Toast from 'primevue/toast'
+import { useToast } from 'primevue/usetoast'
+import AppButton from '@/components/base/AppButton.vue'
+import AppCard from '@/components/base/AppCard.vue'
+import AppTag from '@/components/base/AppTag.vue'
 import FlexRow from '@/components/base/FlexRow.vue'
 import FlexStack from '@/components/base/FlexStack.vue'
-import AppCard from '@/components/base/AppCard.vue'
-import AppButton from '@/components/base/AppButton.vue'
-import AppTag from '@/components/base/AppTag.vue'
 import InfoCard from '@/components/base/InfoCard.vue'
 import QueryError from '@/components/base/QueryError.vue'
-import Message from 'primevue/message'
-import Toast from 'primevue/toast'
-import ProgressBar from 'primevue/progressbar'
+import DashboardGrid from '@/components/DashboardGrid.vue'
+import ShowcaseLayout from '@/components/ShowcaseLayout.vue'
 
 const toast = useToast()
 </script>
@@ -21,7 +21,9 @@ const toast = useToast()
   <ShowcaseLayout>
     <DashboardGrid>
       <AppCard>
-        <template #title>Tags</template>
+        <template #title>
+          Tags
+        </template>
         <template #content>
           <FlexRow>
             <AppTag value="Low Risk" severity="success" />
@@ -34,19 +36,31 @@ const toast = useToast()
       </AppCard>
 
       <AppCard>
-        <template #title>Messages</template>
+        <template #title>
+          Messages
+        </template>
         <template #content>
           <FlexStack gap="sm">
-            <Message severity="info">Portfolio data refreshed at 09:15 UTC</Message>
-            <Message severity="warn">VaR limit utilization above 80%</Message>
-            <Message severity="error">Failed to load exposure data</Message>
-            <Message severity="success">Risk report generated successfully</Message>
+            <Message severity="info">
+              Portfolio data refreshed at 09:15 UTC
+            </Message>
+            <Message severity="warn">
+              VaR limit utilization above 80%
+            </Message>
+            <Message severity="error">
+              Failed to load exposure data
+            </Message>
+            <Message severity="success">
+              Risk report generated successfully
+            </Message>
           </FlexStack>
         </template>
       </AppCard>
 
       <AppCard>
-        <template #title>Toast</template>
+        <template #title>
+          Toast
+        </template>
         <template #content>
           <Toast />
           <FlexRow>
@@ -60,7 +74,9 @@ const toast = useToast()
       </AppCard>
 
       <AppCard>
-        <template #title>Progress</template>
+        <template #title>
+          Progress
+        </template>
         <template #content>
           <FlexStack gap="sm">
             <div>
@@ -78,7 +94,9 @@ const toast = useToast()
 
     <DashboardGrid>
       <AppCard>
-        <template #title>Info Cards</template>
+        <template #title>
+          Info Cards
+        </template>
         <template #content>
           <FlexStack gap="sm">
             <InfoCard severity="error" title="Limit breach">
@@ -98,7 +116,9 @@ const toast = useToast()
       </AppCard>
 
       <AppCard>
-        <template #title>Query Error State</template>
+        <template #title>
+          Query Error State
+        </template>
         <template #content>
           <FlexStack gap="md">
             <span class="demo-label">Default (with retry)</span>

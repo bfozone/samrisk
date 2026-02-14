@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import { computed, useAttrs } from 'vue'
 import Select from 'primevue/select'
+import { computed, useAttrs } from 'vue'
 import { uiComponentDefaults } from '@/ui/config'
 
 defineOptions({ inheritAttrs: false })
-
-type SelectSize = 'small' | 'large'
 
 const props = defineProps<{
   size?: SelectSize
 }>()
 
 defineEmits(['update:modelValue'])
+
+type SelectSize = 'small' | 'large'
 
 const attrs = useAttrs()
 

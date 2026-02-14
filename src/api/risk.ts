@@ -1,11 +1,11 @@
 import apiClient, { parseArray } from './client'
 import {
-  VaRResultSchema,
-  ExposureBucketSchema,
   AuMSnapshotSchema,
-  TrackingErrorResultSchema,
-  PnLResultSchema,
+  ExposureBucketSchema,
   LiquidityBucketSchema,
+  PnLResultSchema,
+  TrackingErrorResultSchema,
+  VaRResultSchema,
 } from './schemas'
 
 export interface RiskQueryOptions {

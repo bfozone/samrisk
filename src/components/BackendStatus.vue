@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { usePortfolios } from '@/composables/usePortfolios'
 import AppButton from '@/components/base/AppButton.vue'
+import { usePortfolios } from '@/composables/usePortfolios'
 
 const { isError, refetch, isLoading } = usePortfolios()
 </script>
@@ -9,12 +9,16 @@ const { isError, refetch, isLoading } = usePortfolios()
   <div v-if="isError" class="backend-status">
     <div class="backend-status-content">
       <i class="pi pi-cloud-off backend-status-icon"></i>
-      <h2 class="backend-status-title">Unable to connect</h2>
-      <p class="backend-status-detail">The server is not reachable. Please check your connection and try again.</p>
+      <h2 class="backend-status-title">
+        Unable to connect
+      </h2>
+      <p class="backend-status-detail">
+        The server is not reachable. Please check your connection and try again.
+      </p>
       <AppButton label="Retry" icon="pi pi-refresh" @click="refetch()" />
     </div>
   </div>
-  <slot v-else-if="!isLoading" />
+  <slot v-else-if="!isLoading"></slot>
   <div v-else class="backend-status">
     <div class="backend-status-content">
       <i class="pi pi-spin pi-spinner backend-status-icon"></i>

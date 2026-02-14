@@ -1,23 +1,23 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import Breadcrumb from 'primevue/breadcrumb'
 
-import ShowcaseLayout from '@/components/ShowcaseLayout.vue'
+import Column from 'primevue/column'
+import ContextMenu from 'primevue/contextmenu'
+import MeterGroup from 'primevue/metergroup'
+import Step from 'primevue/step'
+import StepList from 'primevue/steplist'
+import StepPanel from 'primevue/steppanel'
+import StepPanels from 'primevue/steppanels'
+import Stepper from 'primevue/stepper'
+import { ref } from 'vue'
+import AppButton from '@/components/base/AppButton.vue'
+import AppCard from '@/components/base/AppCard.vue'
+import AppDataTable from '@/components/base/AppDataTable.vue'
+import FlexStack from '@/components/base/FlexStack.vue'
 import DashboardGrid from '@/components/DashboardGrid.vue'
 import DashboardGridItem from '@/components/DashboardGridItem.vue'
-import FlexStack from '@/components/base/FlexStack.vue'
-import AppCard from '@/components/base/AppCard.vue'
-import AppButton from '@/components/base/AppButton.vue'
-import AppDataTable from '@/components/base/AppDataTable.vue'
+import ShowcaseLayout from '@/components/ShowcaseLayout.vue'
 import { uiColorPresets } from '@/ui/config'
-import Breadcrumb from 'primevue/breadcrumb'
-import Stepper from 'primevue/stepper'
-import StepList from 'primevue/steplist'
-import StepPanels from 'primevue/steppanels'
-import Step from 'primevue/step'
-import StepPanel from 'primevue/steppanel'
-import ContextMenu from 'primevue/contextmenu'
-import Column from 'primevue/column'
-import MeterGroup from 'primevue/metergroup'
 
 // --- Breadcrumb ---
 const home = { icon: 'pi pi-home', to: '/' }
@@ -62,7 +62,9 @@ const meterValues = [
   <ShowcaseLayout>
     <DashboardGrid>
       <AppCard>
-        <template #title>Breadcrumb</template>
+        <template #title>
+          Breadcrumb
+        </template>
         <template #content>
           <FlexStack>
             <Breadcrumb :home="home" :model="breadcrumbItems" />
@@ -73,7 +75,9 @@ const meterValues = [
       </AppCard>
 
       <AppCard>
-        <template #title>Context Menu</template>
+        <template #title>
+          Context Menu
+        </template>
         <template #content>
           <span class="demo-hint">Right-click a row to see the context menu</span>
           <ContextMenu ref="contextMenu" :model="contextMenuItems" />
@@ -88,7 +92,9 @@ const meterValues = [
             <Column field="name" header="Holding" />
             <Column field="asset" header="Asset Class" />
             <Column field="weight" header="Weight %">
-              <template #body="{ data }">{{ data.weight.toFixed(1) }}%</template>
+              <template #body="{ data }">
+                {{ data.weight.toFixed(1) }}%
+              </template>
             </Column>
           </AppDataTable>
         </template>
@@ -96,13 +102,21 @@ const meterValues = [
 
       <DashboardGridItem :span="2">
         <AppCard>
-          <template #title>Stepper</template>
+          <template #title>
+            Stepper
+          </template>
           <template #content>
             <Stepper value="1" linear>
               <StepList>
-                <Step value="1">Select Portfolio</Step>
-                <Step value="2">Configure Parameters</Step>
-                <Step value="3">Review & Generate</Step>
+                <Step value="1">
+                  Select Portfolio
+                </Step>
+                <Step value="2">
+                  Configure Parameters
+                </Step>
+                <Step value="3">
+                  Review & Generate
+                </Step>
               </StepList>
               <StepPanels>
                 <StepPanel v-slot="{ activateCallback }" value="1">
@@ -139,7 +153,9 @@ const meterValues = [
 
       <DashboardGridItem :span="2">
         <AppCard>
-          <template #title>Meter Group</template>
+          <template #title>
+            Meter Group
+          </template>
           <template #content>
             <FlexStack>
               <MeterGroup :value="meterValues" />

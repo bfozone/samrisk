@@ -1,7 +1,7 @@
 import type { EChartsOption } from 'echarts'
-import type { RadarChartConfig, ChartOverrides } from './types'
+import type { ChartOverrides, RadarChartConfig } from './types'
 import { chartColors } from '@/theme/preset'
-import { tooltipItem, textStyle, legendBottom, animation } from './defaults'
+import { animation, legendBottom, textStyle, tooltipItem } from './defaults'
 import { deepMerge } from './merge'
 
 export function radarChart(config: RadarChartConfig, overrides?: ChartOverrides): EChartsOption {
@@ -16,7 +16,7 @@ export function radarChart(config: RadarChartConfig, overrides?: ChartOverrides)
   const echartsSeries: EChartsOption['series'] = [
     {
       type: 'radar',
-      data: series.map((s) => ({
+      data: series.map(s => ({
         name: s.name,
         value: s.data,
         areaStyle: { opacity: 0.15 },

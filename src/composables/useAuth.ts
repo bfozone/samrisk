@@ -1,5 +1,5 @@
-import { ref, computed } from 'vue'
 import { useQuery } from '@tanstack/vue-query'
+import { computed, ref } from 'vue'
 import { getCurrentUser } from '@/api/auth'
 
 export function useCurrentUser() {
@@ -27,7 +27,8 @@ export function useAuth() {
   }
 
   async function login() {
-    if (isMockMode) return
+    if (isMockMode)
+      return
     const { getMsalInstance } = await import('@/auth/msalInstance')
     const { loginRequest } = await import('@/auth/msalConfig')
     const msal = getMsalInstance()
@@ -35,7 +36,8 @@ export function useAuth() {
   }
 
   async function logout() {
-    if (isMockMode) return
+    if (isMockMode)
+      return
     const { getMsalInstance } = await import('@/auth/msalInstance')
     const msal = getMsalInstance()
     await msal.logoutRedirect()

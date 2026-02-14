@@ -17,14 +17,18 @@ const props = withDefaults(defineProps<{
 })
 
 const resolvedDecimals = computed(() => {
-  if (props.decimals !== undefined) return props.decimals
-  if (props.format === 'percent') return 1
-  if (props.format === 'currency') return 0
+  if (props.decimals !== undefined)
+    return props.decimals
+  if (props.format === 'percent')
+    return 1
+  if (props.format === 'currency')
+    return 0
   return 2
 })
 
 const showSign = computed(() => {
-  if (props.sign !== undefined) return props.sign
+  if (props.sign !== undefined)
+    return props.sign
   return props.format === 'percent'
 })
 
@@ -48,8 +52,10 @@ const formatted = computed(() => {
 })
 
 const colorStyle = computed(() => {
-  if (!props.colored) return undefined
-  if (props.alwaysNegative) return 'var(--app-color-value-negative)'
+  if (!props.colored)
+    return undefined
+  if (props.alwaysNegative)
+    return 'var(--app-color-value-negative)'
   return props.value >= 0 ? 'var(--app-color-value-positive)' : 'var(--app-color-value-negative)'
 })
 </script>

@@ -2,8 +2,13 @@ import type { EChartsOption } from 'echarts'
 import type { CandlestickChartConfig, ChartOverrides } from './types'
 import { chartColors } from '@/theme/preset'
 import {
-  textStyle, tooltipCross, cleanAxisLine, cleanAxisTick, cleanAxisLabel, cleanSplitLine,
   animation,
+  cleanAxisLabel,
+  cleanAxisLine,
+  cleanAxisTick,
+  cleanSplitLine,
+  textStyle,
+  tooltipCross,
 } from './defaults'
 import { deepMerge } from './merge'
 

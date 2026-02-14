@@ -1,21 +1,21 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
 import { FilterMatchMode } from '@primevue/core/api'
+import Column from 'primevue/column'
 
-import ShowcaseLayout from '@/components/ShowcaseLayout.vue'
-import DashboardGrid from '@/components/DashboardGrid.vue'
-import Section from '@/components/base/Section.vue'
+import ColumnGroup from 'primevue/columngroup'
+import InputNumber from 'primevue/inputnumber'
+import Row from 'primevue/row'
+import TreeTable from 'primevue/treetable'
+import { computed, ref } from 'vue'
 import AppCard from '@/components/base/AppCard.vue'
 import AppDataTable from '@/components/base/AppDataTable.vue'
-import AppTag from '@/components/base/AppTag.vue'
 import AppInputText from '@/components/base/AppInputText.vue'
 import AppSelect from '@/components/base/AppSelect.vue'
+import AppTag from '@/components/base/AppTag.vue'
+import Section from '@/components/base/Section.vue'
 import ValueCell from '@/components/base/ValueCell.vue'
-import Column from 'primevue/column'
-import ColumnGroup from 'primevue/columngroup'
-import Row from 'primevue/row'
-import InputNumber from 'primevue/inputnumber'
-import TreeTable from 'primevue/treetable'
+import DashboardGrid from '@/components/DashboardGrid.vue'
+import ShowcaseLayout from '@/components/ShowcaseLayout.vue'
 
 // ── Helpers ──────────────────────────────────────────
 
@@ -24,8 +24,10 @@ function sideSeverity(side: string) {
 }
 
 function statusSeverity(status: string) {
-  if (status === 'Filled') return 'success'
-  if (status === 'Partial') return 'warn'
+  if (status === 'Filled')
+    return 'success'
+  if (status === 'Partial')
+    return 'warn'
   return 'secondary'
 }
 
@@ -117,7 +119,9 @@ const riskMetrics = [
 const expandedRows = ref({})
 const positions = [
   {
-    name: 'Equities', weight: 45.2, returnYtd: 11.3,
+    name: 'Equities',
+    weight: 45.2,
+    returnYtd: 11.3,
     children: [
       { name: 'US Large Cap', weight: 22.1, returnYtd: 14.8 },
       { name: 'EU Developed', weight: 12.4, returnYtd: 6.2 },
@@ -126,7 +130,9 @@ const positions = [
     ],
   },
   {
-    name: 'Fixed Income', weight: 32.5, returnYtd: 3.8,
+    name: 'Fixed Income',
+    weight: 32.5,
+    returnYtd: 3.8,
     children: [
       { name: 'Govt Bonds', weight: 15.2, returnYtd: 2.9 },
       { name: 'IG Credit', weight: 11.8, returnYtd: 4.5 },
@@ -134,14 +140,18 @@ const positions = [
     ],
   },
   {
-    name: 'Alternatives', weight: 15.1, returnYtd: 6.7,
+    name: 'Alternatives',
+    weight: 15.1,
+    returnYtd: 6.7,
     children: [
       { name: 'Hedge Funds', weight: 8.3, returnYtd: 5.9 },
       { name: 'Private Equity', weight: 6.8, returnYtd: 7.8 },
     ],
   },
   {
-    name: 'Cash', weight: 7.2, returnYtd: 0.4,
+    name: 'Cash',
+    weight: 7.2,
+    returnYtd: 0.4,
     children: [
       { name: 'Money Market', weight: 5.1, returnYtd: 0.5 },
       { name: 'Short-Term Bills', weight: 2.1, returnYtd: 0.2 },
@@ -183,11 +193,16 @@ const heatmapData = [
 ]
 
 function heatmapBg(v: number): string {
-  if (v >= 3) return 'rgba(34, 139, 34, 0.3)'
-  if (v >= 1) return 'rgba(34, 139, 34, 0.15)'
-  if (v > 0) return 'rgba(34, 139, 34, 0.06)'
-  if (v > -1) return 'rgba(238, 0, 12, 0.06)'
-  if (v > -3) return 'rgba(238, 0, 12, 0.15)'
+  if (v >= 3)
+    return 'rgba(34, 139, 34, 0.3)'
+  if (v >= 1)
+    return 'rgba(34, 139, 34, 0.15)'
+  if (v > 0)
+    return 'rgba(34, 139, 34, 0.06)'
+  if (v > -1)
+    return 'rgba(238, 0, 12, 0.06)'
+  if (v > -3)
+    return 'rgba(238, 0, 12, 0.15)'
   return 'rgba(238, 0, 12, 0.3)'
 }
 
@@ -280,7 +295,7 @@ const editableData = ref([
 
 const editingRows = ref<typeof editableData.value>([])
 
-function onRowEditSave(event: { newData: (typeof editableData.value)[0]; index: number }) {
+function onRowEditSave(event: { newData: (typeof editableData.value)[0], index: number }) {
   editableData.value[event.index] = event.newData
 }
 
@@ -292,14 +307,18 @@ const totalTarget = computed(() => editableData.value.reduce((s, r) => s + r.tar
     <!-- Basic + Selection (2-col) -->
     <DashboardGrid>
       <AppCard>
-        <template #title>Basic with Sorting</template>
+        <template #title>
+          Basic with Sorting
+        </template>
         <template #content>
           <AppDataTable :value="holdings" striped-rows sort-field="weight" :sort-order="-1" size="small">
             <Column field="name" header="Instrument" sortable />
             <Column field="asset" header="Asset Class" sortable />
             <Column field="sector" header="Sector" sortable />
             <Column field="weight" header="Weight" sortable>
-              <template #body="{ data }">{{ data.weight.toFixed(1) }}%</template>
+              <template #body="{ data }">
+                {{ data.weight.toFixed(1) }}%
+              </template>
             </Column>
             <Column field="returnYtd" header="YTD Return" sortable>
               <template #body="{ data }">
@@ -311,7 +330,9 @@ const totalTarget = computed(() => editableData.value.reduce((s, r) => s + r.tar
       </AppCard>
 
       <AppCard>
-        <template #title>Row Selection</template>
+        <template #title>
+          Row Selection
+        </template>
         <template #content>
           <AppDataTable v-model:selection="selectedOrders" :value="orders" data-key="id" size="small">
             <Column selection-mode="multiple" header-style="width: 3rem" />
@@ -336,7 +357,9 @@ const totalTarget = computed(() => editableData.value.reduce((s, r) => s + r.tar
     <!-- Sparklines + Inline Bars (full width) -->
     <Section>
       <AppCard>
-        <template #title>Sparklines + Inline Bars</template>
+        <template #title>
+          Sparklines + Inline Bars
+        </template>
         <template #content>
           <AppDataTable :value="sparklineData" striped-rows size="small">
             <Column field="name" header="Portfolio" sortable />
@@ -365,7 +388,7 @@ const totalTarget = computed(() => editableData.value.reduce((s, r) => s + r.tar
             <Column field="weight" header="Weight" sortable style="min-width: 12rem">
               <template #body="{ data }">
                 <div class="inline-bar-cell">
-                  <div class="inline-bar" :style="{ width: (data.weight / maxWeight * 100) + '%' }"></div>
+                  <div class="inline-bar" :style="{ width: `${data.weight / maxWeight * 100}%` }"></div>
                   <span class="inline-bar-label">{{ data.weight.toFixed(1) }}%</span>
                 </div>
               </template>
@@ -378,7 +401,9 @@ const totalTarget = computed(() => editableData.value.reduce((s, r) => s + r.tar
     <!-- Heatmap Cells (full width) -->
     <Section>
       <AppCard>
-        <template #title>Heatmap Cells</template>
+        <template #title>
+          Heatmap Cells
+        </template>
         <template #content>
           <AppDataTable :value="heatmapData" size="small">
             <Column field="name" header="Portfolio" frozen style="min-width: 9rem" />
@@ -399,7 +424,9 @@ const totalTarget = computed(() => editableData.value.reduce((s, r) => s + r.tar
     <!-- Column Filters (full width) -->
     <Section>
       <AppCard>
-        <template #title>Column Filters</template>
+        <template #title>
+          Column Filters
+        </template>
         <template #content>
           <AppDataTable
             v-model:filters="filters"
@@ -412,7 +439,7 @@ const totalTarget = computed(() => editableData.value.reduce((s, r) => s + r.tar
             :global-filter-fields="['instrument', 'sector', 'status']"
           >
             <template #header>
-              <AppInputText v-model="filters['global'].value" placeholder="Search..." class="filter-search" />
+              <AppInputText v-model="filters.global.value" placeholder="Search..." class="filter-search" />
             </template>
             <Column field="instrument" header="Instrument" sortable :show-filter-menu="false">
               <template #filter="{ filterModel, filterCallback }">
@@ -425,7 +452,9 @@ const totalTarget = computed(() => editableData.value.reduce((s, r) => s + r.tar
               </template>
             </Column>
             <Column field="weight" header="Weight" sortable>
-              <template #body="{ data }">{{ data.weight.toFixed(1) }}%</template>
+              <template #body="{ data }">
+                {{ data.weight.toFixed(1) }}%
+              </template>
             </Column>
             <Column field="pnl" header="P&L" sortable>
               <template #body="{ data }">
@@ -449,12 +478,16 @@ const totalTarget = computed(() => editableData.value.reduce((s, r) => s + r.tar
     <Section>
       <DashboardGrid>
         <AppCard>
-          <template #title>TreeTable</template>
+          <template #title>
+            TreeTable
+          </template>
           <template #content>
             <TreeTable :value="treeNodes" size="small">
               <Column field="name" header="Name" expander />
               <Column field="weight" header="Weight">
-                <template #body="{ node }">{{ node.data.weight.toFixed(1) }}%</template>
+                <template #body="{ node }">
+                  {{ node.data.weight.toFixed(1) }}%
+                </template>
               </Column>
               <Column field="returnYtd" header="YTD Return">
                 <template #body="{ node }">
@@ -462,14 +495,18 @@ const totalTarget = computed(() => editableData.value.reduce((s, r) => s + r.tar
                 </template>
               </Column>
               <Column field="var95" header="VaR 95%">
-                <template #body="{ node }">{{ node.data.var95.toFixed(1) }}%</template>
+                <template #body="{ node }">
+                  {{ node.data.var95.toFixed(1) }}%
+                </template>
               </Column>
             </TreeTable>
           </template>
         </AppCard>
 
         <AppCard>
-          <template #title>Editable Cells</template>
+          <template #title>
+            Editable Cells
+          </template>
           <template #content>
             <AppDataTable
               v-model:editing-rows="editingRows"
@@ -481,16 +518,22 @@ const totalTarget = computed(() => editableData.value.reduce((s, r) => s + r.tar
             >
               <Column field="name" header="Asset Class" />
               <Column field="current" header="Current %">
-                <template #body="{ data }">{{ data.current.toFixed(1) }}%</template>
+                <template #body="{ data }">
+                  {{ data.current.toFixed(1) }}%
+                </template>
               </Column>
               <Column field="target" header="Target %">
-                <template #body="{ data }">{{ data.target.toFixed(1) }}%</template>
+                <template #body="{ data }">
+                  {{ data.target.toFixed(1) }}%
+                </template>
                 <template #editor="{ data, field }">
                   <InputNumber v-model="data[field]" :min="0" :max="100" suffix="%" :min-fraction-digits="1" :max-fraction-digits="1" class="edit-input" />
                 </template>
               </Column>
               <Column field="limitMax" header="Limit Max">
-                <template #body="{ data }">{{ data.limitMax.toFixed(1) }}%</template>
+                <template #body="{ data }">
+                  {{ data.limitMax.toFixed(1) }}%
+                </template>
                 <template #editor="{ data, field }">
                   <InputNumber v-model="data[field]" :min="0" :max="100" suffix="%" :min-fraction-digits="1" :max-fraction-digits="1" class="edit-input" />
                 </template>
@@ -508,7 +551,9 @@ const totalTarget = computed(() => editableData.value.reduce((s, r) => s + r.tar
     <!-- Paginated (full width) -->
     <Section>
       <AppCard>
-        <template #title>Paginated</template>
+        <template #title>
+          Paginated
+        </template>
         <template #content>
           <AppDataTable
             :value="trades"
@@ -545,7 +590,9 @@ const totalTarget = computed(() => editableData.value.reduce((s, r) => s + r.tar
     <!-- Frozen + Grouped (full width) -->
     <Section>
       <AppCard>
-        <template #title>Frozen Columns</template>
+        <template #title>
+          Frozen Columns
+        </template>
         <template #content>
           <AppDataTable :value="riskMetrics" scrollable scroll-height="400px" striped-rows size="small">
             <Column field="name" header="Portfolio" frozen style="min-width: 10rem" />
@@ -555,25 +602,39 @@ const totalTarget = computed(() => editableData.value.reduce((s, r) => s + r.tar
               </template>
             </Column>
             <Column field="var95" header="VaR 95%" style="min-width: 7rem">
-              <template #body="{ data }">{{ data.var95.toFixed(1) }}%</template>
+              <template #body="{ data }">
+                {{ data.var95.toFixed(1) }}%
+              </template>
             </Column>
             <Column field="var99" header="VaR 99%" style="min-width: 7rem">
-              <template #body="{ data }">{{ data.var99.toFixed(1) }}%</template>
+              <template #body="{ data }">
+                {{ data.var99.toFixed(1) }}%
+              </template>
             </Column>
             <Column field="cvar" header="CVaR" style="min-width: 7rem">
-              <template #body="{ data }">{{ data.cvar.toFixed(1) }}%</template>
+              <template #body="{ data }">
+                {{ data.cvar.toFixed(1) }}%
+              </template>
             </Column>
             <Column field="te" header="Track. Error" style="min-width: 8rem">
-              <template #body="{ data }">{{ data.te.toFixed(1) }}%</template>
+              <template #body="{ data }">
+                {{ data.te.toFixed(1) }}%
+              </template>
             </Column>
             <Column field="beta" header="Beta" style="min-width: 6rem">
-              <template #body="{ data }">{{ data.beta.toFixed(2) }}</template>
+              <template #body="{ data }">
+                {{ data.beta.toFixed(2) }}
+              </template>
             </Column>
             <Column field="sharpe" header="Sharpe" style="min-width: 6rem">
-              <template #body="{ data }">{{ data.sharpe.toFixed(2) }}</template>
+              <template #body="{ data }">
+                {{ data.sharpe.toFixed(2) }}
+              </template>
             </Column>
             <Column field="sortino" header="Sortino" style="min-width: 7rem">
-              <template #body="{ data }">{{ data.sortino.toFixed(2) }}</template>
+              <template #body="{ data }">
+                {{ data.sortino.toFixed(2) }}
+              </template>
             </Column>
             <Column field="maxDd" header="Max DD" style="min-width: 7rem">
               <template #body="{ data }">
@@ -581,7 +642,9 @@ const totalTarget = computed(() => editableData.value.reduce((s, r) => s + r.tar
               </template>
             </Column>
             <Column field="volatility" header="Volatility" style="min-width: 7rem">
-              <template #body="{ data }">{{ data.volatility.toFixed(1) }}%</template>
+              <template #body="{ data }">
+                {{ data.volatility.toFixed(1) }}%
+              </template>
             </Column>
           </AppDataTable>
         </template>
@@ -592,13 +655,17 @@ const totalTarget = computed(() => editableData.value.reduce((s, r) => s + r.tar
     <Section>
       <DashboardGrid>
         <AppCard>
-          <template #title>Expandable Rows</template>
+          <template #title>
+            Expandable Rows
+          </template>
           <template #content>
             <AppDataTable v-model:expanded-rows="expandedRows" :value="positions" data-key="name" size="small">
               <Column expander style="width: 3rem" />
               <Column field="name" header="Asset Class" />
               <Column field="weight" header="Weight">
-                <template #body="{ data }">{{ data.weight.toFixed(1) }}%</template>
+                <template #body="{ data }">
+                  {{ data.weight.toFixed(1) }}%
+                </template>
               </Column>
               <Column field="returnYtd" header="YTD Return">
                 <template #body="{ data }">
@@ -609,7 +676,9 @@ const totalTarget = computed(() => editableData.value.reduce((s, r) => s + r.tar
                 <AppDataTable :value="data.children" size="small">
                   <Column field="name" header="Sub-Class" />
                   <Column field="weight" header="Weight">
-                    <template #body="{ data: child }">{{ child.weight.toFixed(1) }}%</template>
+                    <template #body="{ data: child }">
+                      {{ child.weight.toFixed(1) }}%
+                    </template>
                   </Column>
                   <Column field="returnYtd" header="YTD Return">
                     <template #body="{ data: child }">
@@ -623,7 +692,9 @@ const totalTarget = computed(() => editableData.value.reduce((s, r) => s + r.tar
         </AppCard>
 
         <AppCard>
-          <template #title>Grouped Headers</template>
+          <template #title>
+            Grouped Headers
+          </template>
           <template #content>
             <AppDataTable :value="groupedData" size="small">
               <ColumnGroup type="header">
@@ -645,16 +716,24 @@ const totalTarget = computed(() => editableData.value.reduce((s, r) => s + r.tar
               </ColumnGroup>
               <Column field="name" />
               <Column field="mktVar">
-                <template #body="{ data }">{{ data.mktVar.toFixed(1) }}</template>
+                <template #body="{ data }">
+                  {{ data.mktVar.toFixed(1) }}
+                </template>
               </Column>
               <Column field="credVar">
-                <template #body="{ data }">{{ data.credVar.toFixed(1) }}</template>
+                <template #body="{ data }">
+                  {{ data.credVar.toFixed(1) }}
+                </template>
               </Column>
               <Column field="liqVar">
-                <template #body="{ data }">{{ data.liqVar.toFixed(1) }}</template>
+                <template #body="{ data }">
+                  {{ data.liqVar.toFixed(1) }}
+                </template>
               </Column>
               <Column field="totalVar">
-                <template #body="{ data }"><strong>{{ data.totalVar.toFixed(1) }}</strong></template>
+                <template #body="{ data }">
+                  <strong>{{ data.totalVar.toFixed(1) }}</strong>
+                </template>
               </Column>
               <Column field="mktStress">
                 <template #body="{ data }">

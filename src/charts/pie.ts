@@ -1,8 +1,8 @@
 import type { EChartsOption } from 'echarts'
-import type { PieChartConfig, ChartOverrides } from './types'
+import type { ChartOverrides, PieChartConfig } from './types'
 import { chartColors } from '@/theme/preset'
+import { animation, textStyle, tooltipItem } from './defaults'
 import { tooltipValueFormatter } from './format'
-import { tooltipItem, textStyle, animation } from './defaults'
 import { deepMerge } from './merge'
 
 export function pieChart(config: PieChartConfig, overrides?: ChartOverrides): EChartsOption {

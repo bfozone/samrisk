@@ -1,12 +1,18 @@
 import type { EChartsOption } from 'echarts'
 import type { BoxplotChartConfig, ChartOverrides } from './types'
 import { chartColors } from '@/theme/preset'
-import { axisFormatter } from './format'
 import {
-  gridDefault, textStyle, tooltipItem,
-  cleanAxisLine, cleanAxisTick, cleanAxisLabel, cleanSplitLine, noSplitLine,
   animation,
+  cleanAxisLabel,
+  cleanAxisLine,
+  cleanAxisTick,
+  cleanSplitLine,
+  gridDefault,
+  noSplitLine,
+  textStyle,
+  tooltipItem,
 } from './defaults'
+import { axisFormatter } from './format'
 import { deepMerge } from './merge'
 
 export function boxplotChart(config: BoxplotChartConfig, overrides?: ChartOverrides): EChartsOption {

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { useAttrs } from 'vue'
 import Card from 'primevue/card'
+import { useAttrs } from 'vue'
 
 defineOptions({ inheritAttrs: false })
 
@@ -15,8 +15,7 @@ const attrs = useAttrs()
 <template>
   <Card
     v-bind="attrs"
-    :class="[
-      'app-card',
+    class="app-card" :class="[
       { 'app-card-compact': props.compact, 'app-card-subtle': props.subtle },
     ]"
   >

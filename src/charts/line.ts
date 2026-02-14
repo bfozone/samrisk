@@ -1,12 +1,22 @@
 import type { EChartsOption } from 'echarts'
-import type { LineChartConfig, ChartOverrides } from './types'
+import type { ChartOverrides, LineChartConfig } from './types'
 import { chartColors } from '@/theme/preset'
-import { axisFormatter, tooltipValueFormatter } from './format'
 import {
-  gridDefault, gridCurrency, gridDualAxis, tooltipAxis,
-  textStyle, cleanAxisLine, cleanAxisTick, cleanAxisLabel, cleanSplitLine, noSplitLine,
-  legendBottom, animation, emphasisFocus,
+  animation,
+  cleanAxisLabel,
+  cleanAxisLine,
+  cleanAxisTick,
+  cleanSplitLine,
+  emphasisFocus,
+  gridCurrency,
+  gridDefault,
+  gridDualAxis,
+  legendBottom,
+  noSplitLine,
+  textStyle,
+  tooltipAxis,
 } from './defaults'
+import { axisFormatter, tooltipValueFormatter } from './format'
 import { deepMerge } from './merge'
 
 export function lineChart(config: LineChartConfig, overrides?: ChartOverrides): EChartsOption {
@@ -20,7 +30,7 @@ export function lineChart(config: LineChartConfig, overrides?: ChartOverrides): 
     showLegend = series.length > 1,
   } = config
 
-  const hasDualAxis = series.some((s) => s.yAxisIndex === 1)
+  const hasDualAxis = series.some(s => s.yAxisIndex === 1)
   const effectiveRightFormat = rightFormat ?? format
 
   const colors = series.map((_, i) => chartColors.series[i % chartColors.series.length]!)
@@ -40,8 +50,10 @@ export function lineChart(config: LineChartConfig, overrides?: ChartOverrides): 
     : { type: 'value', ...yAxisBase, axisLabel: { ...cleanAxisLabel, formatter: axisFormatter(format, currency) } }
 
   let grid: EChartsOption['grid']
-  if (hasDualAxis) grid = gridDualAxis
-  else if (format === 'currency') grid = gridCurrency
+  if (hasDualAxis)
+    grid = gridDualAxis
+  else if (format === 'currency')
+    grid = gridCurrency
   else grid = gridDefault
 
   const echartsSeries: EChartsOption['series'] = series.map((s) => {
@@ -53,16 +65,20 @@ export function lineChart(config: LineChartConfig, overrides?: ChartOverrides): 
       showSymbol: false,
       ...emphasisFocus,
     }
-    if (s.yAxisIndex !== undefined) item.yAxisIndex = s.yAxisIndex
+    if (s.yAxisIndex !== undefined)
+      item.yAxisIndex = s.yAxisIndex
     if (s.area) {
       item.areaStyle = {
         opacity: 1,
         color: {
           type: 'linear',
-          x: 0, y: 0, x2: 0, y2: 1,
+          x: 0,
+          y: 0,
+          x2: 0,
+          y2: 1,
           colorStops: [
-            { offset: 0, color: colors[series.indexOf(s)] + '30' },
-            { offset: 1, color: colors[series.indexOf(s)] + '05' },
+            { offset: 0, color: `${colors[series.indexOf(s)]}30` },
+            { offset: 1, color: `${colors[series.indexOf(s)]}05` },
           ],
         },
       }

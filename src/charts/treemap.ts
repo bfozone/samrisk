@@ -1,8 +1,8 @@
 import type { EChartsOption } from 'echarts'
-import type { TreemapChartConfig, ChartOverrides } from './types'
+import type { ChartOverrides, TreemapChartConfig } from './types'
 import { chartColors } from '@/theme/preset'
+import { animation, textStyle, tooltipItem } from './defaults'
 import { formatValue } from './format'
-import { textStyle, tooltipItem, animation } from './defaults'
 import { deepMerge } from './merge'
 
 export function treemapChart(config: TreemapChartConfig, overrides?: ChartOverrides): EChartsOption {
@@ -23,7 +23,7 @@ export function treemapChart(config: TreemapChartConfig, overrides?: ChartOverri
     tooltip: {
       ...tooltipItem,
       formatter(params: unknown) {
-        const p = params as { name: string; value: number }
+        const p = params as { name: string, value: number }
         return `${p.name}: ${formatValue(p.value, format, currency)}`
       },
     },

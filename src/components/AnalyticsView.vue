@@ -15,7 +15,7 @@ const analytics = useAnalyticsContext()
 <template>
   <div>
     <template v-if="analytics.hasPortfolio">
-      <slot />
+      <slot></slot>
     </template>
     <div v-else class="analytics-empty-state">
       <i :class="icon"></i>

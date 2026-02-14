@@ -1,12 +1,20 @@
 import type { EChartsOption } from 'echarts'
-import type { ScatterChartConfig, ChartOverrides } from './types'
+import type { ChartOverrides, ScatterChartConfig } from './types'
 import { chartColors } from '@/theme/preset'
-import { axisFormatter, formatValue } from './format'
 import {
-  gridDefault, gridCurrency, tooltipItem,
-  textStyle, cleanAxisLine, cleanAxisTick, cleanAxisLabel, cleanSplitLine,
-  legendBottom, animation, emphasisFocus,
+  animation,
+  cleanAxisLabel,
+  cleanAxisLine,
+  cleanAxisTick,
+  cleanSplitLine,
+  emphasisFocus,
+  gridCurrency,
+  gridDefault,
+  legendBottom,
+  textStyle,
+  tooltipItem,
 } from './defaults'
+import { axisFormatter, formatValue } from './format'
 import { deepMerge } from './merge'
 
 export function scatterChart(config: ScatterChartConfig, overrides?: ChartOverrides): EChartsOption {
@@ -20,7 +28,7 @@ export function scatterChart(config: ScatterChartConfig, overrides?: ChartOverri
 
   const colors = series.map((_, i) => chartColors.series[i % chartColors.series.length]!)
 
-  const echartsSeries: EChartsOption['series'] = series.map((s) => ({
+  const echartsSeries: EChartsOption['series'] = series.map(s => ({
     name: s.name,
     type: 'scatter',
     data: s.data,
@@ -36,7 +44,7 @@ export function scatterChart(config: ScatterChartConfig, overrides?: ChartOverri
     tooltip: {
       ...tooltipItem,
       formatter(params: unknown) {
-        const p = params as { seriesName: string; value: [number, number] }
+        const p = params as { seriesName: string, value: [number, number] }
         return `${p.seriesName}<br/>${formatValue(p.value[0], xFormat, currency)} / ${formatValue(p.value[1], yFormat, currency)}`
       },
     },

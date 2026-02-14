@@ -1,21 +1,21 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import Accordion from 'primevue/accordion'
 
-import ShowcaseLayout from '@/components/ShowcaseLayout.vue'
-import DashboardGrid from '@/components/DashboardGrid.vue'
-import AppCard from '@/components/base/AppCard.vue'
-import AppButton from '@/components/base/AppButton.vue'
+import AccordionContent from 'primevue/accordioncontent'
+import AccordionHeader from 'primevue/accordionheader'
+import AccordionPanel from 'primevue/accordionpanel'
 import Dialog from 'primevue/dialog'
 import Popover from 'primevue/popover'
-import Tabs from 'primevue/tabs'
-import TabList from 'primevue/tablist'
 import Tab from 'primevue/tab'
-import TabPanels from 'primevue/tabpanels'
+import TabList from 'primevue/tablist'
 import TabPanel from 'primevue/tabpanel'
-import Accordion from 'primevue/accordion'
-import AccordionPanel from 'primevue/accordionpanel'
-import AccordionHeader from 'primevue/accordionheader'
-import AccordionContent from 'primevue/accordioncontent'
+import TabPanels from 'primevue/tabpanels'
+import Tabs from 'primevue/tabs'
+import { ref } from 'vue'
+import AppButton from '@/components/base/AppButton.vue'
+import AppCard from '@/components/base/AppCard.vue'
+import DashboardGrid from '@/components/DashboardGrid.vue'
+import ShowcaseLayout from '@/components/ShowcaseLayout.vue'
 
 const dialogVisible = ref(false)
 const popoverRef = ref()
@@ -29,7 +29,9 @@ function togglePopover(event: Event) {
   <ShowcaseLayout>
     <DashboardGrid>
       <AppCard>
-        <template #title>Dialog</template>
+        <template #title>
+          Dialog
+        </template>
         <template #content>
           <AppButton label="Open Dialog" icon="pi pi-external-link" @click="dialogVisible = true" />
           <Dialog v-model:visible="dialogVisible" header="Confirm Action" modal :style="{ width: '28rem' }">
@@ -43,7 +45,9 @@ function togglePopover(event: Event) {
       </AppCard>
 
       <AppCard>
-        <template #title>Popover</template>
+        <template #title>
+          Popover
+        </template>
         <template #content>
           <AppButton label="Show Details" icon="pi pi-info-circle" outlined @click="togglePopover" />
           <Popover ref="popoverRef">
@@ -58,23 +62,37 @@ function togglePopover(event: Event) {
       </AppCard>
 
       <AppCard>
-        <template #title>Tabs</template>
+        <template #title>
+          Tabs
+        </template>
         <template #content>
           <Tabs value="0">
             <TabList>
-              <Tab value="0">By Factor</Tab>
-              <Tab value="1">By Region</Tab>
-              <Tab value="2">By Issuer</Tab>
+              <Tab value="0">
+                By Factor
+              </Tab>
+              <Tab value="1">
+                By Region
+              </Tab>
+              <Tab value="2">
+                By Issuer
+              </Tab>
             </TabList>
             <TabPanels>
               <TabPanel value="0">
-                <p class="tab-body">Factor decomposition: Market, Size, Value, Momentum, Quality</p>
+                <p class="tab-body">
+                  Factor decomposition: Market, Size, Value, Momentum, Quality
+                </p>
               </TabPanel>
               <TabPanel value="1">
-                <p class="tab-body">Regional breakdown: Americas 52%, EMEA 28%, APAC 20%</p>
+                <p class="tab-body">
+                  Regional breakdown: Americas 52%, EMEA 28%, APAC 20%
+                </p>
               </TabPanel>
               <TabPanel value="2">
-                <p class="tab-body">Top issuers: US Treasury, Apple, Microsoft, JPMorgan, Nestle</p>
+                <p class="tab-body">
+                  Top issuers: US Treasury, Apple, Microsoft, JPMorgan, Nestle
+                </p>
               </TabPanel>
             </TabPanels>
           </Tabs>
@@ -82,7 +100,9 @@ function togglePopover(event: Event) {
       </AppCard>
 
       <AppCard>
-        <template #title>Accordion</template>
+        <template #title>
+          Accordion
+        </template>
         <template #content>
           <Accordion value="0">
             <AccordionPanel value="0">

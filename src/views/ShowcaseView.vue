@@ -1,13 +1,24 @@
 <script setup lang="ts">
-import ShowcaseLayout from '@/components/ShowcaseLayout.vue'
-import DashboardGrid from '@/components/DashboardGrid.vue'
-import ChartCard from '@/components/ChartCard.vue'
-import { uiColorPresets } from '@/ui/config'
 import {
-  lineChart, barChart, pieChart, treemapChart, sunburstChart, heatmapChart,
-  scatterChart, candlestickChart, boxplotChart, radarChart, gaugeChart, sankeyChart, treeChart,
+  barChart,
+  boxplotChart,
   calendarHeatmapChart,
+  candlestickChart,
+  gaugeChart,
+  heatmapChart,
+  lineChart,
+  pieChart,
+  radarChart,
+  sankeyChart,
+  scatterChart,
+  sunburstChart,
+  treeChart,
+  treemapChart,
 } from '@/charts'
+import ChartCard from '@/components/ChartCard.vue'
+import DashboardGrid from '@/components/DashboardGrid.vue'
+import ShowcaseLayout from '@/components/ShowcaseLayout.vue'
+import { uiColorPresets } from '@/ui/config'
 
 // --- Line: Time Series (area, currency) ---
 const lineTimeSeriesOption = lineChart({
@@ -70,7 +81,9 @@ const pieDonutOption = pieChart({
 const treemapOption = treemapChart({
   data: [
     {
-      name: 'Equities', value: 450_000, children: [
+      name: 'Equities',
+      value: 450_000,
+      children: [
         { name: 'US Large Cap', value: 200_000 },
         { name: 'EU Developed', value: 120_000 },
         { name: 'EM Asia', value: 80_000 },
@@ -78,14 +91,18 @@ const treemapOption = treemapChart({
       ],
     },
     {
-      name: 'Fixed Income', value: 300_000, children: [
+      name: 'Fixed Income',
+      value: 300_000,
+      children: [
         { name: 'Govt Bonds', value: 150_000 },
         { name: 'IG Credit', value: 100_000 },
         { name: 'HY Credit', value: 50_000 },
       ],
     },
     {
-      name: 'Alternatives', value: 150_000, children: [
+      name: 'Alternatives',
+      value: 150_000,
+      children: [
         { name: 'Hedge Funds', value: 80_000 },
         { name: 'Private Equity', value: 70_000 },
       ],
@@ -97,21 +114,24 @@ const treemapOption = treemapChart({
 const sunburstOption = sunburstChart({
   data: [
     {
-      name: 'Growth', children: [
+      name: 'Growth',
+      children: [
         { name: 'US Tech', value: 25 },
         { name: 'EM Equity', value: 15 },
         { name: 'Small Cap', value: 10 },
       ],
     },
     {
-      name: 'Income', children: [
+      name: 'Income',
+      children: [
         { name: 'Govt Bonds', value: 20 },
         { name: 'IG Credit', value: 12 },
         { name: 'HY Bonds', value: 8 },
       ],
     },
     {
-      name: 'Diversifiers', children: [
+      name: 'Diversifiers',
+      children: [
         { name: 'Gold', value: 5 },
         { name: 'Real Estate', value: 5 },
       ],
@@ -125,11 +145,31 @@ const heatmapOption = heatmapChart({
   xLabels: assets,
   yLabels: assets,
   data: [
-    [0, 0, 1.0], [0, 1, -0.3], [0, 2, 0.4], [0, 3, 0.5], [0, 4, 0.0],
-    [1, 0, -0.3], [1, 1, 1.0], [1, 2, -0.1], [1, 3, 0.2], [1, 4, 0.3],
-    [2, 0, 0.4], [2, 1, -0.1], [2, 2, 1.0], [2, 3, 0.3], [2, 4, -0.1],
-    [3, 0, 0.5], [3, 1, 0.2], [3, 2, 0.3], [3, 3, 1.0], [3, 4, 0.1],
-    [4, 0, 0.0], [4, 1, 0.3], [4, 2, -0.1], [4, 3, 0.1], [4, 4, 1.0],
+    [0, 0, 1.0],
+    [0, 1, -0.3],
+    [0, 2, 0.4],
+    [0, 3, 0.5],
+    [0, 4, 0.0],
+    [1, 0, -0.3],
+    [1, 1, 1.0],
+    [1, 2, -0.1],
+    [1, 3, 0.2],
+    [1, 4, 0.3],
+    [2, 0, 0.4],
+    [2, 1, -0.1],
+    [2, 2, 1.0],
+    [2, 3, 0.3],
+    [2, 4, -0.1],
+    [3, 0, 0.5],
+    [3, 1, 0.2],
+    [3, 2, 0.3],
+    [3, 3, 1.0],
+    [3, 4, 0.1],
+    [4, 0, 0.0],
+    [4, 1, 0.3],
+    [4, 2, -0.1],
+    [4, 3, 0.1],
+    [4, 4, 1.0],
   ],
   min: -1,
   max: 1,
@@ -284,9 +324,10 @@ function generateDailyPnl(year: string): [string, number][] {
   const start = new Date(`${year}-01-01`)
   const end = new Date(`${year}-12-31`)
   let seed = 42
-  for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+  for (let d = new Date(start); d.getTime() <= end.getTime(); d.setDate(d.getDate() + 1)) {
     const day = d.getDay()
-    if (day === 0 || day === 6) continue
+    if (day === 0 || day === 6)
+      continue
     seed = (seed * 16807 + 0) % 2147483647
     const r = seed / 2147483647
     const pnl = (r - 0.48) * 4

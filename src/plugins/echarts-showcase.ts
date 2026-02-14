@@ -1,17 +1,17 @@
-import { use } from 'echarts/core'
 import {
-  TreemapChart,
-  SunburstChart,
-  CandlestickChart,
   BoxplotChart,
+  CandlestickChart,
   GaugeChart,
   SankeyChart,
+  SunburstChart,
   TreeChart,
+  TreemapChart,
 } from 'echarts/charts'
 import {
-  DataZoomComponent,
   CalendarComponent,
+  DataZoomComponent,
 } from 'echarts/components'
+import { use } from 'echarts/core'
 
 use([
   TreemapChart,

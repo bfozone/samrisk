@@ -7,18 +7,18 @@ declare module 'vue-router' {
     icon?: string
     hint?: string
     emptyLabel?: string
-    sidebar?: { icon: string; section?: string; order: number }
+    sidebar?: { icon: string, section?: string, order: number }
   }
 }
 
-const ensureShowcaseCharts = async () => {
+async function ensureShowcaseCharts() {
   await Promise.all([
     import('@/plugins/echarts'),
     import('@/plugins/echarts-showcase'),
   ])
 }
 
-const ensureAnalyticsCharts = async () => {
+async function ensureAnalyticsCharts() {
   await import('@/plugins/echarts')
 }
 
@@ -43,8 +43,11 @@ const router = createRouter({
       name: 'performance',
       component: () => import('@/views/AnalyticsPlaceholderView.vue'),
       meta: {
-        title: 'Performance', analyticsRoute: true,
-        icon: 'pi pi-chart-line', hint: 'Investment performance analysis', emptyLabel: 'Select a portfolio from the topbar to view performance',
+        title: 'Performance',
+        analyticsRoute: true,
+        icon: 'pi pi-chart-line',
+        hint: 'Investment performance analysis',
+        emptyLabel: 'Select a portfolio from the topbar to view performance',
         sidebar: { icon: 'pi pi-chart-line', order: 20 },
       },
     },
@@ -53,8 +56,11 @@ const router = createRouter({
       name: 'market-risk',
       component: () => import('@/views/AnalyticsPlaceholderView.vue'),
       meta: {
-        title: 'Market Risk', analyticsRoute: true,
-        icon: 'pi pi-shield', hint: 'VaR, stress testing and factor decomposition', emptyLabel: 'Select a portfolio from the topbar to view market risk metrics',
+        title: 'Market Risk',
+        analyticsRoute: true,
+        icon: 'pi pi-shield',
+        hint: 'VaR, stress testing and factor decomposition',
+        emptyLabel: 'Select a portfolio from the topbar to view market risk metrics',
         sidebar: { icon: 'pi pi-shield', order: 30 },
       },
     },
@@ -63,8 +69,11 @@ const router = createRouter({
       name: 'liquidity-risk',
       component: () => import('@/views/AnalyticsPlaceholderView.vue'),
       meta: {
-        title: 'Liquidity Risk', analyticsRoute: true,
-        icon: 'pi pi-wave-pulse', hint: 'Time-to-liquidation, bid-ask analysis and liquidity stress', emptyLabel: 'Select a portfolio from the topbar to view liquidity risk metrics',
+        title: 'Liquidity Risk',
+        analyticsRoute: true,
+        icon: 'pi pi-wave-pulse',
+        hint: 'Time-to-liquidation, bid-ask analysis and liquidity stress',
+        emptyLabel: 'Select a portfolio from the topbar to view liquidity risk metrics',
         sidebar: { icon: 'pi pi-wave-pulse', order: 40 },
       },
     },
@@ -73,8 +82,11 @@ const router = createRouter({
       name: 'credit-risk',
       component: () => import('@/views/AnalyticsPlaceholderView.vue'),
       meta: {
-        title: 'Credit Risk', analyticsRoute: true,
-        icon: 'pi pi-building-columns', hint: 'Counterparty exposure, credit ratings and concentration', emptyLabel: 'Select a portfolio from the topbar to view credit risk metrics',
+        title: 'Credit Risk',
+        analyticsRoute: true,
+        icon: 'pi pi-building-columns',
+        hint: 'Counterparty exposure, credit ratings and concentration',
+        emptyLabel: 'Select a portfolio from the topbar to view credit risk metrics',
         sidebar: { icon: 'pi pi-building-columns', order: 50 },
       },
     },
@@ -83,8 +95,11 @@ const router = createRouter({
       name: 'esg',
       component: () => import('@/views/AnalyticsPlaceholderView.vue'),
       meta: {
-        title: 'ESG', analyticsRoute: true,
-        icon: 'pi pi-globe', hint: 'ESG scores, carbon footprint and sustainability metrics', emptyLabel: 'Select a portfolio from the topbar to view ESG analytics',
+        title: 'ESG',
+        analyticsRoute: true,
+        icon: 'pi pi-globe',
+        hint: 'ESG scores, carbon footprint and sustainability metrics',
+        emptyLabel: 'Select a portfolio from the topbar to view ESG analytics',
         sidebar: { icon: 'pi pi-globe', order: 60 },
       },
     },
@@ -103,8 +118,11 @@ const router = createRouter({
       name: 'guidelines',
       component: () => import('@/views/AnalyticsPlaceholderView.vue'),
       meta: {
-        title: 'Guidelines', analyticsRoute: true,
-        icon: 'pi pi-check-square', hint: 'Investment controlling and compliance', emptyLabel: 'Select a portfolio from the topbar to view guidelines',
+        title: 'Guidelines',
+        analyticsRoute: true,
+        icon: 'pi pi-check-square',
+        hint: 'Investment controlling and compliance',
+        emptyLabel: 'Select a portfolio from the topbar to view guidelines',
         sidebar: { icon: 'pi pi-check-square', section: 'Compliance', order: 80 },
       },
     },
@@ -200,7 +218,8 @@ const router = createRouter({
 const isMockMode = import.meta.env.VITE_USE_MOCK_API !== 'false'
 
 router.beforeEach(async () => {
-  if (isMockMode) return true
+  if (isMockMode)
+    return true
   const { getMsalInstance } = await import('@/auth/msalInstance')
   const { loginRequest } = await import('@/auth/msalConfig')
   const msal = getMsalInstance()

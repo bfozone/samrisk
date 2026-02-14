@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import ShowcaseLayout from '@/components/ShowcaseLayout.vue'
-import DashboardGrid from '@/components/DashboardGrid.vue'
+import { gaugeChart } from '@/charts'
 import AppCard from '@/components/base/AppCard.vue'
 import ChartCard from '@/components/ChartCard.vue'
-import { gaugeChart } from '@/charts'
+import DashboardGrid from '@/components/DashboardGrid.vue'
+import ShowcaseLayout from '@/components/ShowcaseLayout.vue'
 import { uiColorPresets } from '@/ui/config'
 
 const gaugeOption = gaugeChart({
@@ -16,22 +16,38 @@ const gaugeOption = gaugeChart({
 <template>
   <ShowcaseLayout>
     <!-- Grid Columns -->
-    <h3 class="section-title">Grid Columns</h3>
+    <h3 class="section-title">
+      Grid Columns
+    </h3>
 
     <DashboardGrid :columns="4" gap="md">
-      <AppCard v-for="n in 4" :key="n"><template #content><span class="placeholder-label">columns=4 gap=md</span></template></AppCard>
+      <AppCard v-for="n in 4" :key="n">
+        <template #content>
+          <span class="placeholder-label">columns=4 gap=md</span>
+        </template>
+      </AppCard>
     </DashboardGrid>
 
     <DashboardGrid :columns="3">
-      <AppCard v-for="n in 3" :key="n"><template #content><span class="placeholder-label">columns=3</span></template></AppCard>
+      <AppCard v-for="n in 3" :key="n">
+        <template #content>
+          <span class="placeholder-label">columns=3</span>
+        </template>
+      </AppCard>
     </DashboardGrid>
 
     <DashboardGrid>
-      <AppCard v-for="n in 2" :key="n"><template #content><span class="placeholder-label">columns=2 (default)</span></template></AppCard>
+      <AppCard v-for="n in 2" :key="n">
+        <template #content>
+          <span class="placeholder-label">columns=2 (default)</span>
+        </template>
+      </AppCard>
     </DashboardGrid>
 
     <!-- Card Sizes -->
-    <h3 class="section-title">Card Sizes</h3>
+    <h3 class="section-title">
+      Card Sizes
+    </h3>
 
     <DashboardGrid :columns="3">
       <ChartCard title="Small (220px)" :option="gaugeOption" size="sm" />

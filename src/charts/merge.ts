@@ -11,7 +11,8 @@ export function deepMerge(base: EChartsOption, overrides: EChartsOption): EChart
     const overVal = (overrides as Record<string, unknown>)[key]
     if (isPlainObject(baseVal) && isPlainObject(overVal)) {
       result[key] = deepMerge(baseVal as EChartsOption, overVal as EChartsOption)
-    } else {
+    }
+    else {
       result[key] = overVal
     }
   }

@@ -10,6 +10,8 @@ defineProps<{
 
 <template>
   <AnalyticsView :icon="icon" :empty-label="emptyLabel">
-    <p class="placeholder-hint">{{ hint }}</p>
+    <p class="placeholder-hint">
+      {{ hint }}
+    </p>
   </AnalyticsView>
 </template>

@@ -1,17 +1,16 @@
 <script setup lang="ts">
-import { computed, useAttrs } from 'vue'
 import Button from 'primevue/button'
+import { computed, useAttrs } from 'vue'
 import { uiComponentDefaults } from '@/ui/config'
 
 defineOptions({ inheritAttrs: false })
-
-type ButtonSeverity = 'primary' | 'secondary' | 'success' | 'info' | 'warn' | 'help' | 'danger' | 'contrast'
-type ButtonSize = 'small' | 'large'
 
 const props = defineProps<{
   severity?: ButtonSeverity
   size?: ButtonSize
 }>()
+type ButtonSeverity = 'primary' | 'secondary' | 'success' | 'info' | 'warn' | 'help' | 'danger' | 'contrast'
+type ButtonSize = 'small' | 'large'
 
 const attrs = useAttrs()
 

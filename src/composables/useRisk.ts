@@ -1,9 +1,9 @@
-import { useQuery } from '@tanstack/vue-query'
-import { getVaR, getExposures, getAuM, getTrackingError, getPnL, getLiquidity } from '@/api/risk'
-import type { RiskQueryOptions } from '@/api/risk'
-import { useAnalyticsContext } from '@/stores/analytics'
 import type { MaybeRefOrGetter } from 'vue'
+import type { RiskQueryOptions } from '@/api/risk'
+import { useQuery } from '@tanstack/vue-query'
 import { toValue } from 'vue'
+import { getAuM, getExposures, getLiquidity, getPnL, getTrackingError, getVaR } from '@/api/risk'
+import { useAnalyticsContext } from '@/stores/analytics'
 
 function usePortfolioQuery<T>(key: string, fetcher: (id: string, options?: RiskQueryOptions) => Promise<T>) {
   return (portfolioId: MaybeRefOrGetter<string>) => {

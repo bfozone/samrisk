@@ -1,12 +1,22 @@
 import type { EChartsOption } from 'echarts'
 import type { BarChartConfig, ChartOverrides } from './types'
 import { chartColors } from '@/theme/preset'
-import { axisFormatter, tooltipValueFormatter } from './format'
 import {
-  gridDefault, gridCurrency, gridHorizontalBar, tooltipAxis,
-  textStyle, cleanAxisLine, cleanAxisTick, cleanAxisLabel, cleanSplitLine, noSplitLine,
-  legendBottom, animation, emphasisFocus,
+  animation,
+  cleanAxisLabel,
+  cleanAxisLine,
+  cleanAxisTick,
+  cleanSplitLine,
+  emphasisFocus,
+  gridCurrency,
+  gridDefault,
+  gridHorizontalBar,
+  legendBottom,
+  noSplitLine,
+  textStyle,
+  tooltipAxis,
 } from './defaults'
+import { axisFormatter, tooltipValueFormatter } from './format'
 import { deepMerge } from './merge'
 
 export function barChart(config: BarChartConfig, overrides?: ChartOverrides): EChartsOption {
@@ -24,7 +34,7 @@ export function barChart(config: BarChartConfig, overrides?: ChartOverrides): EC
 
   const colors = series.map((_, i) => chartColors.series[i % chartColors.series.length]!)
 
-  const hasNegative = series.some((s) => s.data.some((v) => v < 0))
+  const hasNegative = series.some(s => s.data.some(v => v < 0))
 
   const categoryAxis = {
     type: 'category' as const,
@@ -54,7 +64,7 @@ export function barChart(config: BarChartConfig, overrides?: ChartOverrides): EC
       name: s.name,
       type: 'bar',
       data: hasNegative
-        ? s.data.map((v) => ({
+        ? s.data.map(v => ({
             value: v,
             itemStyle: {
               color: v >= 0 ? chartColors.positive : chartColors.negative,
@@ -67,7 +77,8 @@ export function barChart(config: BarChartConfig, overrides?: ChartOverrides): EC
       itemStyle: { borderRadius: applyRadius ? posRadius : 0 },
       ...emphasisFocus,
     }
-    if (stacked) item.stack = 'total'
+    if (stacked)
+      item.stack = 'total'
     if (showLabels) {
       const labelFormatter = format === 'percent' ? '{c}%' : '{c}'
       const position = horizontal ? 'right' : 'top'
@@ -77,8 +88,10 @@ export function barChart(config: BarChartConfig, overrides?: ChartOverrides): EC
   })
 
   let grid: EChartsOption['grid']
-  if (horizontal) grid = gridHorizontalBar
-  else if (format === 'currency') grid = gridCurrency
+  if (horizontal)
+    grid = gridHorizontalBar
+  else if (format === 'currency')
+    grid = gridCurrency
   else grid = gridDefault
 
   const option: EChartsOption = {

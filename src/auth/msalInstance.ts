@@ -11,6 +11,7 @@ export async function initializeMsal(): Promise<PublicClientApplication> {
 }
 
 export function getMsalInstance(): PublicClientApplication {
-  if (!msalInstance) throw new Error('MSAL not initialized - call initializeMsal() first')
+  if (!msalInstance)
+    throw new Error('MSAL not initialized - call initializeMsal() first')
   return msalInstance
 }

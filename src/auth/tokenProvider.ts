@@ -1,11 +1,12 @@
 import { InteractionRequiredAuthError } from '@azure/msal-browser'
-import { getMsalInstance } from './msalInstance'
 import { loginRequest } from './msalConfig'
+import { getMsalInstance } from './msalInstance'
 
 export async function acquireToken(): Promise<string | null> {
   const msal = getMsalInstance()
   const accounts = msal.getAllAccounts()
-  if (!accounts.length) return null
+  if (!accounts.length)
+    return null
 
   try {
     const result = await msal.acquireTokenSilent({
@@ -13,7 +14,8 @@ export async function acquireToken(): Promise<string | null> {
       account: accounts[0],
     })
     return result.accessToken
-  } catch (error) {
+  }
+  catch (error) {
     if (error instanceof InteractionRequiredAuthError) {
       await msal.acquireTokenRedirect(loginRequest)
       return null

@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import { computed, useAttrs } from 'vue'
 import InputText from 'primevue/inputtext'
+import { computed, useAttrs } from 'vue'
 import { uiComponentDefaults } from '@/ui/config'
 
 defineOptions({ inheritAttrs: false })
-
-type InputTextSize = 'small' | 'large'
 
 const props = defineProps<{
   size?: InputTextSize
 }>()
 
 defineEmits(['update:modelValue'])
+
+type InputTextSize = 'small' | 'large'
 
 const attrs = useAttrs()
 

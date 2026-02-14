@@ -67,6 +67,7 @@ export interface TreemapNode {
 export interface TreemapChartConfig {
   data: TreemapNode[]
   format?: FormatStyle
+  currency?: string
   levels?: number
 }
 
@@ -81,6 +82,7 @@ export interface SunburstNode {
 export interface SunburstChartConfig {
   data: SunburstNode[]
   format?: FormatStyle
+  currency?: string
 }
 
 // --- Heatmap ---
@@ -90,6 +92,7 @@ export interface HeatmapChartConfig {
   yLabels: string[]
   data: [number, number, number][]
   format?: FormatStyle
+  currency?: string
   min?: number
   max?: number
   colorRange?: [string, string]
@@ -176,6 +179,7 @@ export interface SankeyChartConfig {
   nodes: SankeyNode[]
   links: SankeyLink[]
   format?: FormatStyle
+  currency?: string
 }
 
 // --- Tree ---

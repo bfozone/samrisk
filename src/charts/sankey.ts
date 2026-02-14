@@ -6,7 +6,7 @@ import { textStyle, tooltipItem, animation } from './defaults'
 import { deepMerge } from './merge'
 
 export function sankeyChart(config: SankeyChartConfig, overrides?: ChartOverrides): EChartsOption {
-  const { nodes, links, format = 'currency' } = config
+  const { nodes, links, format = 'currency', currency } = config
 
   const option: EChartsOption = {
     color: chartColors.series,
@@ -17,7 +17,7 @@ export function sankeyChart(config: SankeyChartConfig, overrides?: ChartOverride
       formatter(params: unknown) {
         const p = params as { data: { source?: string; target?: string; value?: number; name?: string } }
         if (p.data.source && p.data.target) {
-          return `${p.data.source} → ${p.data.target}: ${formatValue(p.data.value ?? 0, format)}`
+          return `${p.data.source} → ${p.data.target}: ${formatValue(p.data.value ?? 0, format, currency)}`
         }
         return p.data.name ?? ''
       },

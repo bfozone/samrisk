@@ -12,23 +12,22 @@ export function useAnalyticsSync() {
 
     // Read URL state
     const urlId = to.params.portfolioId as string | undefined
-    const urlAsOf = to.query.asOf as string | undefined
+    const urlAsOf = typeof to.query.asOf === 'string' ? to.query.asOf : undefined
 
     // Sync store from URL (URL takes precedence)
     if (urlId) analytics.selectPortfolio(urlId)
-    if (urlAsOf) analytics.selectDate(urlAsOf)
+    if (analytics.asOfDate !== (urlAsOf ?? null)) {
+      analytics.selectDate(urlAsOf ?? null)
+    }
 
-    // Build desired params/query, then issue a single replace if needed
+    // Build desired params, then issue a single replace if needed
     const wantId = urlId || analytics.portfolioId
-    const wantAsOf = urlAsOf || analytics.asOfDate
 
     const needsIdFill = !urlId && wantId
-    const needsAsOfFill = !urlAsOf && wantAsOf
 
-    if (needsIdFill || needsAsOfFill) {
+    if (needsIdFill) {
       const params = wantId ? { portfolioId: wantId } : to.params
-      const query = wantAsOf ? { ...to.query, asOf: wantAsOf } : to.query
-      router.replace({ name: to.name!, params, query, hash: to.hash })
+      router.replace({ name: to.name!, params, query: to.query, hash: to.hash })
     }
   })
 

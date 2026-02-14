@@ -14,6 +14,7 @@ export function heatmapChart(config: HeatmapChartConfig, overrides?: ChartOverri
     yLabels,
     data,
     format = 'number',
+    currency,
     min = values.length ? Math.min(...values) : 0,
     max = values.length ? Math.max(...values) : 1,
     colorRange = [chartColors.tealBg, chartColors.red],
@@ -26,7 +27,7 @@ export function heatmapChart(config: HeatmapChartConfig, overrides?: ChartOverri
       formatter(params: unknown) {
         const p = params as { value: [number, number, number] }
         const [xi, yi, val] = p.value
-        return `${xLabels[xi]} / ${yLabels[yi]}: ${formatValue(val, format)}`
+        return `${xLabels[xi]} / ${yLabels[yi]}: ${formatValue(val, format, currency)}`
       },
     },
     xAxis: {
@@ -59,7 +60,7 @@ export function heatmapChart(config: HeatmapChartConfig, overrides?: ChartOverri
       {
         type: 'heatmap',
         data,
-        label: { show: true, fontSize: 11, formatter: (p: unknown) => formatValue((p as { value: [number, number, number] }).value[2], format) },
+        label: { show: true, fontSize: 11, formatter: (p: unknown) => formatValue((p as { value: [number, number, number] }).value[2], format, currency) },
         emphasis: { itemStyle: { shadowBlur: 12, shadowColor: 'rgba(0, 0, 0, 0.15)' } },
         itemStyle: { borderColor: '#fff', borderWidth: 2, borderRadius: 2 },
       },

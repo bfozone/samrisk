@@ -6,7 +6,7 @@ import { textStyle, tooltipItem, animation } from './defaults'
 import { deepMerge } from './merge'
 
 export function sunburstChart(config: SunburstChartConfig, overrides?: ChartOverrides): EChartsOption {
-  const { data, format = 'percent' } = config
+  const { data, format = 'percent', currency } = config
 
   const option: EChartsOption = {
     color: chartColors.series,
@@ -15,7 +15,7 @@ export function sunburstChart(config: SunburstChartConfig, overrides?: ChartOver
       ...tooltipItem,
       formatter(params: unknown) {
         const p = params as { name: string; value: number }
-        return `${p.name}: ${formatValue(p.value, format)}`
+        return `${p.name}: ${formatValue(p.value, format, currency)}`
       },
     },
     series: [

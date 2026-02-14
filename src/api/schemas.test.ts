@@ -1,9 +1,15 @@
-import { describe, expect, it } from 'vitest'
 import * as v from 'valibot'
+import { describe, expect, it } from 'vitest'
 import {
-  UserSchema, PortfolioSchema, PositionSchema,
-  VaRResultSchema, ExposureBucketSchema, AuMSnapshotSchema,
-  TrackingErrorResultSchema, PnLResultSchema, LiquidityBucketSchema,
+  AuMSnapshotSchema,
+  ExposureBucketSchema,
+  LiquidityBucketSchema,
+  PnLResultSchema,
+  PortfolioSchema,
+  PositionSchema,
+  TrackingErrorResultSchema,
+  UserSchema,
+  VaRResultSchema,
 } from './schemas'
 
 function expectValid<T>(schema: v.GenericSchema<T>, data: unknown) {
@@ -14,7 +20,7 @@ function expectInvalid<T>(schema: v.GenericSchema<T>, data: unknown) {
   expect(() => v.parse(schema, data)).toThrow()
 }
 
-describe('UserSchema', () => {
+describe('userSchema', () => {
   it('accepts valid user', () => {
     expectValid(UserSchema, { id: '1', name: 'John', initials: 'JD', role: 'admin' })
   })
@@ -32,7 +38,7 @@ describe('UserSchema', () => {
   })
 })
 
-describe('PortfolioSchema', () => {
+describe('portfolioSchema', () => {
   it('accepts valid portfolio', () => {
     expectValid(PortfolioSchema, { id: '1', name: 'Test', currency: 'EUR', navTotal: 1_000_000 })
   })
@@ -46,7 +52,7 @@ describe('PortfolioSchema', () => {
   })
 })
 
-describe('AuMSnapshotSchema', () => {
+describe('auMSnapshotSchema', () => {
   it('accepts valid snapshot', () => {
     expectValid(AuMSnapshotSchema, { portfolioId: '1', date: '2025-01-01', aum: 500_000_000 })
   })
@@ -60,7 +66,7 @@ describe('AuMSnapshotSchema', () => {
   })
 })
 
-describe('VaRResultSchema', () => {
+describe('vaRResultSchema', () => {
   it('accepts valid VaR', () => {
     expectValid(VaRResultSchema, { portfolioId: '1', date: '2025-01-01', var95: 1.5, var99: 2.5, cvar95: 2.0 })
   })
@@ -70,7 +76,7 @@ describe('VaRResultSchema', () => {
   })
 })
 
-describe('PnLResultSchema', () => {
+describe('pnLResultSchema', () => {
   it('accepts valid PnL with negative values', () => {
     expectValid(PnLResultSchema, { portfolioId: '1', date: '2025-01-01', daily: -50000, mtd: -30000, ytd: -30000, cumulative: -30000 })
   })
@@ -80,7 +86,7 @@ describe('PnLResultSchema', () => {
   })
 })
 
-describe('TrackingErrorResultSchema', () => {
+describe('trackingErrorResultSchema', () => {
   it('accepts valid TE', () => {
     expectValid(TrackingErrorResultSchema, { portfolioId: '1', date: '2025-01-01', te: 1.5, activeReturn: 0.3, infoRatio: 0.8 })
   })
@@ -90,7 +96,7 @@ describe('TrackingErrorResultSchema', () => {
   })
 })
 
-describe('LiquidityBucketSchema', () => {
+describe('liquidityBucketSchema', () => {
   it('accepts valid bucket', () => {
     expectValid(LiquidityBucketSchema, { portfolioId: '1', horizon: '1 Day', value: 50_000_000, percentage: 10 })
   })
@@ -104,14 +110,30 @@ describe('LiquidityBucketSchema', () => {
   })
 })
 
-describe('ExposureBucketSchema', () => {
+describe('exposureBucketSchema', () => {
   it('accepts negative values for short exposure', () => {
     expectValid(ExposureBucketSchema, { category: 'Derivatives', value: -50_000, percentage: -5 })
   })
+
+  it('rejects missing category', () => {
+    expectInvalid(ExposureBucketSchema, { value: 100, percentage: 10 })
+  })
+
+  it('rejects missing percentage', () => {
+    expectInvalid(ExposureBucketSchema, { category: 'Equities', value: 100 })
+  })
 })
 
-describe('PositionSchema', () => {
+describe('positionSchema', () => {
   it('accepts negative quantity for shorts', () => {
     expectValid(PositionSchema, { id: '1', portfolioId: '1', instrument: 'XYZ', assetClass: 'Equity', quantity: -100, marketValue: -5000, weight: -2 })
+  })
+
+  it('rejects missing instrument', () => {
+    expectInvalid(PositionSchema, { id: '1', portfolioId: '1', assetClass: 'Equity', quantity: 100, marketValue: 5000, weight: 2 })
+  })
+
+  it('rejects missing fields', () => {
+    expectInvalid(PositionSchema, { id: '1', portfolioId: '1' })
   })
 })

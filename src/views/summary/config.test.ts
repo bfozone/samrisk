@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { deriveAuMStat, derivePnLStat, deriveVaRStat, deriveTEStat } from './config'
-import { buildAuMChart, buildPnLChart, buildVaRChart, buildExposureChart, buildTEChart, buildLiquidityChart } from './config'
+import { buildAuMChart, buildExposureChart, buildLiquidityChart, buildPnLChart, buildTEChart, buildVaRChart, deriveAuMStat, derivePnLStat, deriveTEStat, deriveVaRStat } from './config'
 
 describe('deriveAuMStat', () => {
   it('returns flat with dash for empty array', () => {
@@ -103,6 +102,12 @@ describe('buildAuMChart', () => {
 })
 
 describe('buildPnLChart', () => {
+  it('returns empty categories for empty input', () => {
+    const config = buildPnLChart([], 'EUR')
+    expect(config.categories).toEqual([])
+    expect(config.series[0]!.data).toEqual([])
+  })
+
   it('maps cumulative values to series', () => {
     const items = [
       { portfolioId: '1', date: '2025-01-01', daily: 50, mtd: 50, ytd: 50, cumulative: 50 },
@@ -114,6 +119,12 @@ describe('buildPnLChart', () => {
 })
 
 describe('buildVaRChart', () => {
+  it('returns empty categories for empty input', () => {
+    const config = buildVaRChart([])
+    expect(config.categories).toEqual([])
+    expect(config.series[0]!.data).toEqual([])
+  })
+
   it('includes both VaR 95% and VaR 99% series', () => {
     const items = [
       { portfolioId: '1', date: '2025-01-01', var95: 1.5, var99: 2.5, cvar95: 2.0 },
@@ -140,6 +151,12 @@ describe('buildExposureChart', () => {
 })
 
 describe('buildTEChart', () => {
+  it('returns empty categories for empty input', () => {
+    const config = buildTEChart([])
+    expect(config.categories).toEqual([])
+    expect(config.series[0]!.data).toEqual([])
+  })
+
   it('includes TE and Info Ratio as dual-axis series', () => {
     const items = [
       { portfolioId: '1', date: '2025-01-01', te: 1.5, activeReturn: 0.3, infoRatio: 0.8 },
@@ -152,6 +169,12 @@ describe('buildTEChart', () => {
 })
 
 describe('buildLiquidityChart', () => {
+  it('returns empty categories for empty input', () => {
+    const config = buildLiquidityChart([])
+    expect(config.categories).toEqual([])
+    expect(config.series[0]!.data).toEqual([])
+  })
+
   it('maps horizon to categories and percentage to data', () => {
     const items = [
       { portfolioId: '1', horizon: '1 Day', value: 50_000, percentage: 10 },

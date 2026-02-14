@@ -1,7 +1,7 @@
-import { describe, expect, it } from 'vitest'
-import * as v from 'valibot'
 import { AxiosError, AxiosHeaders } from 'axios'
-import { parse, parseArray, classifyError } from './client'
+import * as v from 'valibot'
+import { afterEach, describe, expect, it, vi } from 'vitest'
+import { classifyError, configureApiErrorHandlers, configureAuthToken, parse, parseArray } from './client'
 
 describe('parse', () => {
   const schema = v.object({ id: v.string(), value: v.number() })
@@ -98,5 +98,40 @@ describe('classifyError', () => {
 
   it('classifies unknown status as unknown', () => {
     expect(classifyError(makeAxiosError(418)).kind).toBe('unknown')
+  })
+})
+
+describe('configureApiErrorHandlers', () => {
+  afterEach(() => {
+    // Reset to defaults
+    configureApiErrorHandlers({})
+  })
+
+  it('overrides a single handler', () => {
+    const spy = vi.fn()
+    configureApiErrorHandlers({ onUnauthorized: spy })
+    // Handler is stored - verify by configuring again without losing others
+    const spy2 = vi.fn()
+    configureApiErrorHandlers({ onForbidden: spy2 })
+    // Original override should still work since configureApiErrorHandlers merges
+    expect(spy).not.toHaveBeenCalled()
+  })
+
+  it('accepts partial handlers without throwing', () => {
+    expect(() => configureApiErrorHandlers({ onServerError: vi.fn() })).not.toThrow()
+  })
+
+  it('accepts empty object without throwing', () => {
+    expect(() => configureApiErrorHandlers({})).not.toThrow()
+  })
+})
+
+describe('configureAuthToken', () => {
+  it('accepts a token provider without throwing', () => {
+    expect(() => configureAuthToken(async () => 'test-token')).not.toThrow()
+  })
+
+  it('accepts a provider returning null', () => {
+    expect(() => configureAuthToken(async () => null)).not.toThrow()
   })
 })

@@ -2,6 +2,7 @@
 import { useAppStore } from '@/stores/app'
 import { useAnalyticsContext } from '@/stores/analytics'
 import { useCurrentUser } from '@/composables/useAuth'
+import { useNavItems } from '@/composables/useNavItems'
 import { useRoute, useRouter } from 'vue-router'
 import { computed } from 'vue'
 import Tooltip from 'primevue/tooltip'
@@ -13,34 +14,13 @@ const analytics = useAnalyticsContext()
 const route = useRoute()
 const router = useRouter()
 const { data: user } = useCurrentUser()
+const { navItems } = useNavItems()
 
 function onKeydown(e: KeyboardEvent) {
   if (e.key === 'Escape' && appStore.isMobile && appStore.mobileOpen) {
     appStore.closeMobile()
   }
 }
-
-const navItems = [
-  { label: 'Summary', icon: 'pi pi-th-large', to: '/summary', section: 'Analytics' },
-  { label: 'Performance', icon: 'pi pi-chart-line', to: '/performance' },
-  { label: 'Market Risk', icon: 'pi pi-shield', to: '/market-risk' },
-  { label: 'Liquidity Risk', icon: 'pi pi-wave-pulse', to: '/liquidity-risk' },
-  { label: 'Credit Risk', icon: 'pi pi-building-columns', to: '/credit-risk' },
-  { label: 'ESG', icon: 'pi pi-globe', to: '/esg' },
-  { label: 'KRI Dashboard', icon: 'pi pi-gauge', to: '/kri', section: 'Monitoring' },
-  { label: 'Guidelines', icon: 'pi pi-check-square', to: '/guidelines', section: 'Compliance' },
-  { label: 'Reports', icon: 'pi pi-file', to: '/reports' },
-  { label: 'Product Master', icon: 'pi pi-box', to: '/product-master', section: 'Master Data' },
-  { label: 'Security Master', icon: 'pi pi-lock', to: '/security-master' },
-  { label: 'Charts', icon: 'pi pi-chart-bar', to: '/showcase', section: 'Showcase' },
-  { label: 'Controls', icon: 'pi pi-sliders-h', to: '/showcase/controls' },
-  { label: 'Feedback', icon: 'pi pi-comment', to: '/showcase/feedback' },
-  { label: 'Overlays', icon: 'pi pi-clone', to: '/showcase/overlays' },
-  { label: 'Tables', icon: 'pi pi-table', to: '/showcase/tables' },
-  { label: 'Forms', icon: 'pi pi-pen-to-square', to: '/showcase/forms' },
-  { label: 'Navigation', icon: 'pi pi-compass', to: '/showcase/navigation' },
-  { label: 'Layout', icon: 'pi pi-objects-column', to: '/showcase/layout' },
-]
 
 const showLabels = computed(() => appStore.sidebarExpanded || (appStore.isMobile && appStore.mobileOpen))
 const showTooltip = computed(() => appStore.sidebarCollapsed && !appStore.isMobile)
@@ -50,7 +30,7 @@ const env = import.meta.env.MODE === 'production' ? 'PROD' : 'DEV'
 function isActive(to: string) {
   if (route.path === to) return true
   if (!route.path.startsWith(to + '/')) return false
-  return !navItems.some(item => item.to !== to && item.to.length > to.length
+  return !navItems.value.some(item => item.to !== to && item.to.length > to.length
     && (route.path === item.to || route.path.startsWith(item.to + '/')))
 }
 

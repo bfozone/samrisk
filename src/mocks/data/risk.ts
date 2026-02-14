@@ -1,5 +1,5 @@
 import { http, HttpResponse } from 'msw'
-import type { VaRResult, ExposureBucket, AuMSnapshot, TrackingErrorResult, PnLResult, LiquidityBucket } from '@/types'
+import type { VaRResult, ExposureBucket, AuMSnapshot, TrackingErrorResult, PnLResult, LiquidityBucket } from '@/api/schemas'
 import { seededRandom, lastNWeekdays } from './seed'
 
 const tradingDays = lastNWeekdays(250)

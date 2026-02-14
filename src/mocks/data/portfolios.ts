@@ -1,5 +1,5 @@
 import { http, HttpResponse } from 'msw'
-import type { Portfolio, Position } from '@/types'
+import type { Portfolio, Position } from '@/api/schemas'
 
 const portfolios: Portfolio[] = [
   { id: '1', name: 'Global Multi-Asset', currency: 'EUR', navTotal: 500_000_000 },

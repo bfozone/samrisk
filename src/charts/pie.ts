@@ -9,6 +9,7 @@ export function pieChart(config: PieChartConfig, overrides?: ChartOverrides): EC
   const {
     data,
     format = 'percent',
+    currency,
     donut = true,
     showLabels = true,
   } = config
@@ -18,7 +19,7 @@ export function pieChart(config: PieChartConfig, overrides?: ChartOverrides): EC
   const option: EChartsOption = {
     color: chartColors.series,
     textStyle,
-    tooltip: { ...tooltipItem, valueFormatter: tooltipValueFormatter(format) },
+    tooltip: { ...tooltipItem, valueFormatter: tooltipValueFormatter(format, currency) },
     series: [
       {
         type: 'pie',

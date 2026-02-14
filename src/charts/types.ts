@@ -17,6 +17,7 @@ export interface LineChartConfig {
   series: LineSeries[]
   format?: FormatStyle
   rightFormat?: FormatStyle
+  currency?: string
   zeroLine?: boolean
   showLegend?: boolean
 }
@@ -32,6 +33,7 @@ export interface BarChartConfig {
   categories: string[]
   series: BarSeries[]
   format?: FormatStyle
+  currency?: string
   horizontal?: boolean
   stacked?: boolean
   showLabels?: boolean
@@ -49,6 +51,7 @@ export interface PieDataItem {
 export interface PieChartConfig {
   data: PieDataItem[]
   format?: FormatStyle
+  currency?: string
   donut?: boolean
   showLabels?: boolean
 }
@@ -104,6 +107,7 @@ export interface ScatterChartConfig {
   series: ScatterSeries[]
   xFormat?: FormatStyle
   yFormat?: FormatStyle
+  currency?: string
   showLegend?: boolean
 }
 
@@ -123,6 +127,7 @@ export interface BoxplotChartConfig {
   /** Each item: [min, Q1, median, Q3, max] */
   data: [number, number, number, number, number][]
   format?: FormatStyle
+  currency?: string
   horizontal?: boolean
 }
 

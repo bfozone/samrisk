@@ -37,8 +37,8 @@ export function useSummaryMetrics() {
 
   // Chart cards - per-card loading/error/retry
   const chartCards = computed(() => [
-    { title: 'AuM', preset: 'metricTrend' as const, config: buildAuMChart(aumSeries.value), loading: aum.isLoading.value, error: aum.isError.value, onRetry: aum.refetch },
-    { title: 'Cumulative P&L', preset: 'pnlTrend' as const, config: buildPnLChart(pnlSeries.value), loading: pnl.isLoading.value, error: pnl.isError.value, onRetry: pnl.refetch },
+    { title: 'AuM', preset: 'metricTrend' as const, config: buildAuMChart(aumSeries.value, currency.value), loading: aum.isLoading.value, error: aum.isError.value, onRetry: aum.refetch },
+    { title: 'Cumulative P&L', preset: 'pnlTrend' as const, config: buildPnLChart(pnlSeries.value, currency.value), loading: pnl.isLoading.value, error: pnl.isError.value, onRetry: pnl.refetch },
     { title: 'Value at Risk', preset: 'riskTrend' as const, config: buildVaRChart(varSeries.value), overrides: { yAxis: { name: 'VaR (%)' } }, loading: varQ.isLoading.value, error: varQ.isError.value, onRetry: varQ.refetch },
     { title: 'Asset Allocation', preset: 'allocationDonut' as const, config: buildExposureChart(exposure.data.value ?? []), loading: exposure.isLoading.value, error: exposure.isError.value, onRetry: exposure.refetch },
     { title: 'Tracking Error & Info Ratio', preset: 'dualMetric' as const, config: buildTEChart(teSeries.value), overrides: { yAxis: [{ name: 'TE (%)' }, { name: 'Info Ratio' }] }, loading: te.isLoading.value, error: te.isError.value, onRetry: te.refetch },

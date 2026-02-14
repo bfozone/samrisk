@@ -14,6 +14,7 @@ export function scatterChart(config: ScatterChartConfig, overrides?: ChartOverri
     series,
     xFormat = 'number',
     yFormat = 'number',
+    currency,
     showLegend = series.length > 1,
   } = config
 
@@ -36,21 +37,21 @@ export function scatterChart(config: ScatterChartConfig, overrides?: ChartOverri
       ...tooltipItem,
       formatter(params: unknown) {
         const p = params as { seriesName: string; value: [number, number] }
-        return `${p.seriesName}<br/>${formatValue(p.value[0], xFormat)} / ${formatValue(p.value[1], yFormat)}`
+        return `${p.seriesName}<br/>${formatValue(p.value[0], xFormat, currency)} / ${formatValue(p.value[1], yFormat, currency)}`
       },
     },
     xAxis: {
       type: 'value',
       axisLine: cleanAxisLine,
       axisTick: cleanAxisTick,
-      axisLabel: { ...cleanAxisLabel, formatter: axisFormatter(xFormat) },
+      axisLabel: { ...cleanAxisLabel, formatter: axisFormatter(xFormat, currency) },
       splitLine: cleanSplitLine,
     },
     yAxis: {
       type: 'value',
       axisLine: cleanAxisLine,
       axisTick: cleanAxisTick,
-      axisLabel: { ...cleanAxisLabel, formatter: axisFormatter(yFormat) },
+      axisLabel: { ...cleanAxisLabel, formatter: axisFormatter(yFormat, currency) },
       splitLine: cleanSplitLine,
     },
     series: echartsSeries,

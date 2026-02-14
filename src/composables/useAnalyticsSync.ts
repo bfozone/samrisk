@@ -10,19 +10,25 @@ export function useAnalyticsSync() {
   const removeAfterEach = router.afterEach((to) => {
     if (!to.meta.analyticsRoute) return
 
+    // Read URL state
     const urlId = to.params.portfolioId as string | undefined
-    if (urlId) {
-      analytics.selectPortfolio(urlId)
-    } else if (analytics.portfolioId) {
-      router.replace({ name: to.name!, params: { portfolioId: analytics.portfolioId }, query: to.query, hash: to.hash })
-    }
-
-    // Sync asOfDate from URL query param (URL takes precedence)
     const urlAsOf = to.query.asOf as string | undefined
-    if (urlAsOf) {
-      analytics.selectDate(urlAsOf)
-    } else if (analytics.asOfDate) {
-      router.replace({ name: to.name!, params: to.params, query: { ...to.query, asOf: analytics.asOfDate }, hash: to.hash })
+
+    // Sync store from URL (URL takes precedence)
+    if (urlId) analytics.selectPortfolio(urlId)
+    if (urlAsOf) analytics.selectDate(urlAsOf)
+
+    // Build desired params/query, then issue a single replace if needed
+    const wantId = urlId || analytics.portfolioId
+    const wantAsOf = urlAsOf || analytics.asOfDate
+
+    const needsIdFill = !urlId && wantId
+    const needsAsOfFill = !urlAsOf && wantAsOf
+
+    if (needsIdFill || needsAsOfFill) {
+      const params = wantId ? { portfolioId: wantId } : to.params
+      const query = wantAsOf ? { ...to.query, asOf: wantAsOf } : to.query
+      router.replace({ name: to.name!, params, query, hash: to.hash })
     }
   })
 

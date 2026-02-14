@@ -1,6 +1,5 @@
 import type { AuMSnapshot, PnLResult, VaRResult, TrackingErrorResult, ExposureBucket, LiquidityBucket } from '@/api/schemas'
 import { formatValue, type LineChartConfig, type PieChartConfig, type BarChartConfig } from '@/charts'
-import type { ChartOverrides } from '@/charts'
 
 export interface StatCardData {
   label: string
@@ -66,19 +65,21 @@ export function deriveTEStat(items: TrackingErrorResult[]): StatCardData {
 
 // --- Chart config builders ---
 
-export function buildAuMChart(items: AuMSnapshot[]): LineChartConfig {
+export function buildAuMChart(items: AuMSnapshot[], currency: string): LineChartConfig {
   return {
     categories: items.map((d) => d.date),
     series: [{ name: 'AuM', data: items.map((d) => d.aum), area: true }],
     format: 'currency',
+    currency,
   }
 }
 
-export function buildPnLChart(items: PnLResult[]): Omit<LineChartConfig, 'zeroLine'> {
+export function buildPnLChart(items: PnLResult[], currency: string): Omit<LineChartConfig, 'zeroLine'> {
   return {
     categories: items.map((d) => d.date),
     series: [{ name: 'Cumulative P&L', data: items.map((d) => d.cumulative) }],
     format: 'currency',
+    currency,
   }
 }
 
@@ -117,20 +118,3 @@ export function buildLiquidityChart(items: LiquidityBucket[]): Omit<BarChartConf
     format: 'percent',
   }
 }
-
-// --- Chart card definitions ---
-
-export interface ChartCardDef {
-  title: string
-  preset: string
-  overrides?: ChartOverrides
-}
-
-export const chartCardDefs: ChartCardDef[] = [
-  { title: 'AuM', preset: 'metricTrend' },
-  { title: 'Cumulative P&L', preset: 'pnlTrend' },
-  { title: 'Value at Risk', preset: 'riskTrend', overrides: { yAxis: { name: 'VaR (%)' } } },
-  { title: 'Asset Allocation', preset: 'allocationDonut' },
-  { title: 'Tracking Error & Info Ratio', preset: 'dualMetric', overrides: { yAxis: [{ name: 'TE (%)' }, { name: 'Info Ratio' }] } },
-  { title: 'Liquidity Profile', preset: 'liquidityProfile' },
-]

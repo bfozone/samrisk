@@ -14,6 +14,7 @@ export function barChart(config: BarChartConfig, overrides?: ChartOverrides): EC
     categories,
     series,
     format = 'number',
+    currency,
     horizontal = false,
     stacked = false,
     showLabels = horizontal,
@@ -37,7 +38,7 @@ export function barChart(config: BarChartConfig, overrides?: ChartOverrides): EC
     type: 'value' as const,
     axisLine: cleanAxisLine,
     axisTick: cleanAxisTick,
-    axisLabel: { ...cleanAxisLabel, formatter: axisFormatter(format) },
+    axisLabel: { ...cleanAxisLabel, formatter: axisFormatter(format, currency) },
     splitLine: cleanSplitLine,
     ...(horizontal && format === 'percent' && !hasNegative ? { max: 100 } : {}),
   }
@@ -83,7 +84,7 @@ export function barChart(config: BarChartConfig, overrides?: ChartOverrides): EC
   const option: EChartsOption = {
     color: colors,
     textStyle,
-    tooltip: { ...tooltipAxis, valueFormatter: tooltipValueFormatter(format) },
+    tooltip: { ...tooltipAxis, valueFormatter: tooltipValueFormatter(format, currency) },
     xAxis: horizontal ? valueAxis : categoryAxis,
     yAxis: horizontal ? categoryAxis : valueAxis,
     series: echartsSeries,

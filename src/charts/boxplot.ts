@@ -14,6 +14,7 @@ export function boxplotChart(config: BoxplotChartConfig, overrides?: ChartOverri
     categories,
     data,
     format = 'number',
+    currency,
     horizontal = false,
   } = config
 
@@ -29,7 +30,7 @@ export function boxplotChart(config: BoxplotChartConfig, overrides?: ChartOverri
     type: 'value' as const,
     axisLine: cleanAxisLine,
     axisTick: cleanAxisTick,
-    axisLabel: { ...cleanAxisLabel, formatter: axisFormatter(format) },
+    axisLabel: { ...cleanAxisLabel, formatter: axisFormatter(format, currency) },
     splitLine: cleanSplitLine,
   }
 

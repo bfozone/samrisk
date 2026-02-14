@@ -15,6 +15,7 @@ export function lineChart(config: LineChartConfig, overrides?: ChartOverrides): 
     series,
     format = 'number',
     rightFormat,
+    currency,
     zeroLine = false,
     showLegend = series.length > 1,
   } = config
@@ -33,10 +34,10 @@ export function lineChart(config: LineChartConfig, overrides?: ChartOverrides): 
 
   const yAxis: EChartsOption['yAxis'] = hasDualAxis
     ? [
-        { type: 'value', position: 'left', ...yAxisBase, axisLabel: { ...cleanAxisLabel, formatter: axisFormatter(format) } },
-        { type: 'value', position: 'right', ...yAxisBase, axisLabel: { ...cleanAxisLabel, formatter: axisFormatter(effectiveRightFormat) }, splitLine: noSplitLine },
+        { type: 'value', position: 'left', ...yAxisBase, axisLabel: { ...cleanAxisLabel, formatter: axisFormatter(format, currency) } },
+        { type: 'value', position: 'right', ...yAxisBase, axisLabel: { ...cleanAxisLabel, formatter: axisFormatter(effectiveRightFormat, currency) }, splitLine: noSplitLine },
       ]
-    : { type: 'value', ...yAxisBase, axisLabel: { ...cleanAxisLabel, formatter: axisFormatter(format) } }
+    : { type: 'value', ...yAxisBase, axisLabel: { ...cleanAxisLabel, formatter: axisFormatter(format, currency) } }
 
   let grid: EChartsOption['grid']
   if (hasDualAxis) grid = gridDualAxis
@@ -82,7 +83,7 @@ export function lineChart(config: LineChartConfig, overrides?: ChartOverrides): 
   const option: EChartsOption = {
     color: colors,
     textStyle,
-    tooltip: { ...tooltipAxis, valueFormatter: tooltipValueFormatter(format) },
+    tooltip: { ...tooltipAxis, valueFormatter: tooltipValueFormatter(format, currency) },
     xAxis: {
       type: 'category',
       data: categories,

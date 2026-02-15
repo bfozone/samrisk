@@ -1,16 +1,16 @@
-import axios from 'axios'
 import type { AxiosError } from 'axios'
+import axios from 'axios'
 import * as v from 'valibot'
 
-export type ApiErrorKind =
-  | 'unauthorized'
-  | 'forbidden'
-  | 'not_found'
-  | 'validation'
-  | 'rate_limited'
-  | 'server'
-  | 'network'
-  | 'unknown'
+export type ApiErrorKind
+  = | 'unauthorized'
+    | 'forbidden'
+    | 'not_found'
+    | 'validation'
+    | 'rate_limited'
+    | 'server'
+    | 'network'
+    | 'unknown'
 
 export interface ApiErrorContext {
   kind: ApiErrorKind
@@ -66,16 +66,22 @@ export function configureApiErrorHandlers(handlers: Partial<ApiErrorHandlers>) {
 export function classifyError(error: AxiosError): ApiErrorContext {
   const status = error.response?.status
 
-  if (!status) return { kind: 'network', error }
-  if (status === 401) return { kind: 'unauthorized', status, error }
-  if (status === 403) return { kind: 'forbidden', status, error }
-  if (status === 404) return { kind: 'not_found', status, error }
-  if (status === 422) return { kind: 'validation', status, error }
+  if (!status)
+    return { kind: 'network', error }
+  if (status === 401)
+    return { kind: 'unauthorized', status, error }
+  if (status === 403)
+    return { kind: 'forbidden', status, error }
+  if (status === 404)
+    return { kind: 'not_found', status, error }
+  if (status === 422)
+    return { kind: 'validation', status, error }
   if (status === 429) {
-    const ra = parseInt(error.response?.headers?.['retry-after'] ?? '', 10)
-    return { kind: 'rate_limited', status, retryAfter: isNaN(ra) ? undefined : ra, error }
+    const ra = Number.parseInt(error.response?.headers?.['retry-after'] ?? '', 10)
+    return { kind: 'rate_limited', status, retryAfter: Number.isNaN(ra) ? undefined : ra, error }
   }
-  if (status >= 500) return { kind: 'server', status, error }
+  if (status >= 500)
+    return { kind: 'server', status, error }
   return { kind: 'unknown', status, error }
 }
 
@@ -136,9 +142,10 @@ apiClient.interceptors.request.use(async (config) => {
 })
 
 apiClient.interceptors.response.use(
-  (response) => response,
+  response => response,
   (error) => {
-    if (!axios.isAxiosError(error)) return Promise.reject(error)
+    if (!axios.isAxiosError(error))
+      return Promise.reject(error)
 
     const context = classifyError(error)
     handleApiError(context)

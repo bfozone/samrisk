@@ -4,14 +4,13 @@ export default antfu(
   {
     vue: true,
     typescript: true,
-    ignores: ['dist/', 'public/mockServiceWorker.js'],
+    ignores: ['dist/', 'public/mockServiceWorker.js', '.claude/'],
   },
   {
     rules: {
-      'ts/no-unused-vars': 'off',
-      'unused-imports/no-unused-vars': 'off',
-      'ts/no-non-null-assertion': 'off',
-      'no-useless-assignment': 'off',
+      'ts/no-unused-vars': ['warn', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }],
+      'unused-imports/no-unused-vars': ['warn', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }],
+      'ts/no-non-null-assertion': 'warn',
       'vue/multi-word-component-names': 'off',
       'vue/require-default-prop': 'off',
       'vue/no-mutating-props': 'error',

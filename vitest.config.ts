@@ -13,5 +13,21 @@ export default defineConfig({
     environment: 'jsdom',
     include: ['src/**/*.test.ts'],
     setupFiles: ['./src/test-setup.ts'],
+    coverage: {
+      provider: 'v8',
+      include: ['src/**/*.{ts,vue}'],
+      exclude: [
+        'src/**/*.test.ts',
+        'src/test-setup.ts',
+        'src/mocks/**',
+        'src/plugins/**',
+        'src/env.d.ts',
+      ],
+      thresholds: {
+        lines: 50,
+        functions: 50,
+        branches: 50,
+      },
+    },
   },
 })

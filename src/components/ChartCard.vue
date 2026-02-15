@@ -52,7 +52,7 @@ onBeforeUnmount(() => {
       <template #content>
         <Skeleton v-if="loading || !visible" :style="{ height: resolvedHeight, width: '100%' }" />
         <QueryError v-else-if="error" :on-retry="onRetry" :style="{ height: resolvedHeight }" />
-        <VChart v-else :option="option" :style="{ height: resolvedHeight, width: '100%' }" autoresize />
+        <VChart v-else :option="option" :style="{ height: resolvedHeight, width: '100%' }" autoresize role="img" :aria-label="`Chart: ${title}`" />
       </template>
     </AppCard>
   </div>

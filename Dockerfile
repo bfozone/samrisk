@@ -13,7 +13,8 @@ COPY --from=build /app/dist /usr/share/nginx/html
 RUN chown -R nginx:nginx /usr/share/nginx/html \
  && chown -R nginx:nginx /var/cache/nginx \
  && chown -R nginx:nginx /var/log/nginx \
- && touch /var/run/nginx.pid && chown nginx:nginx /var/run/nginx.pid
+ && touch /var/run/nginx.pid && chown nginx:nginx /var/run/nginx.pid \
+ && sed -i 's/^user  nginx;/#user  nginx;/' /etc/nginx/nginx.conf
 
 EXPOSE 8080
 

@@ -2,7 +2,7 @@ import { QueryClient, VueQueryPlugin } from '@tanstack/vue-query'
 import { HTTPError } from 'ky'
 import { createPinia } from 'pinia'
 import { createApp } from 'vue'
-import { configureApiErrorHandlers, configureAuthToken } from '@/api/client'
+import { classifyError, configureApiErrorHandlers, configureAuthToken } from '@/api/client'
 import { getToastRef } from '@/utils/toastRef'
 import App from './App.vue'
 import router from './router'
@@ -80,9 +80,9 @@ async function bootstrap() {
         },
         retryDelay: (attemptIndex, error) => {
           if (error instanceof HTTPError) {
-            const ra = Number.parseInt(error.response.headers.get('retry-after') ?? '', 10)
-            if (!Number.isNaN(ra))
-              return ra * 1000
+            const { retryAfter } = classifyError(error)
+            if (retryAfter)
+              return retryAfter * 1000
           }
           return Math.min(1000 * 2 ** attemptIndex, 30000)
         },

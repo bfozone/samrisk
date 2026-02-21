@@ -17,7 +17,7 @@ defineProps<{
 
 <template>
   <Card class="stat-card">
-    <CardContent class="stat-content">
+    <CardContent class="stat-content p-5">
       <Skeleton v-if="loading" class="h-14 w-full" />
       <QueryError v-else-if="error" :on-retry="onRetry" />
       <template v-else>
@@ -43,7 +43,6 @@ defineProps<{
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
-  padding: 1.25rem !important;
 }
 
 .stat-label {

@@ -13,7 +13,7 @@ import {
 import { computed } from 'vue'
 
 const props = defineProps<{
-  modelValue: string | null | undefined
+  modelValue: string | number | null | undefined
   options: Record<string, unknown>[]
   optionLabel?: string
   optionValue?: string
@@ -38,8 +38,8 @@ function getValue(option: Record<string, unknown>) {
 
 <template>
   <SelectRoot
-    :model-value="modelValue ?? undefined"
-    @update:model-value="emit('update:modelValue', $event)"
+    :model-value="modelValue != null ? String(modelValue) : undefined"
+    @update:model-value="emit('update:modelValue', $event as string)"
   >
     <SelectTrigger
       class="inline-flex w-full items-center justify-between gap-2 rounded-md border border-input bg-card px-3 py-2 text-sm text-foreground outline-none transition-colors hover:border-border-strong focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 data-[placeholder]:text-muted-foreground"

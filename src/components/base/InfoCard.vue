@@ -17,7 +17,7 @@ const icons: Record<string, string> = {
 
 <template>
   <Card class="info-card" :class="`info-card-${severity}`">
-    <CardContent class="info-card-content">
+    <CardContent class="info-card-content p-4">
       <div class="info-card-header">
         <AppIcon :name="icons[severity]!" :size="18" />
         <span v-if="title" class="info-card-title">{{ title }}</span>
@@ -34,10 +34,6 @@ const icons: Record<string, string> = {
   border-left: 3px solid transparent;
   gap: 0;
   padding: 0;
-}
-
-.info-card-content {
-  padding: 1rem !important;
 }
 
 .info-card-header {

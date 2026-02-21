@@ -54,6 +54,7 @@ function onDateChange(e: Event) {
         type="date"
         :value="analytics.asOfDate ?? ''"
         placeholder="As-of date"
+        aria-label="As-of date"
         class="topbar-date-input"
         @change="onDateChange"
       />

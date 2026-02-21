@@ -55,6 +55,7 @@ function selectDay(day: number) {
   }
   else {
     if (props.startDate && dateStr < props.startDate) {
+      emit('update:endDate', props.startDate)
       emit('update:startDate', dateStr)
     }
     else {
@@ -68,7 +69,7 @@ function isInRange(day: number) {
   if (!props.startDate || !props.endDate)
     return false
   const d = toDateString(day)
-  return d >= props.startDate && d <= props.endDate
+  return d > props.startDate && d < props.endDate
 }
 
 function isStart(day: number) {
@@ -86,6 +87,21 @@ const displayValue = computed(() => {
     return props.startDate
   return ''
 })
+
+function dayClass(day: number): Record<string, boolean> {
+  const start = isStart(day)
+  const end = isEnd(day)
+  const range = isInRange(day)
+  const hasEnd = !!props.endDate
+
+  return {
+    'rounded-md': !start && !end && !range,
+    'bg-secondary': range,
+    'rounded-l-md bg-primary text-primary-foreground hover:bg-primary/90': start && !end && hasEnd,
+    'rounded-r-md bg-primary text-primary-foreground hover:bg-primary/90': end && !start,
+    'rounded-md bg-primary text-primary-foreground hover:bg-primary/90': (start && end) || (start && !hasEnd),
+  }
+}
 
 const weekdays = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su']
 </script>
@@ -132,13 +148,8 @@ const weekdays = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su']
             <div v-if="day === null" class="p-1"></div>
             <button
               v-else
-              class="flex h-8 items-center justify-center rounded-md bg-transparent text-[0.8125rem] text-foreground hover:bg-accent"
-              :class="{
-                'bg-secondary !rounded-none': isInRange(day),
-                'bg-primary text-primary-foreground hover:bg-primary/90 !rounded-l-md !rounded-r-none': isStart(day) && !isEnd(day),
-                'bg-primary text-primary-foreground hover:bg-primary/90 !rounded-r-md !rounded-l-none': isEnd(day) && !isStart(day),
-                'bg-primary text-primary-foreground hover:bg-primary/90 !rounded-md': isStart(day) && isEnd(day),
-              }"
+              class="flex h-8 items-center justify-center bg-transparent text-[0.8125rem] text-foreground hover:bg-accent"
+              :class="dayClass(day)"
               @click="selectDay(day)"
             >
               {{ day }}

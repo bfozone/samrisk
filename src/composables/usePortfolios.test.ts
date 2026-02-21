@@ -5,12 +5,22 @@ import { defineComponent, h } from 'vue'
 import { usePortfolios, usePositions } from './usePortfolios'
 
 vi.mock('@/api/portfolio', () => ({
-  getPortfolios: vi.fn().mockResolvedValue([
-    { id: 'p1', name: 'Fund A', currency: 'EUR', navTotal: 100 },
-  ]),
-  getPositions: vi.fn().mockResolvedValue([
-    { id: 'pos1', name: 'Bond A', assetClass: 'Fixed Income', weight: 0.5, marketValue: 50 },
-  ]),
+  getPortfolios: vi
+    .fn()
+    .mockResolvedValue([
+      { id: 'p1', name: 'Fund A', currency: 'EUR', navTotal: 100 },
+    ]),
+  getPositions: vi
+    .fn()
+    .mockResolvedValue([
+      {
+        id: 'pos1',
+        name: 'Bond A',
+        assetClass: 'Fixed Income',
+        weight: 0.5,
+        marketValue: 50,
+      },
+    ]),
 }))
 
 function mountWithQuery(setup: () => unknown) {
@@ -48,7 +58,9 @@ describe('usePortfolios', () => {
       result = usePortfolios()
     })
     // Query is created - verify it doesn't throw
-    expect(result!.isLoading.value || result!.data.value !== undefined).toBe(true)
+    expect(result!.isLoading.value || result!.data.value !== undefined).toBe(
+      true,
+    )
   })
 })
 
@@ -60,7 +72,13 @@ describe('usePositions', () => {
     })
     await flushPromises()
     expect(result!.data.value).toEqual([
-      { id: 'pos1', name: 'Bond A', assetClass: 'Fixed Income', weight: 0.5, marketValue: 50 },
+      {
+        id: 'pos1',
+        name: 'Bond A',
+        assetClass: 'Fixed Income',
+        weight: 0.5,
+        marketValue: 50,
+      },
     ])
   })
 

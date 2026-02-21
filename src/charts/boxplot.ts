@@ -1,6 +1,6 @@
 import type { EChartsOption } from 'echarts'
 import type { BoxplotChartConfig, ChartOverrides } from './types'
-import { chartColors } from '@/theme/preset'
+import { chartColors } from '@/theme/colors'
 import {
   animation,
   cleanAxisLabel,
@@ -42,7 +42,7 @@ export function boxplotChart(config: BoxplotChartConfig, overrides?: ChartOverri
 
   const option: EChartsOption = {
     textStyle,
-    tooltip: { ...tooltipItem, axisPointer: { type: 'shadow' } },
+    tooltip: { ...tooltipItem(), axisPointer: { type: 'shadow' } },
     xAxis: horizontal ? valueAxis : categoryAxis,
     yAxis: horizontal ? categoryAxis : valueAxis,
     series: [

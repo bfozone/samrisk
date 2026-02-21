@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import Skeleton from 'primevue/skeleton'
-import AppCard from '@/components/base/AppCard.vue'
+import AppIcon from '@/components/base/AppIcon.vue'
 import QueryError from '@/components/base/QueryError.vue'
+import { Card, CardContent } from '@/components/ui/card'
+import { Skeleton } from '@/components/ui/skeleton'
 
 defineProps<{
   label: string
@@ -15,32 +16,34 @@ defineProps<{
 </script>
 
 <template>
-  <AppCard class="stat-card" compact>
-    <template #content>
-      <Skeleton v-if="loading" height="3.5rem" width="100%" />
+  <Card class="stat-card">
+    <CardContent class="stat-content">
+      <Skeleton v-if="loading" class="h-14 w-full" />
       <QueryError v-else-if="error" :on-retry="onRetry" />
       <template v-else>
         <span class="stat-label">{{ label }}</span>
         <span class="stat-value">{{ value }}</span>
         <span v-if="change" class="stat-change" :class="trend">
-          <i v-if="trend === 'up'" class="pi pi-arrow-up"></i>
-          <i v-else-if="trend === 'down'" class="pi pi-arrow-down"></i>
+          <AppIcon v-if="trend === 'up'" name="arrow-up" :size="10" />
+          <AppIcon v-else-if="trend === 'down'" name="arrow-down" :size="10" />
           {{ change }}
         </span>
       </template>
-    </template>
-  </AppCard>
+    </CardContent>
+  </Card>
 </template>
 
 <style scoped>
-.stat-card :deep(.p-card-body) {
-  padding: 1.25rem;
+.stat-card {
+  gap: 0;
+  padding: 0;
 }
 
-.stat-card :deep(.p-card-content) {
+.stat-content {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
+  padding: 1.25rem !important;
 }
 
 .stat-label {
@@ -48,13 +51,13 @@ defineProps<{
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  color: var(--p-surface-500);
+  color: var(--muted-foreground);
 }
 
 .stat-value {
   font-size: 1.5rem;
   font-weight: 700;
-  color: var(--p-surface-900);
+  color: var(--foreground);
   line-height: 1.2;
 }
 
@@ -66,19 +69,20 @@ defineProps<{
   gap: 0.25rem;
 }
 
-.stat-change i {
-  font-size: 0.625rem;
+.stat-change svg {
+  width: 0.625rem;
+  height: 0.625rem;
 }
 
 .stat-change.up {
-  color: var(--app-color-positive, #A5B077);
+  color: var(--color-positive);
 }
 
 .stat-change.down {
-  color: var(--app-color-negative, #ee000c);
+  color: var(--color-negative);
 }
 
 .stat-change.flat {
-  color: var(--p-surface-500);
+  color: var(--muted-foreground);
 }
 </style>

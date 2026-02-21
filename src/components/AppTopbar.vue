@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import DatePicker from 'primevue/datepicker'
+import { Menu } from 'lucide-vue-next'
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
-import AppButton from '@/components/base/AppButton.vue'
 import AppSelect from '@/components/base/AppSelect.vue'
+import { Button } from '@/components/ui/button'
 import { usePortfolios } from '@/composables/usePortfolios'
 import { useAnalyticsContext } from '@/stores/analytics'
 import { useAppStore } from '@/stores/app'
@@ -16,42 +16,25 @@ const { data: portfolios } = usePortfolios()
 const isAnalyticsRoute = computed(() => !!route.meta.analyticsRoute)
 const pageTitle = computed(() => (route.meta.title as string) ?? '')
 
-/** Parse YYYY-MM-DD to local Date (avoids UTC midnight shift from Date.parse) */
-function parseLocalDate(iso: string): Date | null {
-  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso)
-  if (!m)
-    return null
-  return new Date(+m[1]!, +m[2]! - 1, +m[3]!)
+function onDateChange(e: Event) {
+  const value = (e.target as HTMLInputElement).value
+  analytics.selectDate(value || null)
 }
-
-function toIsoDate(date: Date): string {
-  const y = date.getFullYear()
-  const m = String(date.getMonth() + 1).padStart(2, '0')
-  const d = String(date.getDate()).padStart(2, '0')
-  return `${y}-${m}-${d}`
-}
-
-const dateModel = computed({
-  get: () => (analytics.asOfDate ? parseLocalDate(analytics.asOfDate) : null),
-  set: (val: Date | null) => {
-    analytics.selectDate(val ? toIsoDate(val) : null)
-  },
-})
 </script>
 
 <template>
   <header class="app-topbar">
     <div class="topbar-left">
-      <AppButton
+      <Button
         v-if="appStore.isMobile"
-        icon="pi pi-bars"
-        text
-        rounded
-        severity="secondary"
+        variant="ghost"
+        size="icon-sm"
         aria-label="Open navigation menu"
         class="topbar-toggle"
         @click="appStore.toggleSidebar()"
-      />
+      >
+        <Menu class="size-5" />
+      </Button>
       <h1 class="topbar-title">
         {{ pageTitle }}
       </h1>
@@ -67,12 +50,12 @@ const dateModel = computed({
         class="topbar-portfolio-select"
         @update:modelValue="analytics.selectPortfolio($event)"
       />
-      <DatePicker
-        v-model="dateModel"
-        dateFormat="yy-mm-dd"
+      <input
+        type="date"
+        :value="analytics.asOfDate ?? ''"
         placeholder="As-of date"
-        showIcon
-        class="topbar-date-picker"
+        class="topbar-date-input"
+        @change="onDateChange"
       />
     </div>
   </header>
@@ -84,8 +67,8 @@ const dateModel = computed({
   align-items: center;
   justify-content: space-between;
   padding: var(--app-space-sm) var(--app-space-md);
-  background: var(--p-surface-0);
-  border-bottom: 1px solid var(--p-surface-200);
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
   position: sticky;
   top: 0;
   z-index: 30;
@@ -100,14 +83,14 @@ const dateModel = computed({
 }
 
 .topbar-toggle {
-  color: var(--p-surface-600);
+  color: var(--color-text-secondary);
   flex-shrink: 0;
 }
 
 .topbar-title {
   font-size: 1.125rem;
   font-weight: 600;
-  color: var(--p-surface-900);
+  color: var(--foreground);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -124,8 +107,28 @@ const dateModel = computed({
   min-width: 200px;
 }
 
-.topbar-date-picker {
+.topbar-date-input {
   width: 160px;
+  padding: 0.5rem 0.75rem;
+  min-height: 2.375rem;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-sm, 6px);
+  font-size: 0.875rem;
+  font-family: inherit;
+  color: var(--foreground);
+  background: var(--card);
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.topbar-date-input:hover {
+  border-color: var(--color-text-faint);
+}
+
+.topbar-date-input:focus-visible {
+  border-color: var(--ring);
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
 }
 
 @media (max-width: 768px) {
@@ -139,7 +142,7 @@ const dateModel = computed({
   }
 
   .topbar-portfolio-select,
-  .topbar-date-picker {
+  .topbar-date-input {
     flex: 1;
     min-width: 140px;
   }

@@ -7,7 +7,7 @@ const route = useRoute()
 
 <template>
   <AnalyticsPlaceholder
-    :icon="(route.meta.icon as string) ?? 'pi pi-box'"
+    :icon="(route.meta.icon as string) ?? 'box'"
     :hint="(route.meta.hint as string) ?? ''"
     :empty-label="(route.meta.emptyLabel as string) ?? 'Select a portfolio from the topbar'"
   />

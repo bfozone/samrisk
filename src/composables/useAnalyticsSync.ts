@@ -13,7 +13,8 @@ export function useAnalyticsSync() {
 
     // Read URL state
     const urlId = to.params.portfolioId as string | undefined
-    const urlAsOf = typeof to.query.asOf === 'string' ? to.query.asOf : undefined
+    const urlAsOf
+      = typeof to.query.asOf === 'string' ? to.query.asOf : undefined
 
     // Sync store from URL (URL takes precedence)
     if (urlId)
@@ -38,7 +39,12 @@ export function useAnalyticsSync() {
 
     if (needsIdFill) {
       const params = wantId ? { portfolioId: wantId } : to.params
-      router.replace({ name: to.name!, params, query: to.query, hash: to.hash })
+      router.replace({
+        name: to.name!,
+        params,
+        query: to.query,
+        hash: to.hash,
+      })
     }
   })
 
@@ -53,7 +59,12 @@ export function useAnalyticsSync() {
         return
       const currentId = route.params.portfolioId as string | undefined
       if (currentId !== id) {
-        router.replace({ name: route.name!, params: { portfolioId: id }, query: route.query, hash: route.hash })
+        router.replace({
+          name: route.name!,
+          params: { portfolioId: id },
+          query: route.query,
+          hash: route.hash,
+        })
       }
     },
   )
@@ -65,11 +76,21 @@ export function useAnalyticsSync() {
         return
       const currentAsOf = route.query.asOf as string | undefined
       if (asOf && currentAsOf !== asOf) {
-        router.replace({ name: route.name!, params: route.params, query: { ...route.query, asOf }, hash: route.hash })
+        router.replace({
+          name: route.name!,
+          params: route.params,
+          query: { ...route.query, asOf },
+          hash: route.hash,
+        })
       }
       else if (!asOf && currentAsOf) {
         const { asOf: _, ...rest } = route.query
-        router.replace({ name: route.name!, params: route.params, query: rest, hash: route.hash })
+        router.replace({
+          name: route.name!,
+          params: route.params,
+          query: rest,
+          hash: route.hash,
+        })
       }
     },
   )

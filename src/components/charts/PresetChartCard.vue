@@ -4,7 +4,7 @@ import type { BarChartConfig, ChartOverrides, LineChartConfig, PieChartConfig } 
 import { computed } from 'vue'
 import { allocationDonut, dualMetric, liquidityProfile, metricTrend, pnlTrend, riskTrend } from '@/charts'
 import ChartCard from '@/components/ChartCard.vue'
-import { uiComponentDefaults } from '@/ui/config'
+import { uiDefaults } from '@/ui/config'
 
 type PresetPayload
   = | { preset: 'metricTrend', config: LineChartConfig }
@@ -42,7 +42,7 @@ const option = computed<EChartsOption>(() => {
   }
 })
 
-const resolvedSize = computed(() => props.size ?? uiComponentDefaults.chartCard.size)
+const resolvedSize = computed(() => props.size ?? uiDefaults.chartCard.size)
 </script>
 
 <template>

@@ -1,7 +1,7 @@
 import type { EChartsOption } from 'echarts'
 import type { ChartOverrides } from './types'
-import { chartColors } from '@/theme/preset'
-import { animation, textStyle, tooltipItem } from './defaults'
+import { chartColors } from '@/theme/colors'
+import { animation, chartSeparatorColor, textStyle, tooltipItem } from './defaults'
 import { deepMerge } from './merge'
 
 export interface CalendarHeatmapConfig {
@@ -33,7 +33,7 @@ export function calendarHeatmapChart(config: CalendarHeatmapConfig, overrides?: 
   const option: EChartsOption = {
     textStyle,
     tooltip: {
-      ...tooltipItem,
+      ...tooltipItem(),
       formatter(params: unknown) {
         const p = params as { value: [string, number] }
         return `${p.value[0]}: ${format(p.value[1])}`
@@ -57,7 +57,7 @@ export function calendarHeatmapChart(config: CalendarHeatmapConfig, overrides?: 
       range: year,
       cellSize: ['auto', 16],
       splitLine: { show: true, lineStyle: { color: '#e5e7eb', width: 1 } },
-      itemStyle: { borderColor: '#fff', borderWidth: 2 },
+      itemStyle: { borderColor: chartSeparatorColor(), borderWidth: 2 },
       yearLabel: { show: false },
       dayLabel: { firstDay: 1, nameMap: 'en', color: chartColors.grey, fontSize: 10 },
       monthLabel: { color: chartColors.grey, fontSize: 11 },

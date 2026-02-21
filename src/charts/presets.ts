@@ -1,6 +1,6 @@
 import type { EChartsOption } from 'echarts'
 import type { BarChartConfig, ChartOverrides, LineChartConfig, PieChartConfig } from './types'
-import { chartColors } from '@/theme/preset'
+import { chartColors } from '@/theme/colors'
 import { barChart } from './bar'
 import { lineChart } from './line'
 import { pieChart } from './pie'

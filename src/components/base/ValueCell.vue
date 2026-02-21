@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { uiComponentDefaults } from '@/ui/config'
+import { uiDefaults } from '@/ui/config'
 
 const props = withDefaults(defineProps<{
   value: number
@@ -42,8 +42,8 @@ const formatted = computed(() => {
   }
 
   if (props.format === 'currency') {
-    const code = props.currency ?? uiComponentDefaults.valueCell.currencyCode
-    const locale = uiComponentDefaults.valueCell.locale
+    const code = props.currency ?? uiDefaults.valueCell.currencyCode
+    const locale = uiDefaults.valueCell.locale
     return `${code} ${v.toLocaleString(locale, { minimumFractionDigits: d, maximumFractionDigits: d })}`
   }
 

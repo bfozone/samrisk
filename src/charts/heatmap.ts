@@ -1,8 +1,9 @@
 import type { EChartsOption } from 'echarts'
 import type { ChartOverrides, HeatmapChartConfig } from './types'
-import { chartColors } from '@/theme/preset'
+import { chartColors } from '@/theme/colors'
 import {
   animation,
+  chartSeparatorColor,
   cleanAxisLabel,
   cleanAxisLine,
   cleanAxisTick,
@@ -28,7 +29,7 @@ export function heatmapChart(config: HeatmapChartConfig, overrides?: ChartOverri
   const option: EChartsOption = {
     textStyle,
     tooltip: {
-      ...tooltipItem,
+      ...tooltipItem(),
       formatter(params: unknown) {
         const p = params as { value: [number, number, number] }
         const [xi, yi, val] = p.value
@@ -67,7 +68,7 @@ export function heatmapChart(config: HeatmapChartConfig, overrides?: ChartOverri
         data,
         label: { show: true, fontSize: 11, formatter: (p: unknown) => formatValue((p as { value: [number, number, number] }).value[2], format, currency) },
         emphasis: { itemStyle: { shadowBlur: 12, shadowColor: 'rgba(0, 0, 0, 0.15)' } },
-        itemStyle: { borderColor: '#fff', borderWidth: 2, borderRadius: 2 },
+        itemStyle: { borderColor: chartSeparatorColor(), borderWidth: 2, borderRadius: 2 },
       },
     ],
     grid: { left: 80, right: 16, top: 16, bottom: 60 },

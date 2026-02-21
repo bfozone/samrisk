@@ -1,15 +1,12 @@
 <script setup lang="ts">
-import Toast from 'primevue/toast'
-import { useToast } from 'primevue/usetoast'
 import AppSidebar from '@/components/AppSidebar.vue'
 import AppTopbar from '@/components/AppTopbar.vue'
 import BackendStatus from '@/components/BackendStatus.vue'
 import ErrorBoundary from '@/components/ErrorBoundary.vue'
+import { Toaster } from '@/components/ui/sonner'
 import { useAnalyticsSync } from '@/composables/useAnalyticsSync'
-import { setToastRef } from '@/utils/toastRef'
 
 useAnalyticsSync()
-setToastRef(useToast())
 </script>
 
 <template>
@@ -24,7 +21,7 @@ setToastRef(useToast())
           </ErrorBoundary>
         </main>
       </div>
-      <Toast position="top-right" />
+      <Toaster position="top-right" :duration="5000" rich-colors />
     </div>
   </BackendStatus>
 </template>

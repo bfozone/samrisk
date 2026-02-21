@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import AppCard from '@/components/base/AppCard.vue'
+import AppIcon from '@/components/base/AppIcon.vue'
+import { Card, CardContent } from '@/components/ui/card'
 
 defineProps<{
   severity: 'error' | 'warn' | 'success' | 'info'
@@ -7,30 +8,36 @@ defineProps<{
 }>()
 
 const icons: Record<string, string> = {
-  error: 'pi pi-times-circle',
-  warn: 'pi pi-exclamation-triangle',
-  success: 'pi pi-check-circle',
-  info: 'pi pi-info-circle',
+  error: 'times-circle',
+  warn: 'exclamation-triangle',
+  success: 'check-circle',
+  info: 'info-circle',
 }
 </script>
 
 <template>
-  <AppCard class="info-card" :class="`info-card-${severity}`" compact>
-    <template #content>
+  <Card class="info-card" :class="`info-card-${severity}`">
+    <CardContent class="info-card-content">
       <div class="info-card-header">
-        <i :class="icons[severity]"></i>
+        <AppIcon :name="icons[severity]!" :size="18" />
         <span v-if="title" class="info-card-title">{{ title }}</span>
       </div>
       <div v-if="$slots.default" class="info-card-body">
         <slot></slot>
       </div>
-    </template>
-  </AppCard>
+    </CardContent>
+  </Card>
 </template>
 
 <style scoped>
 .info-card {
   border-left: 3px solid transparent;
+  gap: 0;
+  padding: 0;
+}
+
+.info-card-content {
+  padding: 1rem !important;
 }
 
 .info-card-header {
@@ -39,8 +46,10 @@ const icons: Record<string, string> = {
   gap: 0.5rem;
 }
 
-.info-card-header i {
-  font-size: 1.125rem;
+.info-card-header svg {
+  width: 1.125rem;
+  height: 1.125rem;
+  flex-shrink: 0;
 }
 
 .info-card-title {
@@ -52,35 +61,35 @@ const icons: Record<string, string> = {
   margin-top: 0.375rem;
   padding-left: 1.625rem;
   font-size: 0.8125rem;
-  color: var(--p-surface-600);
+  color: var(--color-text-secondary);
   line-height: 1.5;
 }
 
 .info-card-error {
-  border-left-color: var(--app-color-negative, #ee000c);
+  border-left-color: var(--color-negative);
 }
 .info-card-error .info-card-header {
-  color: var(--app-color-negative, #ee000c);
+  color: var(--color-negative);
 }
 
 .info-card-warn {
-  border-left-color: var(--app-color-warning, #EAA159);
+  border-left-color: var(--color-warning);
 }
 .info-card-warn .info-card-header {
-  color: var(--app-color-warning, #EAA159);
+  color: var(--color-warning);
 }
 
 .info-card-success {
-  border-left-color: var(--app-color-positive, #A5B077);
+  border-left-color: var(--color-positive);
 }
 .info-card-success .info-card-header {
-  color: var(--app-color-positive, #A5B077);
+  color: var(--color-positive);
 }
 
 .info-card-info {
-  border-left-color: var(--app-color-info, #61828E);
+  border-left-color: var(--color-info);
 }
 .info-card-info .info-card-header {
-  color: var(--app-color-info, #61828E);
+  color: var(--color-info);
 }
 </style>

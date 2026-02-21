@@ -1,11 +1,12 @@
 <script setup lang="ts">
+import AppIcon from '@/components/base/AppIcon.vue'
 import { useAnalyticsContext } from '@/stores/analytics'
 
 withDefaults(defineProps<{
   icon?: string
   emptyLabel?: string
 }>(), {
-  icon: 'pi pi-briefcase',
+  icon: 'briefcase',
   emptyLabel: 'Select a portfolio from the topbar',
 })
 
@@ -18,7 +19,7 @@ const analytics = useAnalyticsContext()
       <slot></slot>
     </template>
     <div v-else class="analytics-empty-state">
-      <i :class="icon"></i>
+      <AppIcon :name="icon" :size="40" />
       <p>{{ emptyLabel }}</p>
     </div>
   </div>

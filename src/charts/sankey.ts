@@ -1,6 +1,6 @@
 import type { EChartsOption } from 'echarts'
 import type { ChartOverrides, SankeyChartConfig } from './types'
-import { chartColors } from '@/theme/preset'
+import { chartColors } from '@/theme/colors'
 import { animation, textStyle, tooltipItem } from './defaults'
 import { formatValue } from './format'
 import { deepMerge } from './merge'
@@ -12,7 +12,7 @@ export function sankeyChart(config: SankeyChartConfig, overrides?: ChartOverride
     color: chartColors.series,
     textStyle,
     tooltip: {
-      ...tooltipItem,
+      ...tooltipItem(),
       triggerOn: 'mousemove',
       formatter(params: unknown) {
         const p = params as { data: { source?: string, target?: string, value?: number, name?: string } }

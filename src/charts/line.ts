@@ -1,6 +1,6 @@
 import type { EChartsOption } from 'echarts'
 import type { ChartOverrides, LineChartConfig } from './types'
-import { chartColors } from '@/theme/preset'
+import { chartColors } from '@/theme/colors'
 import {
   animation,
   cleanAxisLabel,
@@ -99,7 +99,7 @@ export function lineChart(config: LineChartConfig, overrides?: ChartOverrides): 
   const option: EChartsOption = {
     color: colors,
     textStyle,
-    tooltip: { ...tooltipAxis, valueFormatter: tooltipValueFormatter(format, currency) },
+    tooltip: { ...tooltipAxis(), valueFormatter: tooltipValueFormatter(format, currency) },
     xAxis: {
       type: 'category',
       data: categories,

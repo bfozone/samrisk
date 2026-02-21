@@ -1,51 +1,85 @@
-<script setup lang="ts">
-import DataTable from 'primevue/datatable'
-import { computed, useAttrs } from 'vue'
-import { uiComponentDefaults } from '@/ui/config'
+<script setup lang="ts" generic="T">
+import type { ColumnDef, SortingState } from '@tanstack/vue-table'
+import {
+  FlexRender,
+  getCoreRowModel,
+  getSortedRowModel,
+  useVueTable,
+} from '@tanstack/vue-table'
+import { ArrowDown, ArrowUp, ArrowUpDown } from 'lucide-vue-next'
+import { ref } from 'vue'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableEmpty,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table'
 
-defineOptions({ inheritAttrs: false })
+const props = withDefaults(defineProps<{
+  data: T[]
+  columns: ColumnDef<T, unknown>[]
+  striped?: boolean
+  stickyHeader?: boolean
+}>(), {
+  striped: true,
+  stickyHeader: true,
+})
 
-const props = defineProps<{
-  size?: DataTableSize
-  stripedRows?: boolean
-}>()
+const sorting = ref<SortingState>([])
 
-const emit = defineEmits([
-  'update:selection',
-  'update:filters',
-  'update:expandedRows',
-  'update:editingRows',
-  'rowContextmenu',
-  'rowEditSave',
-])
-
-type DataTableSize = 'small' | 'large'
-
-const attrs = useAttrs()
-
-const resolvedSize = computed(() => props.size ?? uiComponentDefaults.table.size)
-const resolvedStripedRows = computed(() => props.stripedRows ?? uiComponentDefaults.table.stripedRows)
+const table = useVueTable({
+  get data() { return props.data },
+  get columns() { return props.columns },
+  state: {
+    get sorting() { return sorting.value },
+  },
+  onSortingChange: (updater) => {
+    sorting.value = typeof updater === 'function' ? updater(sorting.value) : updater
+  },
+  getCoreRowModel: getCoreRowModel(),
+  getSortedRowModel: getSortedRowModel(),
+})
 </script>
 
 <template>
-  <DataTable
-    v-bind="attrs"
-    :size="resolvedSize"
-    :striped-rows="resolvedStripedRows"
-    class="app-data-table"
-    @update:selection="emit('update:selection', $event)"
-    @update:filters="emit('update:filters', $event)"
-    @update:expandedRows="emit('update:expandedRows', $event)"
-    @update:editingRows="emit('update:editingRows', $event)"
-    @row-contextmenu="emit('rowContextmenu', $event)"
-    @row-edit-save="emit('rowEditSave', $event)"
-  >
-    <template
-      v-for="(_, slotName) in $slots"
-      :key="String(slotName)"
-      #[slotName]="slotProps"
-    >
-      <slot :name="slotName" v-bind="slotProps ?? {}"></slot>
-    </template>
-  </DataTable>
+  <div class="overflow-x-auto rounded-lg border border-border">
+    <Table>
+      <TableHeader :class="stickyHeader && 'sticky top-0 z-[1]'">
+        <TableRow v-for="headerGroup in table.getHeaderGroups()" :key="headerGroup.id">
+          <TableHead
+            v-for="header in headerGroup.headers"
+            :key="header.id"
+            :class="header.column.getCanSort() && 'cursor-pointer select-none hover:text-foreground'"
+            @click="header.column.getToggleSortingHandler()?.($event)"
+          >
+            <div class="flex items-center gap-1">
+              <FlexRender :render="header.column.columnDef.header" :props="header.getContext()" />
+              <template v-if="header.column.getCanSort()">
+                <ArrowUp v-if="header.column.getIsSorted() === 'asc'" class="size-3" />
+                <ArrowDown v-else-if="header.column.getIsSorted() === 'desc'" class="size-3" />
+                <ArrowUpDown v-else class="size-3 opacity-40" />
+              </template>
+            </div>
+          </TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        <TableRow
+          v-for="row in table.getRowModel().rows"
+          :key="row.id"
+          :class="striped && 'even:bg-muted/50'"
+        >
+          <TableCell v-for="cell in row.getVisibleCells()" :key="cell.id">
+            <FlexRender :render="cell.column.columnDef.cell" :props="cell.getContext()" />
+          </TableCell>
+        </TableRow>
+        <TableEmpty v-if="table.getRowModel().rows.length === 0" :colspan="table.getAllColumns().length">
+          No data available
+        </TableEmpty>
+      </TableBody>
+    </Table>
+  </div>
 </template>

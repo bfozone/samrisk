@@ -6,8 +6,8 @@ export function usePortfolioContext() {
   const analytics = useAnalyticsContext()
   const { data: portfolios } = usePortfolios()
 
-  const selectedPortfolio = computed(() =>
-    portfolios.value?.find(p => p.id === analytics.portfolioId) ?? null,
+  const selectedPortfolio = computed(
+    () => portfolios.value?.find(p => p.id === analytics.portfolioId) ?? null,
   )
 
   const currency = computed(() => selectedPortfolio.value?.currency ?? 'EUR')

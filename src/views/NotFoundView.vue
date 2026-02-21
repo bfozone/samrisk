@@ -20,6 +20,6 @@
 
 .not-found h1 {
   font-size: 4rem;
-  color: var(--p-surface-300);
+  color: var(--color-border-strong);
 }
 </style>

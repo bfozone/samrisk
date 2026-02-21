@@ -1,6 +1,6 @@
 import type { EChartsOption } from 'echarts'
 import type { BarChartConfig, ChartOverrides } from './types'
-import { chartColors } from '@/theme/preset'
+import { chartColors } from '@/theme/colors'
 import {
   animation,
   cleanAxisLabel,
@@ -97,7 +97,7 @@ export function barChart(config: BarChartConfig, overrides?: ChartOverrides): EC
   const option: EChartsOption = {
     color: colors,
     textStyle,
-    tooltip: { ...tooltipAxis, valueFormatter: tooltipValueFormatter(format, currency) },
+    tooltip: { ...tooltipAxis(), valueFormatter: tooltipValueFormatter(format, currency) },
     xAxis: horizontal ? valueAxis : categoryAxis,
     yAxis: horizontal ? categoryAxis : valueAxis,
     series: echartsSeries,

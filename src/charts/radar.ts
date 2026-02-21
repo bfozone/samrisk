@@ -1,6 +1,6 @@
 import type { EChartsOption } from 'echarts'
 import type { ChartOverrides, RadarChartConfig } from './types'
-import { chartColors } from '@/theme/preset'
+import { chartColors } from '@/theme/colors'
 import { animation, legendBottom, textStyle, tooltipItem } from './defaults'
 import { deepMerge } from './merge'
 
@@ -28,7 +28,7 @@ export function radarChart(config: RadarChartConfig, overrides?: ChartOverrides)
   const option: EChartsOption = {
     color: colors,
     textStyle,
-    tooltip: tooltipItem,
+    tooltip: tooltipItem(),
     radar: {
       indicator: indicators,
       shape: 'polygon',

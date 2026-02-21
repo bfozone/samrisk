@@ -1,36 +1,71 @@
 <script setup lang="ts">
-import Select from 'primevue/select'
-import { computed, useAttrs } from 'vue'
-import { uiComponentDefaults } from '@/ui/config'
-
-defineOptions({ inheritAttrs: false })
+import { ChevronDown } from 'lucide-vue-next'
+import {
+  SelectContent,
+  SelectItem,
+  SelectItemText,
+  SelectPortal,
+  SelectRoot,
+  SelectTrigger,
+  SelectValue,
+  SelectViewport,
+} from 'reka-ui'
+import { computed } from 'vue'
 
 const props = defineProps<{
-  size?: SelectSize
+  modelValue: string | null | undefined
+  options: Record<string, unknown>[]
+  optionLabel?: string
+  optionValue?: string
+  placeholder?: string
 }>()
 
-defineEmits(['update:modelValue'])
+const emit = defineEmits<{
+  'update:modelValue': [value: string]
+}>()
 
-type SelectSize = 'small' | 'large'
+const labelKey = computed(() => props.optionLabel ?? 'label')
+const valueKey = computed(() => props.optionValue ?? 'value')
 
-const attrs = useAttrs()
+function getLabel(option: Record<string, unknown>) {
+  return String(option[labelKey.value] ?? '')
+}
 
-const resolvedSize = computed(() => props.size ?? uiComponentDefaults.select.size)
+function getValue(option: Record<string, unknown>) {
+  return String(option[valueKey.value] ?? '')
+}
 </script>
 
 <template>
-  <Select
-    v-bind="attrs"
-    :size="resolvedSize"
-    class="app-select"
-    @update:modelValue="$emit('update:modelValue', $event)"
+  <SelectRoot
+    :model-value="modelValue ?? undefined"
+    @update:model-value="emit('update:modelValue', $event)"
   >
-    <template
-      v-for="(_, slotName) in $slots"
-      :key="String(slotName)"
-      #[slotName]="slotProps"
+    <SelectTrigger
+      class="inline-flex w-full items-center justify-between gap-2 rounded-md border border-input bg-card px-3 py-2 text-sm text-foreground outline-none transition-colors hover:border-border-strong focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 data-[placeholder]:text-muted-foreground"
+      aria-label="Select option"
     >
-      <slot :name="slotName" v-bind="slotProps ?? {}"></slot>
-    </template>
-  </Select>
+      <SelectValue :placeholder="placeholder ?? 'Select...'" />
+      <ChevronDown class="size-3.5 shrink-0 text-muted-foreground" />
+    </SelectTrigger>
+
+    <SelectPortal>
+      <SelectContent
+        class="z-50 min-w-[var(--reka-select-trigger-width)] overflow-y-auto rounded-lg border border-border bg-popover p-1 shadow-lg"
+        position="popper"
+        :side-offset="4"
+      >
+        <SelectViewport>
+          <SelectItem
+            v-for="option in options"
+            :key="getValue(option)"
+            :value="getValue(option)"
+            class="flex cursor-pointer select-none items-center rounded-sm px-3 py-2 text-sm text-foreground outline-none hover:bg-accent data-[highlighted]:bg-accent data-[state=checked]:font-semibold"
+          >
+            <SelectItemText>{{ getLabel(option) }}</SelectItemText>
+          </SelectItem>
+        </SelectViewport>
+      </SelectContent>
+    </SelectPortal>
+  </SelectRoot>
 </template>

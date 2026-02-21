@@ -1,7 +1,7 @@
 import type { EChartsOption } from 'echarts'
 import type { ChartOverrides, SunburstChartConfig } from './types'
-import { chartColors } from '@/theme/preset'
-import { animation, textStyle, tooltipItem } from './defaults'
+import { chartColors } from '@/theme/colors'
+import { animation, chartSeparatorColor, textStyle, tooltipItem } from './defaults'
 import { formatValue } from './format'
 import { deepMerge } from './merge'
 
@@ -12,7 +12,7 @@ export function sunburstChart(config: SunburstChartConfig, overrides?: ChartOver
     color: chartColors.series,
     textStyle,
     tooltip: {
-      ...tooltipItem,
+      ...tooltipItem(),
       formatter(params: unknown) {
         const p = params as { name: string, value: number }
         return `${p.name}: ${formatValue(p.value, format, currency)}`
@@ -24,7 +24,7 @@ export function sunburstChart(config: SunburstChartConfig, overrides?: ChartOver
         data,
         radius: ['15%', '90%'],
         label: { show: true, formatter: '{b}', rotate: 'radial', fontSize: 11 },
-        itemStyle: { borderWidth: 2, borderColor: '#fff', borderRadius: 4 },
+        itemStyle: { borderWidth: 2, borderColor: chartSeparatorColor(), borderRadius: 4 },
         emphasis: { focus: 'ancestor' },
       },
     ],

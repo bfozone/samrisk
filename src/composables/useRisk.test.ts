@@ -3,16 +3,32 @@ import { flushPromises, mount } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { defineComponent, h } from 'vue'
-import { useAuM, useExposures, useLiquidity, usePnL, useTrackingError, useVaR } from './useRisk'
+import {
+  useAuM,
+  useExposures,
+  useLiquidity,
+  usePnL,
+  useTrackingError,
+  useVaR,
+} from './useRisk'
 
-const { mockVaR, mockExposures, mockAuM, mockTE, mockPnL, mockLiquidity } = vi.hoisted(() => ({
-  mockVaR: [{ label: '95%', current: 12000, previous: 11500 }],
-  mockExposures: [{ label: 'Equity', weight: 0.6 }],
-  mockAuM: [{ date: '2025-01-01', value: 1000000 }],
-  mockTE: [{ date: '2025-01-01', te: 0.02, infoRatio: 1.5 }],
-  mockPnL: [{ date: '2025-01-01', daily: 500, mtd: 1000, ytd: 5000, cumulative: 5000 }],
-  mockLiquidity: [{ bucket: '1d', weight: 0.3 }],
-}))
+const { mockVaR, mockExposures, mockAuM, mockTE, mockPnL, mockLiquidity }
+  = vi.hoisted(() => ({
+    mockVaR: [{ label: '95%', current: 12000, previous: 11500 }],
+    mockExposures: [{ label: 'Equity', weight: 0.6 }],
+    mockAuM: [{ date: '2025-01-01', value: 1000000 }],
+    mockTE: [{ date: '2025-01-01', te: 0.02, infoRatio: 1.5 }],
+    mockPnL: [
+      {
+        date: '2025-01-01',
+        daily: 500,
+        mtd: 1000,
+        ytd: 5000,
+        cumulative: 5000,
+      },
+    ],
+    mockLiquidity: [{ bucket: '1d', weight: 0.3 }],
+  }))
 
 vi.mock('@/api/risk', () => ({
   getVaR: vi.fn().mockResolvedValue(mockVaR),

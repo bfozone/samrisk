@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import { RefreshCw } from 'lucide-vue-next'
 import { onErrorCaptured, ref } from 'vue'
-import AppButton from '@/components/base/AppButton.vue'
+import AppIcon from '@/components/base/AppIcon.vue'
+import { Button } from '@/components/ui/button'
 
 const hasError = ref(false)
 const errorMessage = ref('')
@@ -20,14 +22,17 @@ function retry() {
 <template>
   <div v-if="hasError" class="error-boundary">
     <div class="error-boundary-content">
-      <i class="pi pi-exclamation-triangle error-boundary-icon"></i>
+      <AppIcon name="exclamation-triangle" :size="40" class="error-boundary-icon" />
       <h2 class="error-boundary-title">
         Something went wrong
       </h2>
       <p class="error-boundary-detail">
         {{ errorMessage }}
       </p>
-      <AppButton label="Retry" icon="pi pi-refresh" @click="retry" />
+      <Button @click="retry">
+        <RefreshCw class="size-4" />
+        Retry
+      </Button>
     </div>
   </div>
   <slot v-else></slot>
@@ -52,21 +57,20 @@ function retry() {
 }
 
 .error-boundary-icon {
-  font-size: 2.5rem;
-  color: var(--p-surface-400);
+  color: var(--color-text-faint);
 }
 
 .error-boundary-title {
   font-size: 1.125rem;
   font-weight: 600;
   margin: 0;
-  color: var(--p-surface-700);
+  color: var(--color-text-secondary);
 }
 
 .error-boundary-detail {
   font-size: 0.875rem;
   margin: 0;
-  color: var(--p-surface-500);
+  color: var(--muted-foreground);
   max-width: 360px;
 }
 </style>

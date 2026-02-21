@@ -12,7 +12,8 @@ export function useNavItems() {
   const router = useRouter()
 
   const navItems = computed<NavItem[]>(() =>
-    router.getRoutes()
+    router
+      .getRoutes()
       .filter(r => r.meta.sidebar)
       .sort((a, b) => a.meta.sidebar!.order - b.meta.sidebar!.order)
       .map(r => ({

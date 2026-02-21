@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import AppButton from '@/components/base/AppButton.vue'
+import { RefreshCw } from 'lucide-vue-next'
+import AppIcon from '@/components/base/AppIcon.vue'
+import { Button } from '@/components/ui/button'
 
 defineProps<{
   message?: string
@@ -9,16 +11,17 @@ defineProps<{
 
 <template>
   <div class="query-error">
-    <i class="pi pi-exclamation-circle"></i>
+    <AppIcon name="exclamation-circle" :size="24" />
     <span class="query-error-message">{{ message ?? 'Failed to load data' }}</span>
-    <AppButton
+    <Button
       v-if="onRetry"
-      label="Retry"
-      icon="pi pi-refresh"
-      severity="secondary"
-      size="small"
+      variant="outline"
+      size="sm"
       @click="onRetry"
-    />
+    >
+      <RefreshCw class="size-3.5" />
+      Retry
+    </Button>
   </div>
 </template>
 
@@ -30,11 +33,12 @@ defineProps<{
   justify-content: center;
   gap: 0.5rem;
   padding: 1.5rem 1rem;
-  color: var(--p-surface-400);
+  color: var(--color-text-faint);
 }
 
-.query-error i {
-  font-size: 1.5rem;
+.query-error svg {
+  width: 1.5rem;
+  height: 1.5rem;
 }
 
 .query-error-message {

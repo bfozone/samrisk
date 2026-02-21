@@ -1,7 +1,7 @@
 import type { EChartsOption } from 'echarts'
 import type { ChartOverrides, PieChartConfig } from './types'
-import { chartColors } from '@/theme/preset'
-import { animation, textStyle, tooltipItem } from './defaults'
+import { chartColors } from '@/theme/colors'
+import { animation, chartSeparatorColor, textStyle, tooltipItem } from './defaults'
 import { tooltipValueFormatter } from './format'
 import { deepMerge } from './merge'
 
@@ -19,7 +19,7 @@ export function pieChart(config: PieChartConfig, overrides?: ChartOverrides): EC
   const option: EChartsOption = {
     color: chartColors.series,
     textStyle,
-    tooltip: { ...tooltipItem, valueFormatter: tooltipValueFormatter(format, currency) },
+    tooltip: { ...tooltipItem(), valueFormatter: tooltipValueFormatter(format, currency) },
     series: [
       {
         type: 'pie',
@@ -34,7 +34,7 @@ export function pieChart(config: PieChartConfig, overrides?: ChartOverrides): EC
         emphasis: {
           itemStyle: { shadowBlur: 12, shadowColor: 'rgba(0, 0, 0, 0.15)' },
         },
-        itemStyle: { borderColor: '#fff', borderWidth: 2 },
+        itemStyle: { borderColor: chartSeparatorColor(), borderWidth: 2 },
       },
     ],
     ...animation,

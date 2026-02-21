@@ -1,6 +1,6 @@
 import type { EChartsOption } from 'echarts'
 import type { ChartOverrides, TreeChartConfig } from './types'
-import { chartColors } from '@/theme/preset'
+import { chartColors } from '@/theme/colors'
 import { textStyle, tooltipItem } from './defaults'
 import { deepMerge } from './merge'
 
@@ -9,7 +9,7 @@ export function treeChart(config: TreeChartConfig, overrides?: ChartOverrides): 
 
   const option: EChartsOption = {
     textStyle,
-    tooltip: { ...tooltipItem, triggerOn: 'mousemove' },
+    tooltip: { ...tooltipItem(), triggerOn: 'mousemove' },
     series: [
       {
         type: 'tree',

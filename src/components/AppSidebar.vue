@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import Tooltip from 'primevue/tooltip'
 import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import AppIcon from '@/components/base/AppIcon.vue'
 import { useCurrentUser } from '@/composables/useAuth'
 import { useNavItems } from '@/composables/useNavItems'
+import { useTheme } from '@/composables/useTheme'
 import { useAnalyticsContext } from '@/stores/analytics'
 import { useAppStore } from '@/stores/app'
 
-const vTooltip = Tooltip
-
+const { isDark, toggle: toggleTheme } = useTheme()
 const appStore = useAppStore()
 const analytics = useAnalyticsContext()
 const route = useRoute()
@@ -105,14 +105,14 @@ function navigate(to: string) {
             <!-- Nav item -->
             <li role="none">
               <button
-                v-tooltip.right="showTooltip ? item.label : undefined"
+                :title="showTooltip ? item.label : undefined"
                 role="menuitem"
                 class="nav-item"
                 :class="{ active: isActive(item.to) }"
                 :aria-current="isActive(item.to) ? 'page' : undefined"
                 @click="navigate(item.to)"
               >
-                <i :class="item.icon" class="nav-icon"></i>
+                <AppIcon :name="item.icon" :size="18" class="nav-icon" />
                 <Transition name="label">
                   <span v-if="showLabels" class="nav-label">
                     {{ item.label }}
@@ -123,6 +123,21 @@ function navigate(to: string) {
           </template>
         </ul>
       </nav>
+
+      <!-- Theme toggle -->
+      <button
+        class="nav-item theme-toggle"
+        :title="showTooltip ? (isDark ? 'Light mode' : 'Dark mode') : undefined"
+        :aria-label="isDark ? 'Switch to light mode' : 'Switch to dark mode'"
+        @click="toggleTheme"
+      >
+        <AppIcon :name="isDark ? 'sun' : 'moon'" :size="18" class="nav-icon" />
+        <Transition name="label">
+          <span v-if="showLabels" class="nav-label">
+            {{ isDark ? 'Light mode' : 'Dark mode' }}
+          </span>
+        </Transition>
+      </button>
 
       <!-- User section -->
       <button class="sidebar-user" type="button" :aria-label="`User: ${user?.name ?? 'Unidentified User'}`">
@@ -145,7 +160,7 @@ function navigate(to: string) {
       aria-label="Toggle sidebar"
       @click="appStore.toggleSidebar()"
     >
-      <i :class="appStore.sidebarExpanded ? 'pi pi-chevron-left' : 'pi pi-chevron-right'"></i>
+      <AppIcon :name="appStore.sidebarExpanded ? 'chevron-left' : 'chevron-right'" :size="10" />
     </button>
   </aside>
 </template>
@@ -162,8 +177,8 @@ function navigate(to: string) {
   position: sticky;
   top: 0;
   height: 100vh;
-  background: var(--p-surface-900);
-  color: var(--p-surface-300);
+  background: var(--color-sidebar-bg);
+  color: var(--color-sidebar-text);
   display: flex;
   flex-direction: column;
   overflow: visible;
@@ -221,7 +236,7 @@ function navigate(to: string) {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  color: var(--p-surface-0);
+  color: #ffffff;
   white-space: nowrap;
   overflow: hidden;
   border: none;
@@ -266,7 +281,7 @@ function navigate(to: string) {
 
 .env-tag.dev {
   background: rgba(238, 0, 12, 0.15);
-  color: #ee000c;
+  color: var(--color-accent-brand);
 }
 
 .env-tag.prod {
@@ -283,9 +298,9 @@ function navigate(to: string) {
   width: 1.5rem;
   height: 1.5rem;
   border-radius: 50%;
-  border: 1px solid var(--p-surface-200);
-  background: var(--p-surface-0);
-  color: var(--p-surface-500);
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--muted-foreground);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -296,7 +311,7 @@ function navigate(to: string) {
     opacity var(--app-transition-fast),
     background-color var(--app-transition-fast),
     color var(--app-transition-fast);
-  box-shadow: var(--app-shadow-sm);
+  box-shadow: var(--shadow-sm);
 }
 
 .app-sidebar:hover .sidebar-edge-toggle {
@@ -304,12 +319,13 @@ function navigate(to: string) {
 }
 
 .sidebar-edge-toggle:hover {
-  background: var(--p-surface-100);
-  color: var(--p-surface-700);
+  background: var(--secondary);
+  color: var(--color-text-secondary);
 }
 
-.sidebar-edge-toggle i {
-  font-size: 0.625rem;
+.sidebar-edge-toggle svg {
+  width: 0.625rem;
+  height: 0.625rem;
 }
 
 /* Navigation */
@@ -347,15 +363,16 @@ function navigate(to: string) {
   display: block;
   width: 1.5rem;
   height: 1px;
-  background: var(--p-surface-700);
+  background: var(--color-sidebar-hover);
 }
 
+/* Nav section label uses muted sidebar text */
 .nav-section-label {
   font-size: 0.6875rem;
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  color: var(--p-surface-500);
+  color: var(--muted-foreground);
 }
 
 /* Nav items */
@@ -368,7 +385,7 @@ function navigate(to: string) {
   padding: 0.5rem 0.75rem;
   border: none;
   background: transparent;
-  color: var(--p-surface-400);
+  color: var(--color-text-faint);
   font-family: inherit;
   font-size: 0.8125rem;
   font-weight: 500;
@@ -382,28 +399,27 @@ function navigate(to: string) {
 }
 
 .nav-item:hover {
-  background: rgba(255, 255, 255, 0.06);
-  color: var(--p-surface-200);
+  background: var(--color-sidebar-hover);
+  color: var(--color-sidebar-text);
 }
 
 .nav-item:hover .nav-icon {
-  color: var(--p-surface-200);
+  color: var(--color-sidebar-text);
 }
 
 .nav-item.active {
-  background: rgba(255, 255, 255, 0.1);
-  color: var(--p-surface-0);
+  background: var(--color-sidebar-active);
+  color: #ffffff;
   font-weight: 600;
 }
 
 .nav-item.active .nav-icon {
-  color: #ee000c;
+  color: var(--color-accent-brand);
 }
 
 .nav-icon {
-  font-size: 1.125rem;
   width: 1.25rem;
-  text-align: center;
+  height: 1.25rem;
   flex-shrink: 0;
 }
 
@@ -411,6 +427,11 @@ function navigate(to: string) {
   overflow: hidden;
   flex: 1;
   text-align: left;
+}
+
+.theme-toggle {
+  margin: 0 0.5rem;
+  flex-shrink: 0;
 }
 
 /* User section */
@@ -421,7 +442,7 @@ function navigate(to: string) {
   align-items: center;
   gap: 0.75rem;
   border: none;
-  border-top: 1px solid var(--p-surface-700);
+  border-top: 1px solid var(--color-sidebar-hover);
   background: transparent;
   color: inherit;
   font-family: inherit;
@@ -435,15 +456,15 @@ function navigate(to: string) {
 }
 
 .sidebar-user:hover {
-  background: rgba(255, 255, 255, 0.06);
+  background: var(--color-sidebar-hover);
 }
 
 .user-avatar {
   width: 2rem;
   height: 2rem;
   border-radius: 8px;
-  background: var(--p-surface-700);
-  color: var(--p-surface-200);
+  background: var(--color-sidebar-active);
+  color: var(--color-sidebar-text);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -470,13 +491,13 @@ function navigate(to: string) {
 .user-name {
   font-size: 0.8125rem;
   font-weight: 600;
-  color: var(--p-surface-0);
+  color: #ffffff;
   line-height: 1.3;
 }
 
 .user-role {
   font-size: 0.6875rem;
-  color: var(--p-surface-500);
+  color: var(--muted-foreground);
   line-height: 1.3;
 }
 

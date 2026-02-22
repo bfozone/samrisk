@@ -2,13 +2,23 @@
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import AppSelect from '@/components/base/AppSelect.vue'
+import DatePresets from '@/components/DatePresets.vue'
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from '@/components/ui/breadcrumb'
 import { SidebarTrigger } from '@/components/ui/sidebar'
+import { useBreadcrumbs } from '@/composables/useBreadcrumbs'
 import { usePortfolios } from '@/composables/usePortfolios'
 import { useAnalyticsContext } from '@/stores/analytics'
 
 const analytics = useAnalyticsContext()
 const route = useRoute()
 const { data: portfolios } = usePortfolios()
+const { items: breadcrumbs } = useBreadcrumbs()
 
 const isAnalyticsRoute = computed(() => !!route.meta.analyticsRoute)
 const pageTitle = computed(() => (route.meta.title as string) ?? '')
@@ -23,7 +33,20 @@ function onDateChange(e: Event) {
   <header class="app-topbar">
     <div class="topbar-left">
       <SidebarTrigger class="-ml-1 md:hidden" />
-      <h1 class="topbar-title">
+      <Breadcrumb v-if="breadcrumbs.length > 1">
+        <BreadcrumbList>
+          <template v-for="(crumb, idx) in breadcrumbs" :key="crumb.label">
+            <BreadcrumbSeparator v-if="idx > 0" />
+            <BreadcrumbItem>
+              <BreadcrumbPage v-if="idx === breadcrumbs.length - 1" class="topbar-title">
+                {{ crumb.label }}
+              </BreadcrumbPage>
+              <span v-else class="text-muted-foreground text-sm">{{ crumb.label }}</span>
+            </BreadcrumbItem>
+          </template>
+        </BreadcrumbList>
+      </Breadcrumb>
+      <h1 v-else class="topbar-title">
         {{ pageTitle }}
       </h1>
     </div>
@@ -38,6 +61,7 @@ function onDateChange(e: Event) {
         class="topbar-portfolio-select"
         @update:modelValue="analytics.selectPortfolio($event)"
       />
+      <DatePresets />
       <input
         type="date"
         :value="analytics.asOfDate ?? ''"

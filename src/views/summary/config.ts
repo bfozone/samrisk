@@ -7,6 +7,7 @@ export interface StatCardData {
   value: string
   change: string
   trend: 'up' | 'down' | 'flat'
+  sparkline?: number[]
 }
 
 function fmtPct(v: number): string {
@@ -26,6 +27,7 @@ export function deriveAuMStat(items: AuMSnapshot[], currency: string): StatCardD
     value: formatValue(latest.aum, 'currency', currency),
     change: fmtPct(pctChange),
     trend: pctChange > 0.01 ? 'up' : pctChange < -0.01 ? 'down' : 'flat',
+    sparkline: items.map(d => d.aum),
   }
 }
 
@@ -39,6 +41,7 @@ export function derivePnLStat(items: PnLResult[], currency: string): StatCardDat
     value: `${v >= 0 ? '+' : ''}${formatValue(v, 'currency', currency)}`,
     change: `MTD ${formatValue(latest.mtd, 'currency', currency)}`,
     trend: v > 0 ? 'up' : v < 0 ? 'down' : 'flat',
+    sparkline: items.map(d => d.cumulative),
   }
 }
 
@@ -53,6 +56,7 @@ export function deriveVaRStat(items: VaRResult[]): StatCardData {
     value: `${latest.var95.toFixed(2)}%`,
     change: fmtPct(diff),
     trend: diff > 0.01 ? 'up' : diff < -0.01 ? 'down' : 'flat',
+    sparkline: items.map(d => d.var95),
   }
 }
 
@@ -65,6 +69,7 @@ export function deriveTEStat(items: TrackingErrorResult[]): StatCardData {
     value: `${latest.te.toFixed(2)}%`,
     change: `IR ${latest.infoRatio.toFixed(2)}`,
     trend: latest.infoRatio > 0 ? 'up' : latest.infoRatio < 0 ? 'down' : 'flat',
+    sparkline: items.map(d => d.te),
   }
 }
 

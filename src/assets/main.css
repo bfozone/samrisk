@@ -38,10 +38,7 @@ body {
 
   /* Layout */
   --app-content-padding: 1.5rem;
-  --app-sidebar-width-expanded: 250px;
-  --app-sidebar-width-collapsed: 64px;
   --app-breakpoint-mobile: 768px;
-  --app-card-padding-compact: 1rem;
 }
 
 @media (max-width: 768px) {

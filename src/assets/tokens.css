@@ -55,6 +55,16 @@
   --color-sidebar-hover: rgba(255, 255, 255, 0.06);
   --color-sidebar-active: rgba(255, 255, 255, 0.10);
 
+  /* shadcn Sidebar */
+  --sidebar: var(--color-sidebar-bg);
+  --sidebar-foreground: var(--color-sidebar-text);
+  --sidebar-primary: #ffffff;
+  --sidebar-primary-foreground: var(--color-sidebar-bg);
+  --sidebar-accent: var(--color-sidebar-active);
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: var(--color-sidebar-hover);
+  --sidebar-ring: var(--color-accent-brand);
+
   /* Chart */
   --color-chart-tooltip-bg: rgba(28, 32, 38, 0.92);
   --color-chart-tooltip-text: #f0f0f0;
@@ -127,6 +137,16 @@
   --color-sidebar-text: #CCCED0;
   --color-sidebar-hover: rgba(255, 255, 255, 0.08);
   --color-sidebar-active: rgba(255, 255, 255, 0.12);
+
+  /* shadcn Sidebar */
+  --sidebar: var(--color-sidebar-bg);
+  --sidebar-foreground: var(--color-sidebar-text);
+  --sidebar-primary: #ffffff;
+  --sidebar-primary-foreground: var(--color-sidebar-bg);
+  --sidebar-accent: var(--color-sidebar-active);
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: var(--color-sidebar-hover);
+  --sidebar-ring: var(--color-accent-brand);
 
   /* Chart */
   --color-chart-tooltip-bg: rgba(15, 17, 20, 0.94);

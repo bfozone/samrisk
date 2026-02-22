@@ -13,79 +13,32 @@ const icons: Record<string, string> = {
   success: 'check-circle',
   info: 'info-circle',
 }
+
+const borderColors: Record<string, string> = {
+  error: 'border-l-negative',
+  warn: 'border-l-warning',
+  success: 'border-l-positive',
+  info: 'border-l-info',
+}
+
+const textColors: Record<string, string> = {
+  error: 'text-negative',
+  warn: 'text-warning',
+  success: 'text-positive',
+  info: 'text-info',
+}
 </script>
 
 <template>
-  <Card class="info-card" :class="`info-card-${severity}`">
-    <CardContent class="info-card-content p-4">
-      <div class="info-card-header">
-        <AppIcon :name="icons[severity]!" :size="18" />
-        <span v-if="title" class="info-card-title">{{ title }}</span>
+  <Card class="gap-0 border-l-3 py-0 transition-shadow duration-200 hover:shadow-md" :class="borderColors[severity]">
+    <CardContent class="p-4">
+      <div class="flex items-center gap-2" :class="textColors[severity]">
+        <AppIcon :name="icons[severity]!" :size="18" class="shrink-0" />
+        <span v-if="title" class="text-sm font-semibold">{{ title }}</span>
       </div>
-      <div v-if="$slots.default" class="info-card-body">
+      <div v-if="$slots.default" class="mt-1.5 pl-[1.625rem] text-[0.8125rem] leading-normal text-text-secondary">
         <slot></slot>
       </div>
     </CardContent>
   </Card>
 </template>
-
-<style scoped>
-.info-card {
-  border-left: 3px solid transparent;
-  gap: 0;
-  padding: 0;
-}
-
-.info-card-header {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.info-card-header svg {
-  width: 1.125rem;
-  height: 1.125rem;
-  flex-shrink: 0;
-}
-
-.info-card-title {
-  font-size: 0.875rem;
-  font-weight: 600;
-}
-
-.info-card-body {
-  margin-top: 0.375rem;
-  padding-left: 1.625rem;
-  font-size: 0.8125rem;
-  color: var(--color-text-secondary);
-  line-height: 1.5;
-}
-
-.info-card-error {
-  border-left-color: var(--color-negative);
-}
-.info-card-error .info-card-header {
-  color: var(--color-negative);
-}
-
-.info-card-warn {
-  border-left-color: var(--color-warning);
-}
-.info-card-warn .info-card-header {
-  color: var(--color-warning);
-}
-
-.info-card-success {
-  border-left-color: var(--color-positive);
-}
-.info-card-success .info-card-header {
-  color: var(--color-positive);
-}
-
-.info-card-info {
-  border-left-color: var(--color-info);
-}
-.info-card-info .info-card-header {
-  color: var(--color-info);
-}
-</style>

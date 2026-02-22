@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import AppIcon from '@/components/base/AppIcon.vue'
 import QueryError from '@/components/base/QueryError.vue'
+import SparkLine from '@/components/base/SparkLine.vue'
 import { Card, CardContent } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 
@@ -9,79 +10,48 @@ defineProps<{
   value: string
   change?: string
   trend?: 'up' | 'down' | 'flat'
+  sparkline?: number[]
   loading?: boolean
   error?: boolean
   onRetry?: () => void
 }>()
+
+const trendColor: Record<string, string> = {
+  up: 'var(--color-positive)',
+  down: 'var(--color-negative)',
+  flat: 'var(--color-muted-foreground)',
+}
 </script>
 
 <template>
-  <Card class="stat-card">
-    <CardContent class="stat-content p-5">
+  <Card class="gap-0 py-0 transition-shadow duration-200 hover:shadow-md">
+    <CardContent class="flex items-end justify-between gap-4 p-5">
       <Skeleton v-if="loading" class="h-14 w-full" />
       <QueryError v-else-if="error" :on-retry="onRetry" />
       <template v-else>
-        <span class="stat-label">{{ label }}</span>
-        <span class="stat-value">{{ value }}</span>
-        <span v-if="change" class="stat-change" :class="trend">
-          <AppIcon v-if="trend === 'up'" name="arrow-up" :size="10" />
-          <AppIcon v-else-if="trend === 'down'" name="arrow-down" :size="10" />
-          {{ change }}
-        </span>
+        <div class="flex flex-col gap-1">
+          <span class="text-xs font-medium uppercase tracking-wide text-muted-foreground">{{ label }}</span>
+          <span class="text-2xl font-bold leading-tight text-foreground">{{ value }}</span>
+          <span
+            v-if="change"
+            class="inline-flex w-fit items-center gap-1 rounded-full px-2 py-0.5 text-xs font-semibold"
+            :class="{
+              'bg-positive/10 text-positive': trend === 'up',
+              'bg-negative/10 text-negative': trend === 'down',
+              'bg-muted text-muted-foreground': trend === 'flat',
+            }"
+          >
+            <AppIcon v-if="trend === 'up'" name="arrow-up" :size="10" />
+            <AppIcon v-else-if="trend === 'down'" name="arrow-down" :size="10" />
+            {{ change }}
+          </span>
+        </div>
+        <SparkLine
+          v-if="sparkline?.length"
+          :data="sparkline"
+          :color="trendColor[trend ?? 'flat']"
+        />
       </template>
     </CardContent>
   </Card>
 </template>
-
-<style scoped>
-.stat-card {
-  gap: 0;
-  padding: 0;
-}
-
-.stat-content {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-
-.stat-label {
-  font-size: 0.75rem;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: var(--muted-foreground);
-}
-
-.stat-value {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--foreground);
-  line-height: 1.2;
-}
-
-.stat-change {
-  font-size: 0.8125rem;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-}
-
-.stat-change svg {
-  width: 0.625rem;
-  height: 0.625rem;
-}
-
-.stat-change.up {
-  color: var(--color-positive);
-}
-
-.stat-change.down {
-  color: var(--color-negative);
-}
-
-.stat-change.flat {
-  color: var(--muted-foreground);
-}
-</style>

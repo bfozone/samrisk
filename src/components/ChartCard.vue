@@ -50,7 +50,7 @@ onBeforeUnmount(() => {
 
 <template>
   <div ref="wrapperRef">
-    <Card>
+    <Card class="transition-shadow duration-200 hover:shadow-md">
       <CardHeader>
         <CardTitle>{{ title }}</CardTitle>
       </CardHeader>

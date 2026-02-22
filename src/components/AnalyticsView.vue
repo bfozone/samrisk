@@ -14,7 +14,7 @@ const analytics = useAnalyticsContext()
 </script>
 
 <template>
-  <div>
+  <div class="space-y-6">
     <template v-if="analytics.hasPortfolio">
       <slot></slot>
     </template>

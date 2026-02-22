@@ -8,6 +8,11 @@ export interface NavItem {
   section?: string
 }
 
+export interface NavGroup {
+  label: string
+  items: NavItem[]
+}
+
 export function useNavItems() {
   const router = useRouter()
 
@@ -24,5 +29,22 @@ export function useNavItems() {
       })),
   )
 
-  return { navItems }
+  const navGroups = computed<NavGroup[]>(() => {
+    const groups: NavGroup[] = []
+    let current: NavGroup | null = null
+
+    for (const item of navItems.value) {
+      if (item.section) {
+        current = { label: item.section, items: [] }
+        groups.push(current)
+      }
+      if (current) {
+        current.items.push(item)
+      }
+    }
+
+    return groups
+  })
+
+  return { navItems, navGroups }
 }

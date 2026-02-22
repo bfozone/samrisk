@@ -1,14 +1,11 @@
 <script setup lang="ts">
-import { Menu } from 'lucide-vue-next'
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import AppSelect from '@/components/base/AppSelect.vue'
-import { Button } from '@/components/ui/button'
+import { SidebarTrigger } from '@/components/ui/sidebar'
 import { usePortfolios } from '@/composables/usePortfolios'
 import { useAnalyticsContext } from '@/stores/analytics'
-import { useAppStore } from '@/stores/app'
 
-const appStore = useAppStore()
 const analytics = useAnalyticsContext()
 const route = useRoute()
 const { data: portfolios } = usePortfolios()
@@ -25,16 +22,7 @@ function onDateChange(e: Event) {
 <template>
   <header class="app-topbar">
     <div class="topbar-left">
-      <Button
-        v-if="appStore.isMobile"
-        variant="ghost"
-        size="icon-sm"
-        aria-label="Open navigation menu"
-        class="topbar-toggle"
-        @click="appStore.toggleSidebar()"
-      >
-        <Menu class="size-5" />
-      </Button>
+      <SidebarTrigger class="-ml-1 md:hidden" />
       <h1 class="topbar-title">
         {{ pageTitle }}
       </h1>
@@ -81,11 +69,6 @@ function onDateChange(e: Event) {
   align-items: center;
   gap: 0.75rem;
   min-width: 0;
-}
-
-.topbar-toggle {
-  color: var(--color-text-secondary);
-  flex-shrink: 0;
 }
 
 .topbar-title {

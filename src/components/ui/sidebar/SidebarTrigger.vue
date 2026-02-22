@@ -9,7 +9,7 @@ const props = defineProps<{
   class?: HTMLAttributes['class']
 }>()
 
-const { toggleSidebar } = useSidebar()
+const { toggleSidebar, open } = useSidebar()
 </script>
 
 <template>
@@ -18,6 +18,7 @@ const { toggleSidebar } = useSidebar()
     data-slot="sidebar-trigger"
     variant="ghost"
     size="icon"
+    :aria-expanded="open"
     :class="cn('h-7 w-7', props.class)"
     @click="toggleSidebar"
   >

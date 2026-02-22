@@ -13,8 +13,8 @@ const { statCards, chartRows } = useSummaryMetrics()
       <StatCard v-for="s in statCards" :key="s.label" v-bind="s" />
     </div>
     <div
-      v-for="(row, i) in chartRows"
-      :key="i"
+      v-for="row in chartRows"
+      :key="row.map(c => c.title).join('-')"
       class="grid grid-cols-2 max-md:grid-cols-1 gap-6 [&>*]:min-w-0"
     >
       <PresetChartCard v-for="c in row" :key="c.title" v-bind="c" />

@@ -49,7 +49,13 @@
   --color-warning: #EAA159;
   --color-info: #61828E;
 
+  /* ValueCell */
+  --app-color-value-positive: var(--color-positive);
+  --app-color-value-negative: var(--color-negative);
+
   /* Sidebar */
+  --app-sidebar-width: 250px;
+  --app-sidebar-width-icon: 64px;
   --color-sidebar-bg: #20242a;
   --color-sidebar-text: #CCCED0;
   --color-sidebar-hover: rgba(255, 255, 255, 0.06);
@@ -131,6 +137,10 @@
   --color-negative: #f44c55;
   --color-warning: #f0b573;
   --color-info: #7ea0ad;
+
+  /* ValueCell */
+  --app-color-value-positive: var(--color-positive);
+  --app-color-value-negative: var(--color-negative);
 
   /* Sidebar */
   --color-sidebar-bg: #0f1114;

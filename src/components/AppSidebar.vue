@@ -27,17 +27,12 @@ const analytics = useAnalyticsContext()
 const route = useRoute()
 const router = useRouter()
 const { data: user } = useCurrentUser()
-const { navItems, navGroups } = useNavItems()
+const { navGroups } = useNavItems()
 
 const env = import.meta.env.MODE === 'production' ? 'PROD' : 'DEV'
 
 function isActive(to: string) {
-  if (route.path === to)
-    return true
-  if (!route.path.startsWith(`${to}/`))
-    return false
-  return !navItems.value.some(item => item.to !== to && item.to.length > to.length
-    && (route.path === item.to || route.path.startsWith(`${item.to}/`)))
+  return route.path === to || route.path.startsWith(`${to}/`)
 }
 
 function navigate(to: string) {
@@ -95,6 +90,7 @@ function navigate(to: string) {
             <SidebarMenuItem v-for="item in group.items" :key="item.to">
               <SidebarMenuButton
                 :is-active="isActive(item.to)"
+                :aria-current="isActive(item.to) ? 'page' : undefined"
                 :tooltip="item.label"
                 @click="navigate(item.to)"
               >

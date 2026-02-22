@@ -1,4 +1,4 @@
-<script setup lang="ts" generic="T">
+<script setup lang="ts" generic="T extends Record<string, unknown>">
 import type { ColumnDef, SortingState } from '@tanstack/vue-table'
 import {
   FlexRender,

@@ -55,5 +55,10 @@ export function useSummaryMetrics() {
     return rows
   })
 
-  return { statCards, chartRows }
+  const latestVar95 = computed(() => {
+    const items = varSeries.value
+    return items.length ? items[items.length - 1]!.var95 : null
+  })
+
+  return { statCards, chartRows, latestVar95 }
 }

@@ -5,12 +5,13 @@ import SparkLine from '@/components/base/SparkLine.vue'
 import { Card, CardContent } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 
-defineProps<{
+const props = defineProps<{
   label: string
   value: string
   change?: string
   trend?: 'up' | 'down' | 'flat'
   sparkline?: number[]
+  status?: 'ok' | 'warning' | 'critical'
   loading?: boolean
   error?: boolean
   onRetry?: () => void
@@ -24,7 +25,14 @@ const trendColor: Record<string, string> = {
 </script>
 
 <template>
-  <Card class="gap-0 py-0 transition-shadow duration-200 hover:shadow-md">
+  <Card
+    class="gap-0 py-0 transition-shadow duration-200 hover:shadow-md"
+    :class="{
+      'border-l-[3px] border-l-positive': props.status === 'ok',
+      'border-l-[3px] border-l-warning': props.status === 'warning',
+      'border-l-[3px] border-l-destructive': props.status === 'critical',
+    }"
+  >
     <CardContent class="flex items-end justify-between gap-4 p-5">
       <Skeleton v-if="loading" class="h-14 w-full" />
       <QueryError v-else-if="error" :on-retry="onRetry" />

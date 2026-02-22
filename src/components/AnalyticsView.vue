@@ -16,6 +16,9 @@ const analytics = useAnalyticsContext()
 <template>
   <div class="space-y-6">
     <template v-if="analytics.hasPortfolio">
+      <div v-if="$slots.alerts" class="space-y-2">
+        <slot name="alerts"></slot>
+      </div>
       <slot></slot>
     </template>
     <div v-else class="analytics-empty-state">

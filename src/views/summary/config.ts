@@ -2,12 +2,15 @@ import type { AuMSnapshot, ExposureBucket, LiquidityBucket, PnLResult, TrackingE
 import type { BarChartConfig, LineChartConfig, PieChartConfig } from '@/charts'
 import { formatValue } from '@/charts'
 
+export type RiskStatus = 'ok' | 'warning' | 'critical'
+
 export interface StatCardData {
   label: string
   value: string
   change: string
   trend: 'up' | 'down' | 'flat'
   sparkline?: number[]
+  status?: RiskStatus
 }
 
 function fmtPct(v: number): string {
@@ -45,6 +48,14 @@ export function derivePnLStat(items: PnLResult[], currency: string): StatCardDat
   }
 }
 
+export function varStatus(var95: number): RiskStatus {
+  if (var95 > 5)
+    return 'critical'
+  if (var95 > 3)
+    return 'warning'
+  return 'ok'
+}
+
 export function deriveVaRStat(items: VaRResult[]): StatCardData {
   if (items.length < 2)
     return { label: 'VaR 95%', value: '-', change: '', trend: 'flat' }
@@ -57,6 +68,7 @@ export function deriveVaRStat(items: VaRResult[]): StatCardData {
     change: fmtPct(diff),
     trend: diff > 0.01 ? 'up' : diff < -0.01 ? 'down' : 'flat',
     sparkline: items.map(d => d.var95),
+    status: varStatus(latest.var95),
   }
 }
 

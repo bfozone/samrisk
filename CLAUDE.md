@@ -18,11 +18,13 @@ Docker build uses Bun, serves via Nginx on port 8080.
 
 ## Stack
 
-- **UI:** PrimeVue 4 + ECharts via vue-echarts
+- **UI:** shadcn-vue (Reka UI primitives + Tailwind) + ECharts via vue-echarts
+- **Components:** `src/components/ui/` (shadcn-vue, owned code) + `src/components/base/` (custom wrappers)
 - **State:** Pinia (app store) + TanStack Vue Query (server state)
-- **API:** Axios client (`src/api/client.ts`), base URL from `VITE_API_BASE_URL`
+- **API:** Ky client (`src/api/client.ts`), base URL from `VITE_API_BASE_URL`
 - **Mocking:** MSW handlers in `src/mocks/handlers.ts` - auto-enabled in dev mode
-- **Theme:** Custom PrimeVue preset in `src/theme/preset.ts`
+- **Theme:** shadcn CSS variables in `src/assets/tokens.css`, Tailwind config in `src/assets/tailwind.css`
+- **Toast:** vue-sonner (Toaster in DefaultLayout, `addToast()` from `src/utils/toastRef.ts`)
 - **Backend (future):** FastAPI + Dagster + Trino/Iceberg datalake - frontend consumes REST endpoints only
 
 ## Code style
@@ -34,14 +36,14 @@ Docker build uses Bun, serves via Nginx on port 8080.
 
 ## Project structure
 
-- `src/api/` - Axios request functions (one file per domain)
+- `src/api/` - Ky request functions (one file per domain)
 - `src/components/` - Reusable components
 - `src/composables/` - Vue composables (useX pattern)
 - `src/layouts/` - Page layouts
 - `src/views/` - Route-level page components
 - `src/stores/` - Pinia stores
 - `src/types/` - Shared TypeScript interfaces
-- `src/theme/` - PrimeVue preset and chart color palette
+- `src/theme/` - Chart color palette
 
 ## Routes
 

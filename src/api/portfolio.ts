@@ -6,11 +6,11 @@ export interface PortfolioQueryOptions {
 }
 
 export async function getPortfolios(options?: PortfolioQueryOptions) {
-  const { data } = await apiClient.get('/portfolios', { signal: options?.signal })
+  const data = await apiClient.get('portfolios', { signal: options?.signal }).json()
   return parseArray(PortfolioSchema, data)
 }
 
 export async function getPositions(portfolioId: string, options?: PortfolioQueryOptions) {
-  const { data } = await apiClient.get(`/portfolios/${portfolioId}/positions`, { signal: options?.signal })
+  const data = await apiClient.get(`portfolios/${portfolioId}/positions`, { signal: options?.signal }).json()
   return parseArray(PositionSchema, data)
 }

@@ -1,0 +1,179 @@
+/* ── shadcn-vue design tokens ────────────────────── */
+
+:root {
+  /* shadcn core */
+  --background: #ffffff;
+  --foreground: #20242a;
+
+  --card: #ffffff;
+  --card-foreground: #20242a;
+
+  --popover: #ffffff;
+  --popover-foreground: #20242a;
+
+  --primary: #20242a;
+  --primary-foreground: #ffffff;
+
+  --secondary: #e7eaec;
+  --secondary-foreground: #20242a;
+
+  --muted: #f0f2f5;
+  --muted-foreground: #778187;
+
+  --accent: #f7f8fa;
+  --accent-foreground: #20242a;
+
+  --destructive: #ee000c;
+  --destructive-foreground: #ffffff;
+
+  --border: #d5d7d9;
+  --input: #d5d7d9;
+  --ring: #20242a;
+
+  --radius: 0.5rem;
+
+  /* SAMRisk-specific */
+  --color-primary-hover: #2b2e36;
+
+  --color-text-secondary: #616b72;
+  --color-text-faint: #939ca1;
+
+  --color-border-muted: #e7eaec;
+  --color-border-strong: #CCCED0;
+
+  --color-bg-inset: #f7f8fa;
+
+  --color-accent-brand: #ee000c;
+  --color-positive: #A5B077;
+  --color-negative: #ee000c;
+  --color-warning: #EAA159;
+  --color-info: #61828E;
+
+  /* ValueCell */
+  --app-color-value-positive: var(--color-positive);
+  --app-color-value-negative: var(--color-negative);
+
+  /* Sidebar */
+  --app-sidebar-width: 250px;
+  --app-sidebar-width-icon: 64px;
+  --color-sidebar-bg: #20242a;
+  --color-sidebar-text: #CCCED0;
+  --color-sidebar-hover: rgba(255, 255, 255, 0.06);
+  --color-sidebar-active: rgba(255, 255, 255, 0.10);
+
+  /* shadcn Sidebar */
+  --sidebar: var(--color-sidebar-bg);
+  --sidebar-foreground: var(--color-sidebar-text);
+  --sidebar-primary: #ffffff;
+  --sidebar-primary-foreground: var(--color-sidebar-bg);
+  --sidebar-accent: var(--color-sidebar-active);
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: var(--color-sidebar-hover);
+  --sidebar-ring: var(--color-accent-brand);
+
+  /* Chart */
+  --color-chart-tooltip-bg: rgba(28, 32, 38, 0.92);
+  --color-chart-tooltip-text: #f0f0f0;
+  --color-chart-grid: #e5e7eb;
+  --color-chart-axis-pointer: #d5d7d9;
+  --color-chart-separator: #ffffff;
+
+  /* Chart palette (shadcn convention) */
+  --chart-1: #20242a;
+  --chart-2: #ee000c;
+  --chart-3: #A5B077;
+  --chart-4: #61828E;
+  --chart-5: #EAA159;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 1px 2px rgba(0, 0, 0, 0.04), 0 4px 16px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 2px 4px rgba(0, 0, 0, 0.04), 0 8px 32px rgba(0, 0, 0, 0.08);
+}
+
+.dark {
+  /* shadcn core */
+  --background: #131518;
+  --foreground: #e7eaec;
+
+  --card: #1e2128;
+  --card-foreground: #e7eaec;
+
+  --popover: #1e2128;
+  --popover-foreground: #e7eaec;
+
+  --primary: #e7eaec;
+  --primary-foreground: #15171d;
+
+  --secondary: #20242a;
+  --secondary-foreground: #e7eaec;
+
+  --muted: #1a1d23;
+  --muted-foreground: #778187;
+
+  --accent: #1a1d23;
+  --accent-foreground: #e7eaec;
+
+  --destructive: #f44c55;
+  --destructive-foreground: #ffffff;
+
+  --border: #2b2e36;
+  --input: #2b2e36;
+  --ring: #e7eaec;
+
+  /* SAMRisk-specific */
+  --color-primary-hover: #d5d7d9;
+
+  --color-text-secondary: #939ca1;
+  --color-text-faint: #616b72;
+
+  --color-border-muted: #20242a;
+  --color-border-strong: #3c3f40;
+
+  --color-bg-inset: #15171d;
+
+  --color-accent-brand: #ee000c;
+  --color-positive: #bec993;
+  --color-negative: #f44c55;
+  --color-warning: #f0b573;
+  --color-info: #7ea0ad;
+
+  /* ValueCell */
+  --app-color-value-positive: var(--color-positive);
+  --app-color-value-negative: var(--color-negative);
+
+  /* Sidebar */
+  --color-sidebar-bg: #0f1114;
+  --color-sidebar-text: #CCCED0;
+  --color-sidebar-hover: rgba(255, 255, 255, 0.08);
+  --color-sidebar-active: rgba(255, 255, 255, 0.12);
+
+  /* shadcn Sidebar */
+  --sidebar: var(--color-sidebar-bg);
+  --sidebar-foreground: var(--color-sidebar-text);
+  --sidebar-primary: #ffffff;
+  --sidebar-primary-foreground: var(--color-sidebar-bg);
+  --sidebar-accent: var(--color-sidebar-active);
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: var(--color-sidebar-hover);
+  --sidebar-ring: var(--color-accent-brand);
+
+  /* Chart */
+  --color-chart-tooltip-bg: rgba(15, 17, 20, 0.94);
+  --color-chart-tooltip-text: #e7eaec;
+  --color-chart-grid: #2b2e36;
+  --color-chart-axis-pointer: #3c3f40;
+  --color-chart-separator: #1e2128;
+
+  /* Chart palette */
+  --chart-1: #e7eaec;
+  --chart-2: #f44c55;
+  --chart-3: #bec993;
+  --chart-4: #7ea0ad;
+  --chart-5: #f0b573;
+
+  /* Shadows (higher opacity for dark mode) */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.12);
+  --shadow-md: 0 1px 2px rgba(0, 0, 0, 0.12), 0 4px 16px rgba(0, 0, 0, 0.16);
+  --shadow-lg: 0 2px 4px rgba(0, 0, 0, 0.12), 0 8px 32px rgba(0, 0, 0, 0.2);
+}

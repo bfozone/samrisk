@@ -1,6 +1,6 @@
 import type { EChartsOption } from 'echarts'
 import type { ChartOverrides, ScatterChartConfig } from './types'
-import { chartColors } from '@/theme/preset'
+import { chartColors } from '@/theme/colors'
 import {
   animation,
   cleanAxisLabel,
@@ -42,7 +42,7 @@ export function scatterChart(config: ScatterChartConfig, overrides?: ChartOverri
     color: colors,
     textStyle,
     tooltip: {
-      ...tooltipItem,
+      ...tooltipItem(),
       formatter(params: unknown) {
         const p = params as { seriesName: string, value: [number, number] }
         return `${p.seriesName}<br/>${formatValue(p.value[0], xFormat, currency)} / ${formatValue(p.value[1], yFormat, currency)}`

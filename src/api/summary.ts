@@ -7,7 +7,7 @@ export interface SummaryQueryOptions {
 }
 
 export async function getSummary(portfolioId: string, options?: SummaryQueryOptions) {
-  const params = options?.asOf ? { asOf: options.asOf } : undefined
-  const { data } = await apiClient.get(`/risk/${portfolioId}/summary`, { params, signal: options?.signal })
+  const searchParams = options?.asOf ? { asOf: options.asOf } : undefined
+  const data = await apiClient.get(`risk/${portfolioId}/summary`, { searchParams, signal: options?.signal }).json()
   return parse(SummaryResponseSchema, data)
 }

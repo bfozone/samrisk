@@ -42,18 +42,18 @@ const today = computed(() =>
   font-size: 1.75rem;
   font-weight: 600;
   line-height: 1.3;
-  color: var(--p-surface-900);
+  color: var(--foreground);
 }
 
 .welcome-subtitle {
   margin-top: 0.5rem;
   font-size: 1rem;
-  color: var(--p-surface-600);
+  color: var(--color-text-secondary);
 }
 
 .welcome-date {
   margin-top: 0.375rem;
   font-size: 0.875rem;
-  color: var(--p-surface-500);
+  color: var(--muted-foreground);
 }
 </style>

@@ -1,6 +1,6 @@
 import type { EChartsOption } from 'echarts'
 import type { ChartOverrides, GaugeChartConfig } from './types'
-import { chartColors } from '@/theme/preset'
+import { chartColors } from '@/theme/colors'
 import { animation, textStyle } from './defaults'
 import { deepMerge } from './merge'
 

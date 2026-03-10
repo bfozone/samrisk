@@ -1,6 +1,6 @@
 import type { EChartsOption } from 'echarts'
 import type { CandlestickChartConfig, ChartOverrides } from './types'
-import { chartColors } from '@/theme/preset'
+import { chartColors } from '@/theme/colors'
 import {
   animation,
   cleanAxisLabel,
@@ -17,7 +17,7 @@ export function candlestickChart(config: CandlestickChartConfig, overrides?: Cha
 
   const option: EChartsOption = {
     textStyle,
-    tooltip: tooltipCross,
+    tooltip: tooltipCross(),
     xAxis: {
       type: 'category',
       data: categories,

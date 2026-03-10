@@ -1,4 +1,4 @@
-import { AxiosError, AxiosHeaders } from 'axios'
+import { HTTPError } from 'ky'
 import * as v from 'valibot'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { classifyError, configureApiErrorHandlers, configureAuthToken, parse, parseArray } from './client'
@@ -41,63 +41,62 @@ describe('parseArray', () => {
   })
 })
 
-function makeAxiosError(status?: number, headers?: Record<string, string>): AxiosError {
-  const error = new AxiosError('test error')
-  if (status !== undefined) {
-    error.response = {
-      status,
-      statusText: 'Error',
-      headers: headers ?? {},
-      config: { headers: new AxiosHeaders() },
-      data: null,
-    }
-  }
-  return error
+function makeHTTPError(status?: number, headers?: Record<string, string>): HTTPError | Error {
+  if (status === undefined)
+    return new Error('Network error')
+
+  const response = new Response(null, {
+    status,
+    statusText: 'Error',
+    headers: headers ?? {},
+  })
+  const request = new Request('https://example.com/api/test')
+  return new HTTPError(response, request, {} as never)
 }
 
 describe('classifyError', () => {
   it('classifies 401 as unauthorized', () => {
-    expect(classifyError(makeAxiosError(401)).kind).toBe('unauthorized')
+    expect(classifyError(makeHTTPError(401)).kind).toBe('unauthorized')
   })
 
   it('classifies 403 as forbidden', () => {
-    expect(classifyError(makeAxiosError(403)).kind).toBe('forbidden')
+    expect(classifyError(makeHTTPError(403)).kind).toBe('forbidden')
   })
 
   it('classifies 404 as not_found', () => {
-    expect(classifyError(makeAxiosError(404)).kind).toBe('not_found')
+    expect(classifyError(makeHTTPError(404)).kind).toBe('not_found')
   })
 
   it('classifies 422 as validation', () => {
-    expect(classifyError(makeAxiosError(422)).kind).toBe('validation')
+    expect(classifyError(makeHTTPError(422)).kind).toBe('validation')
   })
 
   it('classifies 429 as rate_limited', () => {
-    const ctx = classifyError(makeAxiosError(429))
+    const ctx = classifyError(makeHTTPError(429))
     expect(ctx.kind).toBe('rate_limited')
     expect(ctx.retryAfter).toBeUndefined()
   })
 
   it('parses retry-after header for 429', () => {
-    const ctx = classifyError(makeAxiosError(429, { 'retry-after': '30' }))
+    const ctx = classifyError(makeHTTPError(429, { 'retry-after': '30' }))
     expect(ctx.kind).toBe('rate_limited')
     expect(ctx.retryAfter).toBe(30)
   })
 
   it('classifies 500 as server', () => {
-    expect(classifyError(makeAxiosError(500)).kind).toBe('server')
+    expect(classifyError(makeHTTPError(500)).kind).toBe('server')
   })
 
   it('classifies 503 as server', () => {
-    expect(classifyError(makeAxiosError(503)).kind).toBe('server')
+    expect(classifyError(makeHTTPError(503)).kind).toBe('server')
   })
 
   it('classifies no response as network', () => {
-    expect(classifyError(makeAxiosError()).kind).toBe('network')
+    expect(classifyError(makeHTTPError()).kind).toBe('network')
   })
 
   it('classifies unknown status as unknown', () => {
-    expect(classifyError(makeAxiosError(418)).kind).toBe('unknown')
+    expect(classifyError(makeHTTPError(418)).kind).toBe('unknown')
   })
 })
 

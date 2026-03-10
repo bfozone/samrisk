@@ -11,13 +11,6 @@ declare module 'vue-router' {
   }
 }
 
-async function ensureShowcaseCharts() {
-  await Promise.all([
-    import('@/plugins/echarts'),
-    import('@/plugins/echarts-showcase'),
-  ])
-}
-
 async function ensureAnalyticsCharts() {
   await import('@/plugins/echarts')
 }
@@ -36,7 +29,7 @@ const router = createRouter({
       name: 'summary',
       component: () => import('@/views/SummaryView.vue'),
       beforeEnter: ensureAnalyticsCharts,
-      meta: { title: 'Summary', analyticsRoute: true, sidebar: { icon: 'pi pi-th-large', section: 'Analytics', order: 10 } },
+      meta: { title: 'Summary', analyticsRoute: true, sidebar: { icon: 'th-large', section: 'Analytics', order: 10 } },
     },
     {
       path: '/performance/:portfolioId?',
@@ -45,10 +38,10 @@ const router = createRouter({
       meta: {
         title: 'Performance',
         analyticsRoute: true,
-        icon: 'pi pi-chart-line',
+        icon: 'chart-line',
         hint: 'Investment performance analysis',
         emptyLabel: 'Select a portfolio from the topbar to view performance',
-        sidebar: { icon: 'pi pi-chart-line', order: 20 },
+        sidebar: { icon: 'chart-line', order: 20 },
       },
     },
     {
@@ -58,10 +51,10 @@ const router = createRouter({
       meta: {
         title: 'Market Risk',
         analyticsRoute: true,
-        icon: 'pi pi-shield',
+        icon: 'shield',
         hint: 'VaR, stress testing and factor decomposition',
         emptyLabel: 'Select a portfolio from the topbar to view market risk metrics',
-        sidebar: { icon: 'pi pi-shield', order: 30 },
+        sidebar: { icon: 'shield', order: 30 },
       },
     },
     {
@@ -71,10 +64,10 @@ const router = createRouter({
       meta: {
         title: 'Liquidity Risk',
         analyticsRoute: true,
-        icon: 'pi pi-wave-pulse',
+        icon: 'wave-pulse',
         hint: 'Time-to-liquidation, bid-ask analysis and liquidity stress',
         emptyLabel: 'Select a portfolio from the topbar to view liquidity risk metrics',
-        sidebar: { icon: 'pi pi-wave-pulse', order: 40 },
+        sidebar: { icon: 'wave-pulse', order: 40 },
       },
     },
     {
@@ -84,10 +77,10 @@ const router = createRouter({
       meta: {
         title: 'Credit Risk',
         analyticsRoute: true,
-        icon: 'pi pi-building-columns',
+        icon: 'building-columns',
         hint: 'Counterparty exposure, credit ratings and concentration',
         emptyLabel: 'Select a portfolio from the topbar to view credit risk metrics',
-        sidebar: { icon: 'pi pi-building-columns', order: 50 },
+        sidebar: { icon: 'building-columns', order: 50 },
       },
     },
     {
@@ -97,10 +90,10 @@ const router = createRouter({
       meta: {
         title: 'ESG',
         analyticsRoute: true,
-        icon: 'pi pi-globe',
+        icon: 'globe',
         hint: 'ESG scores, carbon footprint and sustainability metrics',
         emptyLabel: 'Select a portfolio from the topbar to view ESG analytics',
-        sidebar: { icon: 'pi pi-globe', order: 60 },
+        sidebar: { icon: 'globe', order: 60 },
       },
     },
     {
@@ -110,7 +103,7 @@ const router = createRouter({
       meta: {
         title: 'KRI Dashboard',
         hint: 'Key risk indicators, limit utilization and breach alerts',
-        sidebar: { icon: 'pi pi-gauge', section: 'Monitoring', order: 70 },
+        sidebar: { icon: 'gauge', section: 'Monitoring', order: 70 },
       },
     },
     {
@@ -120,10 +113,10 @@ const router = createRouter({
       meta: {
         title: 'Guidelines',
         analyticsRoute: true,
-        icon: 'pi pi-check-square',
+        icon: 'check-square',
         hint: 'Investment controlling and compliance',
         emptyLabel: 'Select a portfolio from the topbar to view guidelines',
-        sidebar: { icon: 'pi pi-check-square', section: 'Compliance', order: 80 },
+        sidebar: { icon: 'check-square', section: 'Compliance', order: 80 },
       },
     },
     {
@@ -133,7 +126,7 @@ const router = createRouter({
       meta: {
         title: 'Reports',
         hint: 'Report generation and regulatory exports',
-        sidebar: { icon: 'pi pi-file', order: 90 },
+        sidebar: { icon: 'file', order: 90 },
       },
     },
     {
@@ -143,7 +136,7 @@ const router = createRouter({
       meta: {
         title: 'Product Master',
         hint: 'Product catalogue and fund structures',
-        sidebar: { icon: 'pi pi-box', section: 'Master Data', order: 100 },
+        sidebar: { icon: 'box', section: 'Master Data', order: 100 },
       },
     },
     {
@@ -153,58 +146,8 @@ const router = createRouter({
       meta: {
         title: 'Security Master',
         hint: 'Security reference data and classifications',
-        sidebar: { icon: 'pi pi-lock', order: 110 },
+        sidebar: { icon: 'lock', order: 110 },
       },
-    },
-    {
-      path: '/showcase',
-      name: 'showcase',
-      component: () => import('@/views/ShowcaseView.vue'),
-      beforeEnter: ensureShowcaseCharts,
-      meta: { title: 'Charts', sidebar: { icon: 'pi pi-chart-bar', section: 'Showcase', order: 120 } },
-    },
-    {
-      path: '/showcase/controls',
-      name: 'showcase-controls',
-      component: () => import('@/views/ControlsShowcaseView.vue'),
-      meta: { title: 'Controls', sidebar: { icon: 'pi pi-sliders-h', order: 130 } },
-    },
-    {
-      path: '/showcase/feedback',
-      name: 'showcase-feedback',
-      component: () => import('@/views/FeedbackShowcaseView.vue'),
-      meta: { title: 'Feedback', sidebar: { icon: 'pi pi-comment', order: 140 } },
-    },
-    {
-      path: '/showcase/overlays',
-      name: 'showcase-overlays',
-      component: () => import('@/views/OverlaysShowcaseView.vue'),
-      meta: { title: 'Overlays', sidebar: { icon: 'pi pi-clone', order: 150 } },
-    },
-    {
-      path: '/showcase/tables',
-      name: 'showcase-tables',
-      component: () => import('@/views/TablesShowcaseView.vue'),
-      meta: { title: 'Tables', sidebar: { icon: 'pi pi-table', order: 160 } },
-    },
-    {
-      path: '/showcase/forms',
-      name: 'showcase-forms',
-      component: () => import('@/views/FormsShowcaseView.vue'),
-      meta: { title: 'Forms', sidebar: { icon: 'pi pi-pen-to-square', order: 170 } },
-    },
-    {
-      path: '/showcase/navigation',
-      name: 'showcase-navigation',
-      component: () => import('@/views/NavigationShowcaseView.vue'),
-      meta: { title: 'Navigation', sidebar: { icon: 'pi pi-compass', order: 180 } },
-    },
-    {
-      path: '/showcase/layout',
-      name: 'showcase-layout',
-      component: () => import('@/views/LayoutShowcaseView.vue'),
-      beforeEnter: ensureShowcaseCharts,
-      meta: { title: 'Layout', sidebar: { icon: 'pi pi-objects-column', order: 190 } },
     },
     {
       path: '/:pathMatch(.*)*',

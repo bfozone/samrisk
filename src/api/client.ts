@@ -1,5 +1,5 @@
-import type { AxiosError } from 'axios'
-import axios from 'axios'
+import type { HTTPError } from 'ky'
+import ky from 'ky'
 import * as v from 'valibot'
 
 export type ApiErrorKind
@@ -16,7 +16,7 @@ export interface ApiErrorContext {
   kind: ApiErrorKind
   status?: number
   retryAfter?: number
-  error: AxiosError
+  error: HTTPError | Error
 }
 
 export interface ApiErrorHandlers {
@@ -63,11 +63,12 @@ export function configureApiErrorHandlers(handlers: Partial<ApiErrorHandlers>) {
   errorHandlers = { ...errorHandlers, ...handlers }
 }
 
-export function classifyError(error: AxiosError): ApiErrorContext {
-  const status = error.response?.status
-
-  if (!status)
+export function classifyError(error: HTTPError | Error): ApiErrorContext {
+  if (!('response' in error) || !error.response)
     return { kind: 'network', error }
+
+  const status = error.response.status
+
   if (status === 401)
     return { kind: 'unauthorized', status, error }
   if (status === 403)
@@ -77,7 +78,7 @@ export function classifyError(error: AxiosError): ApiErrorContext {
   if (status === 422)
     return { kind: 'validation', status, error }
   if (status === 429) {
-    const ra = Number.parseInt(error.response?.headers?.['retry-after'] ?? '', 10)
+    const ra = Number.parseInt(error.response.headers.get('retry-after') ?? '', 10)
     return { kind: 'rate_limited', status, retryAfter: Number.isNaN(ra) ? undefined : ra, error }
   }
   if (status >= 500)
@@ -125,34 +126,31 @@ export function configureAuthToken(provider: () => Promise<string | null>) {
   getAuthToken = provider
 }
 
-const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || '/api',
+const apiClient = ky.create({
+  prefixUrl: import.meta.env.VITE_API_BASE_URL || '/api',
   timeout: 30_000,
   headers: {
     'Content-Type': 'application/json',
   },
-})
-
-apiClient.interceptors.request.use(async (config) => {
-  const token = await getAuthToken?.()
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`
-  }
-  return config
-})
-
-apiClient.interceptors.response.use(
-  response => response,
-  (error) => {
-    if (!axios.isAxiosError(error))
-      return Promise.reject(error)
-
-    const context = classifyError(error)
-    handleApiError(context)
-
-    return Promise.reject(error)
+  hooks: {
+    beforeRequest: [
+      async (request) => {
+        const token = await getAuthToken?.()
+        if (token) {
+          request.headers.set('Authorization', `Bearer ${token}`)
+        }
+      },
+    ],
+    beforeError: [
+      (error) => {
+        const context = classifyError(error)
+        handleApiError(context)
+        return error
+      },
+    ],
   },
-)
+  retry: 0,
+})
 
 /** Validate API response data against a valibot schema. */
 export function parse<T>(schema: v.GenericSchema<T>, data: unknown): T {

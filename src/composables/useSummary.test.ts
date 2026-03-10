@@ -8,7 +8,15 @@ import { useSummary } from './useSummary'
 const { mockSummary } = vi.hoisted(() => ({
   mockSummary: {
     aum: [{ date: '2025-01-01', value: 1000000 }],
-    pnl: [{ date: '2025-01-01', daily: 500, mtd: 1000, ytd: 5000, cumulative: 5000 }],
+    pnl: [
+      {
+        date: '2025-01-01',
+        daily: 500,
+        mtd: 1000,
+        ytd: 5000,
+        cumulative: 5000,
+      },
+    ],
     var: [{ label: '95%', current: 12000, previous: 11500 }],
     trackingError: [{ date: '2025-01-01', te: 0.02, infoRatio: 1.5 }],
     exposures: [{ label: 'Equity', weight: 0.6 }],

@@ -1,5 +1,5 @@
 import type { EChartsOption } from 'echarts'
-import { chartColors } from '@/theme/preset'
+import { chartColors } from '@/theme/colors'
 
 // --- Shared text style ---
 
@@ -61,41 +61,69 @@ export const gridHorizontalBar: EChartsOption['grid'] = {
 
 // --- Tooltips: dark, rounded, no border ---
 
-const tooltipBase = {
-  backgroundColor: 'rgba(28, 32, 38, 0.92)',
-  borderColor: 'transparent',
-  borderWidth: 0,
-  textStyle: {
-    fontFamily,
-    color: '#f0f0f0',
-    fontSize: 12,
-  },
-  padding: [8, 12] as [number, number],
-  extraCssText: 'border-radius: 8px; box-shadow: 0 4px 16px rgba(0,0,0,0.16);',
+function getChartToken(name: string, fallback: string): string {
+  if (typeof document === 'undefined')
+    return fallback
+  return getComputedStyle(document.documentElement).getPropertyValue(name).trim() || fallback
 }
 
-export const tooltipAxis: EChartsOption['tooltip'] = {
-  trigger: 'axis',
-  ...tooltipBase,
-  axisPointer: {
-    type: 'line',
-    lineStyle: { color: '#d5d7d9', type: 'dashed' },
-  },
+function createTooltipBase() {
+  const bg = getChartToken('--color-chart-tooltip-bg', 'rgba(28, 32, 38, 0.92)')
+  const text = getChartToken('--color-chart-tooltip-text', '#f0f0f0')
+  const pointer = getChartToken('--color-chart-axis-pointer', '#d5d7d9')
+  return { bg, text, pointer }
 }
 
-export const tooltipItem: EChartsOption['tooltip'] = {
-  trigger: 'item',
-  ...tooltipBase,
+export function tooltipAxis(): EChartsOption['tooltip'] {
+  const { bg, text, pointer } = createTooltipBase()
+  return {
+    trigger: 'axis',
+    backgroundColor: bg,
+    borderColor: 'transparent',
+    borderWidth: 0,
+    textStyle: { fontFamily, color: text, fontSize: 12 },
+    padding: [8, 12] as [number, number],
+    extraCssText: 'border-radius: 8px; box-shadow: 0 4px 16px rgba(0,0,0,0.16);',
+    axisPointer: {
+      type: 'line',
+      lineStyle: { color: pointer, type: 'dashed' },
+    },
+  }
 }
 
-export const tooltipCross: EChartsOption['tooltip'] = {
-  trigger: 'axis',
-  ...tooltipBase,
-  axisPointer: {
-    type: 'cross',
-    crossStyle: { color: '#d5d7d9' },
-    lineStyle: { color: '#d5d7d9', type: 'dashed' },
-  },
+export function tooltipItem(): EChartsOption['tooltip'] {
+  const { bg, text } = createTooltipBase()
+  return {
+    trigger: 'item',
+    backgroundColor: bg,
+    borderColor: 'transparent',
+    borderWidth: 0,
+    textStyle: { fontFamily, color: text, fontSize: 12 },
+    padding: [8, 12] as [number, number],
+    extraCssText: 'border-radius: 8px; box-shadow: 0 4px 16px rgba(0,0,0,0.16);',
+  }
+}
+
+export function tooltipCross(): EChartsOption['tooltip'] {
+  const { bg, text, pointer } = createTooltipBase()
+  return {
+    trigger: 'axis',
+    backgroundColor: bg,
+    borderColor: 'transparent',
+    borderWidth: 0,
+    textStyle: { fontFamily, color: text, fontSize: 12 },
+    padding: [8, 12] as [number, number],
+    extraCssText: 'border-radius: 8px; box-shadow: 0 4px 16px rgba(0,0,0,0.16);',
+    axisPointer: {
+      type: 'cross',
+      crossStyle: { color: pointer },
+      lineStyle: { color: pointer, type: 'dashed' },
+    },
+  }
+}
+
+export function chartSeparatorColor(): string {
+  return getChartToken('--color-chart-separator', '#ffffff')
 }
 
 // --- Legend: bottom, rounded indicators ---

@@ -1,58 +1,47 @@
 <script setup lang="ts">
-import DatePicker from 'primevue/datepicker'
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
-import AppButton from '@/components/base/AppButton.vue'
 import AppSelect from '@/components/base/AppSelect.vue'
+import DatePicker from '@/components/DatePicker.vue'
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from '@/components/ui/breadcrumb'
+import { SidebarTrigger } from '@/components/ui/sidebar'
+import { useBreadcrumbs } from '@/composables/useBreadcrumbs'
 import { usePortfolios } from '@/composables/usePortfolios'
 import { useAnalyticsContext } from '@/stores/analytics'
-import { useAppStore } from '@/stores/app'
 
-const appStore = useAppStore()
 const analytics = useAnalyticsContext()
 const route = useRoute()
 const { data: portfolios } = usePortfolios()
+const { items: breadcrumbs } = useBreadcrumbs()
 
 const isAnalyticsRoute = computed(() => !!route.meta.analyticsRoute)
 const pageTitle = computed(() => (route.meta.title as string) ?? '')
-
-/** Parse YYYY-MM-DD to local Date (avoids UTC midnight shift from Date.parse) */
-function parseLocalDate(iso: string): Date | null {
-  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso)
-  if (!m)
-    return null
-  return new Date(+m[1]!, +m[2]! - 1, +m[3]!)
-}
-
-function toIsoDate(date: Date): string {
-  const y = date.getFullYear()
-  const m = String(date.getMonth() + 1).padStart(2, '0')
-  const d = String(date.getDate()).padStart(2, '0')
-  return `${y}-${m}-${d}`
-}
-
-const dateModel = computed({
-  get: () => (analytics.asOfDate ? parseLocalDate(analytics.asOfDate) : null),
-  set: (val: Date | null) => {
-    analytics.selectDate(val ? toIsoDate(val) : null)
-  },
-})
 </script>
 
 <template>
   <header class="app-topbar">
     <div class="topbar-left">
-      <AppButton
-        v-if="appStore.isMobile"
-        icon="pi pi-bars"
-        text
-        rounded
-        severity="secondary"
-        aria-label="Open navigation menu"
-        class="topbar-toggle"
-        @click="appStore.toggleSidebar()"
-      />
-      <h1 class="topbar-title">
+      <SidebarTrigger class="-ml-1 md:hidden" />
+      <Breadcrumb v-if="breadcrumbs.length > 1">
+        <BreadcrumbList>
+          <template v-for="(crumb, idx) in breadcrumbs" :key="crumb.label">
+            <BreadcrumbSeparator v-if="idx > 0" />
+            <BreadcrumbItem>
+              <BreadcrumbPage v-if="idx === breadcrumbs.length - 1" class="topbar-title">
+                {{ crumb.label }}
+              </BreadcrumbPage>
+              <span v-else class="text-muted-foreground text-sm">{{ crumb.label }}</span>
+            </BreadcrumbItem>
+          </template>
+        </BreadcrumbList>
+      </Breadcrumb>
+      <h1 v-else class="topbar-title">
         {{ pageTitle }}
       </h1>
     </div>
@@ -67,13 +56,7 @@ const dateModel = computed({
         class="topbar-portfolio-select"
         @update:modelValue="analytics.selectPortfolio($event)"
       />
-      <DatePicker
-        v-model="dateModel"
-        dateFormat="yy-mm-dd"
-        placeholder="As-of date"
-        showIcon
-        class="topbar-date-picker"
-      />
+      <DatePicker />
     </div>
   </header>
 </template>
@@ -84,8 +67,8 @@ const dateModel = computed({
   align-items: center;
   justify-content: space-between;
   padding: var(--app-space-sm) var(--app-space-md);
-  background: var(--p-surface-0);
-  border-bottom: 1px solid var(--p-surface-200);
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
   position: sticky;
   top: 0;
   z-index: 30;
@@ -99,15 +82,10 @@ const dateModel = computed({
   min-width: 0;
 }
 
-.topbar-toggle {
-  color: var(--p-surface-600);
-  flex-shrink: 0;
-}
-
 .topbar-title {
   font-size: 1.125rem;
   font-weight: 600;
-  color: var(--p-surface-900);
+  color: var(--foreground);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -124,10 +102,6 @@ const dateModel = computed({
   min-width: 200px;
 }
 
-.topbar-date-picker {
-  width: 160px;
-}
-
 @media (max-width: 768px) {
   .app-topbar {
     flex-wrap: wrap;
@@ -138,8 +112,7 @@ const dateModel = computed({
     flex-wrap: wrap;
   }
 
-  .topbar-portfolio-select,
-  .topbar-date-picker {
+  .topbar-portfolio-select {
     flex: 1;
     min-width: 140px;
   }

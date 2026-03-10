@@ -1,16 +1,14 @@
 import { QueryClient, VueQueryPlugin } from '@tanstack/vue-query'
-import axios from 'axios'
+import { HTTPError } from 'ky'
 import { createPinia } from 'pinia'
-import PrimeVue from 'primevue/config'
-import ToastService from 'primevue/toastservice'
 import { createApp } from 'vue'
-import { configureApiErrorHandlers, configureAuthToken } from '@/api/client'
+import { classifyError, configureApiErrorHandlers, configureAuthToken } from '@/api/client'
 import { getToastRef } from '@/utils/toastRef'
 import App from './App.vue'
 import router from './router'
-import RiskAppPreset from './theme/preset'
 
-import 'primeicons/primeicons.css'
+import './assets/tailwind.css'
+import './assets/tokens.css'
 import './assets/main.css'
 
 const isMockMode = import.meta.env.VITE_USE_MOCK_API !== 'false'
@@ -76,15 +74,15 @@ async function bootstrap() {
         staleTime: 2 * 60 * 1000,
         refetchOnWindowFocus: false,
         retry: (failureCount, error) => {
-          if (axios.isAxiosError(error) && error.response?.status === 429)
+          if (error instanceof HTTPError && error.response.status === 429)
             return failureCount < 3
           return false
         },
         retryDelay: (attemptIndex, error) => {
-          if (axios.isAxiosError(error)) {
-            const ra = Number.parseInt(error.response?.headers?.['retry-after'] ?? '', 10)
-            if (!Number.isNaN(ra))
-              return ra * 1000
+          if (error instanceof HTTPError) {
+            const { retryAfter } = classifyError(error)
+            if (retryAfter)
+              return retryAfter * 1000
           }
           return Math.min(1000 * 2 ** attemptIndex, 30000)
         },
@@ -92,15 +90,6 @@ async function bootstrap() {
     },
   })
   app.use(VueQueryPlugin, { queryClient })
-  app.use(ToastService)
-  app.use(PrimeVue, {
-    theme: {
-      preset: RiskAppPreset,
-      options: {
-        darkModeSelector: '.p-dark',
-      },
-    },
-  })
 
   app.mount('#app')
 }

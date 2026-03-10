@@ -1,97 +1,109 @@
-# SAMRisk Mockup App
+# SAMRisk
 
-Skeleton frontend for a future production risk/portfolio application.
+Financial risk dashboard - Vue 3 + TypeScript + Vite SPA.
 
-## Purpose
+Pre-production mockup with real patterns. MSW provides mock data so the app runs without a backend.
 
-- Provide a realistic UI shell and interaction model before backend APIs exist.
-- Validate layout, navigation, charting, and component patterns.
-- Keep development unblocked using mocked API responses via MSW.
+## Stack
 
-## Tech Stack
-
-- Vue 3 + TypeScript + Vite
-- Pinia for app state
-- Vue Router
-- TanStack Query for data fetching
-- PrimeVue + custom theme preset
-- ECharts for charts
-- MSW for browser API mocking
+| Layer | Tech |
+|-------|------|
+| Framework | Vue 3 (`<script setup>` + Composition API) |
+| Components | shadcn-vue (Reka UI + Tailwind v4) |
+| Charts | ECharts via vue-echarts |
+| State | Pinia (app) + TanStack Vue Query (server) |
+| HTTP | Ky (`src/api/client.ts`) |
+| Auth | MSAL (Azure AD) - skipped in mock mode |
+| Mocking | MSW browser handlers |
+| Toast | vue-sonner |
+| Build | Vite, Bun, TypeScript strict mode |
+| Lint | ESLint (antfu config) + lint-staged |
 
 ## Requirements
 
 - Bun 1.x
 
-## Local Development
+## Quick Start
 
 ```bash
 bun install
-bun run dev
+bun run dev          # dev server with MSW mocks
 ```
-
-The app runs with mock API handlers in development mode. No real backend is required.
 
 ## Scripts
 
 ```bash
-bun run dev        # start Vite dev server
-bun run build      # typecheck + production build
-bun run preview    # preview production build locally
-bun run test       # run Vitest in watch mode
-bun run test:run   # single Vitest run (passes if no tests exist yet)
+bun run dev          # start Vite dev server
+bun run build        # type-check + production build
+bun run test         # vitest watch mode
+bun run test:run     # vitest single run
+bun run lint         # eslint check
+bun run lint:fix     # eslint auto-fix
 ```
 
 ## Environment
 
-Copy `.env.example` and adjust as needed:
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `VITE_API_BASE_URL` | `/api` | Backend API base URL |
+| `VITE_USE_MOCK_API` | `true` | Set to `false` to use real backend + MSAL auth |
 
-- `VITE_API_BASE_URL` (default `/api`)
+## Project Structure
 
-## Routing Status
+```
+src/
+  api/              # HTTP request functions (one file per domain)
+  assets/           # Global CSS: tokens.css, tailwind.css, main.css
+  auth/             # MSAL config and token provider
+  charts/           # ECharts option builders and presets
+  components/
+    ui/             # shadcn-vue components (owned, CLI-generated)
+    base/           # Custom wrappers (AppIcon, AppDataTable, etc.)
+    charts/         # Chart-specific components
+  composables/      # Vue composables (useX pattern)
+  layouts/          # Page layouts
+  lib/              # Utilities (cn(), icon registry)
+  mocks/            # MSW handlers and mock data
+  plugins/          # ECharts theme registration
+  stores/           # Pinia stores
+  theme/            # Chart color palette
+  types/            # Shared TypeScript interfaces
+  utils/            # Standalone helpers (toast, formatting)
+  views/            # Route-level page components
+```
 
-Currently implemented views:
+## Routes
 
-- `/` (Welcome)
-- `/overview`
-- `/summary/:portfolioId?`
-- `/performance/:portfolioId?`
-- `/guidelines/:portfolioId?`
-- `/risk/:portfolioId?`
-- `/portfolios`
-- `/reports`
-- `/showcase` + `/showcase/*`
-- `/:pathMatch(.*)*` (Not Found)
+| Section | Path | Status |
+|---------|------|--------|
+| - | `/` | Welcome page |
+| Analytics | `/summary/:portfolioId?` | Implemented |
+| Analytics | `/performance/:portfolioId?` | Placeholder |
+| Analytics | `/market-risk/:portfolioId?` | Placeholder |
+| Analytics | `/liquidity-risk/:portfolioId?` | Placeholder |
+| Analytics | `/credit-risk/:portfolioId?` | Placeholder |
+| Analytics | `/esg/:portfolioId?` | Placeholder |
+| Monitoring | `/kri` | Placeholder |
+| Compliance | `/guidelines/:portfolioId?` | Placeholder |
+| Compliance | `/reports` | Placeholder |
+| Master Data | `/product-master` | Placeholder |
+| Master Data | `/security-master` | Placeholder |
 
-Analytics routes already support portfolio context in the URL; non-summary analytics pages are currently placeholder content.
-
-## API Error Handling Strategy
-
-`src/api/client.ts` contains centralized axios response error handling with configurable hooks for:
-
-- `401` unauthorized
-- `403` forbidden
-- `5xx` server errors
-- network errors
-- unknown API errors
-
-You can connect this to future auth refresh/login redirect and toast/notification systems using `configureApiErrorHandlers(...)`.
+Analytics routes share portfolio context via `stores/analytics.ts`, synced to URL params.
 
 ## UI System
 
-To keep feature work low-effort and stylistically consistent, prefer app wrappers over direct PrimeVue primitives:
+Components live in two layers:
 
-- `AppButton` (`src/components/base/AppButton.vue`)
-- `AppCard` (`src/components/base/AppCard.vue`)
-- `AppDataTable` (`src/components/base/AppDataTable.vue`)
-- `PresetChartCard` (`src/components/charts/PresetChartCard.vue`) for semantic chart presets
+- **`src/components/ui/`** - shadcn-vue components. Owned code generated via CLI, styled with Tailwind utility classes. Add new ones with `npx shadcn-vue@latest add <name>`.
+- **`src/components/base/`** - Custom wrappers for things shadcn doesn't cover: `AppIcon`, `AppDataTable` (TanStack Table), `AppSelect`, `AppCombobox`, `AppDateRangePicker`, `ValueCell`.
 
-Default behavior and semantic color presets are centralized in `src/ui/config.ts`.
-Core theme tokens remain in `src/theme/preset.ts` and global CSS tokens in `src/assets/main.css`.
+Theme tokens follow shadcn conventions (`--background`, `--foreground`, `--primary`, etc.) defined in `src/assets/tokens.css`. SAMRisk-specific tokens (`--color-positive`, `--color-negative`, chart colors, sidebar colors) coexist alongside.
 
-## Container Build
+## Container
 
-The repo includes:
+```bash
+docker compose up --build   # builds + serves on port 8080
+```
 
-- `Dockerfile` for build + nginx runtime image
-- `docker-compose.yml` for local container run
-- `nginx.conf` with SPA fallback and static asset caching
+Dockerfile uses Bun for build, Nginx for serving with SPA fallback.

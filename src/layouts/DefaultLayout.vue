@@ -1,51 +1,39 @@
 <script setup lang="ts">
-import Toast from 'primevue/toast'
-import { useToast } from 'primevue/usetoast'
+import { useLocalStorage } from '@vueuse/core'
 import AppSidebar from '@/components/AppSidebar.vue'
 import AppTopbar from '@/components/AppTopbar.vue'
 import BackendStatus from '@/components/BackendStatus.vue'
 import ErrorBoundary from '@/components/ErrorBoundary.vue'
+import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar'
+import { Toaster } from '@/components/ui/sonner'
 import { useAnalyticsSync } from '@/composables/useAnalyticsSync'
-import { setToastRef } from '@/utils/toastRef'
 
 useAnalyticsSync()
-setToastRef(useToast())
+
+const sidebarOpen = useLocalStorage('samrisk-sidebar-expanded', true)
 </script>
 
 <template>
   <BackendStatus>
-    <div class="app-layout">
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:p-3 focus:bg-background focus:text-foreground focus:rounded-md focus:m-2 focus:shadow-md">
+      Skip to content
+    </a>
+    <SidebarProvider
+      :open="sidebarOpen"
+      class="overflow-x-hidden"
+      :style="{ '--sidebar-width': 'var(--app-sidebar-width)', '--sidebar-width-icon': 'var(--app-sidebar-width-icon)' }"
+      @update:open="v => sidebarOpen = v"
+    >
       <AppSidebar />
-      <div class="app-main">
+      <SidebarInset class="flex flex-col">
         <AppTopbar />
-        <main class="app-content">
+        <main id="main-content" class="flex-1 overflow-auto p-[var(--app-content-padding)]">
           <ErrorBoundary>
             <router-view />
           </ErrorBoundary>
         </main>
-      </div>
-      <Toast position="top-right" />
-    </div>
+      </SidebarInset>
+    </SidebarProvider>
+    <Toaster position="top-right" :duration="5000" rich-colors />
   </BackendStatus>
 </template>
-
-<style scoped>
-.app-layout {
-  display: flex;
-  height: 100vh;
-  overflow: hidden;
-}
-
-.app-main {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-}
-
-.app-content {
-  flex: 1;
-  padding: var(--app-content-padding);
-  overflow-y: auto;
-}
-</style>

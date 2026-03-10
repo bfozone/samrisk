@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import AppButton from '@/components/base/AppButton.vue'
+import { RefreshCw } from 'lucide-vue-next'
+import AppIcon from '@/components/base/AppIcon.vue'
+import { Button } from '@/components/ui/button'
 import { usePortfolios } from '@/composables/usePortfolios'
 
 const { isError, refetch, isLoading } = usePortfolios()
@@ -8,20 +10,23 @@ const { isError, refetch, isLoading } = usePortfolios()
 <template>
   <div v-if="isError" class="backend-status">
     <div class="backend-status-content">
-      <i class="pi pi-cloud-off backend-status-icon"></i>
+      <AppIcon name="cloud-off" :size="48" class="backend-status-icon" />
       <h2 class="backend-status-title">
         Unable to connect
       </h2>
       <p class="backend-status-detail">
         The server is not reachable. Please check your connection and try again.
       </p>
-      <AppButton label="Retry" icon="pi pi-refresh" @click="refetch()" />
+      <Button @click="refetch()">
+        <RefreshCw class="size-4" />
+        Retry
+      </Button>
     </div>
   </div>
   <slot v-else-if="!isLoading"></slot>
   <div v-else class="backend-status">
     <div class="backend-status-content">
-      <i class="pi pi-spin pi-spinner backend-status-icon"></i>
+      <AppIcon name="spinner" :size="48" class="backend-status-icon animate-spin" />
     </div>
   </div>
 </template>
@@ -45,21 +50,27 @@ const { isError, refetch, isLoading } = usePortfolios()
 }
 
 .backend-status-icon {
-  font-size: 3rem;
-  color: var(--p-surface-400);
+  color: var(--color-text-faint);
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+.animate-spin {
+  animation: spin 1s linear infinite;
 }
 
 .backend-status-title {
   font-size: 1.25rem;
   font-weight: 600;
   margin: 0;
-  color: var(--p-surface-700);
+  color: var(--color-text-secondary);
 }
 
 .backend-status-detail {
   font-size: 0.875rem;
   margin: 0;
-  color: var(--p-surface-500);
+  color: var(--muted-foreground);
   max-width: 360px;
 }
 </style>

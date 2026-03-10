@@ -1,84 +1,65 @@
 <script setup lang="ts">
-import Skeleton from 'primevue/skeleton'
-import AppCard from '@/components/base/AppCard.vue'
+import AppIcon from '@/components/base/AppIcon.vue'
 import QueryError from '@/components/base/QueryError.vue'
+import SparkLine from '@/components/base/SparkLine.vue'
+import { Card, CardContent } from '@/components/ui/card'
+import { Skeleton } from '@/components/ui/skeleton'
 
-defineProps<{
+const props = defineProps<{
   label: string
   value: string
   change?: string
   trend?: 'up' | 'down' | 'flat'
+  sparkline?: number[]
+  status?: 'ok' | 'warning' | 'critical'
   loading?: boolean
   error?: boolean
   onRetry?: () => void
 }>()
+
+const trendColor: Record<string, string> = {
+  up: 'var(--color-positive)',
+  down: 'var(--color-negative)',
+  flat: 'var(--color-muted-foreground)',
+}
 </script>
 
 <template>
-  <AppCard class="stat-card" compact>
-    <template #content>
-      <Skeleton v-if="loading" height="3.5rem" width="100%" />
+  <Card
+    class="gap-0 py-0 transition-shadow duration-200 hover:shadow-md"
+    :class="{
+      'border-l-[3px] border-l-positive': props.status === 'ok',
+      'border-l-[3px] border-l-warning': props.status === 'warning',
+      'border-l-[3px] border-l-destructive': props.status === 'critical',
+    }"
+  >
+    <CardContent class="flex items-end justify-between gap-4 p-5">
+      <Skeleton v-if="loading" class="h-14 w-full" />
       <QueryError v-else-if="error" :on-retry="onRetry" />
       <template v-else>
-        <span class="stat-label">{{ label }}</span>
-        <span class="stat-value">{{ value }}</span>
-        <span v-if="change" class="stat-change" :class="trend">
-          <i v-if="trend === 'up'" class="pi pi-arrow-up"></i>
-          <i v-else-if="trend === 'down'" class="pi pi-arrow-down"></i>
-          {{ change }}
-        </span>
+        <div class="flex flex-col gap-1">
+          <span class="text-xs font-medium uppercase tracking-wide text-muted-foreground">{{ label }}</span>
+          <span class="text-2xl font-bold leading-tight text-foreground">{{ value }}</span>
+          <span
+            v-if="change"
+            class="inline-flex w-fit items-center gap-1 rounded-full px-2 py-0.5 text-xs font-semibold"
+            :class="{
+              'bg-positive/10 text-positive': trend === 'up',
+              'bg-negative/10 text-negative': trend === 'down',
+              'bg-muted text-muted-foreground': trend === 'flat',
+            }"
+          >
+            <AppIcon v-if="trend === 'up'" name="arrow-up" :size="10" />
+            <AppIcon v-else-if="trend === 'down'" name="arrow-down" :size="10" />
+            {{ change }}
+          </span>
+        </div>
+        <SparkLine
+          v-if="sparkline?.length"
+          :data="sparkline"
+          :color="trendColor[trend ?? 'flat']"
+        />
       </template>
-    </template>
-  </AppCard>
+    </CardContent>
+  </Card>
 </template>
-
-<style scoped>
-.stat-card :deep(.p-card-body) {
-  padding: 1.25rem;
-}
-
-.stat-card :deep(.p-card-content) {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-
-.stat-label {
-  font-size: 0.75rem;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: var(--p-surface-500);
-}
-
-.stat-value {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--p-surface-900);
-  line-height: 1.2;
-}
-
-.stat-change {
-  font-size: 0.8125rem;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-}
-
-.stat-change i {
-  font-size: 0.625rem;
-}
-
-.stat-change.up {
-  color: var(--app-color-positive, #A5B077);
-}
-
-.stat-change.down {
-  color: var(--app-color-negative, #ee000c);
-}
-
-.stat-change.flat {
-  color: var(--p-surface-500);
-}
-</style>

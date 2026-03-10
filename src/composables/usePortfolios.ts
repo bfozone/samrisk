@@ -13,7 +13,10 @@ export function usePortfolios() {
   })
 }
 
-function usePortfolioQuery<T>(key: string, fetcher: (id: string, options?: PortfolioQueryOptions) => Promise<T>) {
+function usePortfolioQuery<T>(
+  key: string,
+  fetcher: (id: string, options?: PortfolioQueryOptions) => Promise<T>,
+) {
   return (portfolioId: MaybeRefOrGetter<string>) =>
     useQuery({
       queryKey: [key, portfolioId],

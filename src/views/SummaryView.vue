@@ -3,7 +3,7 @@ import { computed } from 'vue'
 import AlertBanner from '@/components/AlertBanner.vue'
 import AnalyticsView from '@/components/AnalyticsView.vue'
 import PresetChartCard from '@/components/charts/PresetChartCard.vue'
-import StatCard from '@/components/StatCard.vue'
+import KpiStrip from '@/components/KpiStrip.vue'
 import { useSummaryMetrics } from './summary/useSummaryMetrics'
 
 const { statCards, chartRows, latestVar95 } = useSummaryMetrics()
@@ -27,9 +27,7 @@ const varAlert = computed(() => {
         variant="destructive"
       />
     </template>
-    <div class="grid grid-cols-4 max-lg:grid-cols-2 max-md:grid-cols-1 gap-4 [&>*]:min-w-0">
-      <StatCard v-for="s in statCards" :key="s.label" v-bind="s" />
-    </div>
+    <KpiStrip :items="statCards" />
     <div
       v-for="row in chartRows"
       :key="row.map(c => c.title).join('-')"

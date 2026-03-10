@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import AppSelect from '@/components/base/AppSelect.vue'
-import DatePresets from '@/components/DatePresets.vue'
+import DatePicker from '@/components/DatePicker.vue'
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -22,11 +22,6 @@ const { items: breadcrumbs } = useBreadcrumbs()
 
 const isAnalyticsRoute = computed(() => !!route.meta.analyticsRoute)
 const pageTitle = computed(() => (route.meta.title as string) ?? '')
-
-function onDateChange(e: Event) {
-  const value = (e.target as HTMLInputElement).value
-  analytics.selectDate(value || null)
-}
 </script>
 
 <template>
@@ -61,15 +56,7 @@ function onDateChange(e: Event) {
         class="topbar-portfolio-select"
         @update:modelValue="analytics.selectPortfolio($event)"
       />
-      <DatePresets />
-      <input
-        type="date"
-        :value="analytics.asOfDate ?? ''"
-        placeholder="As-of date"
-        aria-label="As-of date"
-        class="topbar-date-input"
-        @change="onDateChange"
-      />
+      <DatePicker />
     </div>
   </header>
 </template>
@@ -115,30 +102,6 @@ function onDateChange(e: Event) {
   min-width: 200px;
 }
 
-.topbar-date-input {
-  width: 160px;
-  padding: 0.5rem 0.75rem;
-  min-height: 2.375rem;
-  border: 1px solid var(--color-border-strong);
-  border-radius: var(--radius-sm, 6px);
-  font-size: 0.875rem;
-  font-family: inherit;
-  color: var(--foreground);
-  background: var(--card);
-  outline: none;
-  transition: border-color 0.15s ease;
-}
-
-.topbar-date-input:hover {
-  border-color: var(--color-text-faint);
-}
-
-.topbar-date-input:focus-visible {
-  border-color: var(--ring);
-  outline: 2px solid var(--ring);
-  outline-offset: 2px;
-}
-
 @media (max-width: 768px) {
   .app-topbar {
     flex-wrap: wrap;
@@ -149,8 +112,7 @@ function onDateChange(e: Event) {
     flex-wrap: wrap;
   }
 
-  .topbar-portfolio-select,
-  .topbar-date-input {
+  .topbar-portfolio-select {
     flex: 1;
     min-width: 140px;
   }

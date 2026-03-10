@@ -29,7 +29,7 @@ function toggle(key: string, getDate: () => string) {
 </script>
 
 <template>
-  <div role="group" aria-label="Date presets" class="flex flex-wrap gap-1">
+  <div role="group" aria-label="Date presets" class="flex gap-1">
     <button
       v-for="preset in presets"
       :key="preset.key"

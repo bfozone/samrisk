@@ -14,13 +14,14 @@ RUN chown -R nginx:nginx /usr/share/nginx/html \
  && chown -R nginx:nginx /var/cache/nginx \
  && chown -R nginx:nginx /var/log/nginx \
  && touch /var/run/nginx.pid && chown nginx:nginx /var/run/nginx.pid \
- && sed -i 's/^user  nginx;/#user  nginx;/' /etc/nginx/nginx.conf
+ && sed -i 's/^user  nginx;/#user  nginx;/' /etc/nginx/nginx.conf \
+ && mkdir -p /tmp/nginx && chown nginx:nginx /tmp/nginx
 
 EXPOSE 8080
 
 USER nginx
 
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD wget --quiet --tries=1 --spider http://localhost:8080/ || exit 1
+HEALTHCHECK --interval=10s --timeout=3s --start-period=15s --retries=5 \
+  CMD wget --quiet --tries=1 --spider http://127.0.0.1:8080/ || exit 1
 
 CMD ["nginx", "-g", "daemon off;"]

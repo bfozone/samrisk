@@ -40,15 +40,15 @@ describe('userSchema', () => {
 
 describe('portfolioSchema', () => {
   it('accepts valid portfolio', () => {
-    expectValid(PortfolioSchema, { id: '1', name: 'Test', currency: 'EUR', navTotal: 1_000_000 })
+    expectValid(PortfolioSchema, { id: '1', name: 'Test', benchmarkName: 'MSCI World', currency: 'EUR', navTotal: 1_000_000, manager: 'Jane Doe', inceptionDate: '2020-01-15' })
   })
 
   it('rejects invalid currency', () => {
-    expectInvalid(PortfolioSchema, { id: '1', name: 'Test', currency: 'BTC', navTotal: 1_000_000 })
+    expectInvalid(PortfolioSchema, { id: '1', name: 'Test', benchmarkName: 'MSCI World', currency: 'BTC', navTotal: 1_000_000, manager: 'Jane Doe', inceptionDate: '2020-01-15' })
   })
 
   it('rejects negative navTotal', () => {
-    expectInvalid(PortfolioSchema, { id: '1', name: 'Test', currency: 'EUR', navTotal: -100 })
+    expectInvalid(PortfolioSchema, { id: '1', name: 'Test', benchmarkName: 'MSCI World', currency: 'EUR', navTotal: -100, manager: 'Jane Doe', inceptionDate: '2020-01-15' })
   })
 })
 

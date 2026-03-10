@@ -21,8 +21,11 @@ export type User = v.InferOutput<typeof UserSchema>
 export const PortfolioSchema = v.object({
   id: v.string(),
   name: v.string(),
+  benchmarkName: v.string(),
   currency: Currency,
   navTotal: NonNegative,
+  manager: v.string(),
+  inceptionDate: IsoDate,
 })
 export type Portfolio = v.InferOutput<typeof PortfolioSchema>
 
@@ -89,6 +92,16 @@ export const LiquidityBucketSchema = v.object({
 })
 export type LiquidityBucket = v.InferOutput<typeof LiquidityBucketSchema>
 
+// --- Performance ---
+
+export const PerformanceSeriesSchema = v.object({
+  date: IsoDate,
+  portfolioReturn: v.number(),
+  benchmarkReturn: v.number(),
+  activeReturn: v.number(),
+})
+export type PerformanceSeries = v.InferOutput<typeof PerformanceSeriesSchema>
+
 // --- Summary (aggregate) ---
 
 export const SummaryResponseSchema = v.object({
@@ -98,5 +111,6 @@ export const SummaryResponseSchema = v.object({
   trackingError: v.array(TrackingErrorResultSchema),
   exposures: v.array(ExposureBucketSchema),
   liquidity: v.array(LiquidityBucketSchema),
+  performance: v.array(PerformanceSeriesSchema),
 })
 export type SummaryResponse = v.InferOutput<typeof SummaryResponseSchema>

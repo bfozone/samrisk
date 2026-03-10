@@ -1,4 +1,4 @@
-import type { AuMSnapshot, ExposureBucket, LiquidityBucket, PnLResult, TrackingErrorResult, VaRResult } from '@/api/schemas'
+import type { AuMSnapshot, ExposureBucket, LiquidityBucket, PerformanceSeries, PnLResult, TrackingErrorResult, VaRResult } from '@/api/schemas'
 import type { BarChartConfig, LineChartConfig, PieChartConfig } from '@/charts'
 import { formatValue } from '@/charts'
 
@@ -85,21 +85,92 @@ export function deriveTEStat(items: TrackingErrorResult[]): StatCardData {
   }
 }
 
+export function derivePerformanceStat(performance: PerformanceSeries[], pnl: PnLResult[], currency: string): StatCardData {
+  if (!pnl.length)
+    return { label: 'YTD Return', value: '-', change: '', trend: 'flat' }
+  const latest = pnl.at(-1)!
+  const latestPerf = performance.at(-1)
+  const activeReturn = latestPerf?.activeReturn ?? 0
+  return {
+    label: 'YTD Return',
+    value: `${latest.ytd >= 0 ? '+' : ''}${formatValue(latest.ytd, 'currency', currency)}`,
+    change: `vs Bmk ${fmtPct(activeReturn * 100)}`,
+    trend: activeReturn > 0.0001 ? 'up' : activeReturn < -0.0001 ? 'down' : 'flat',
+    sparkline: performance.map(d => d.portfolioReturn),
+  }
+}
+
+export function deriveLiquidityStat(items: LiquidityBucket[]): StatCardData {
+  if (!items.length)
+    return { label: '7-Day Liquidity', value: '-', change: '', trend: 'flat' }
+  const shortHorizons = ['1 Day', '2-7 Days']
+  const pct = items
+    .filter(b => shortHorizons.includes(b.horizon))
+    .reduce((sum, b) => sum + b.percentage, 0)
+  const status: RiskStatus = pct >= 50 ? 'ok' : pct >= 30 ? 'warning' : 'critical'
+  return {
+    label: '7-Day Liquidity',
+    value: `${Math.round(pct)}%`,
+    change: '',
+    trend: 'flat',
+    status,
+  }
+}
+
+export function deriveCreditStat(): StatCardData {
+  return {
+    label: 'Avg Rating',
+    value: 'A+',
+    change: 'Investment Grade',
+    trend: 'flat',
+  }
+}
+
+export function deriveEsgStat(): StatCardData {
+  return {
+    label: 'ESG Score',
+    value: '72',
+    change: '/100',
+    trend: 'flat',
+  }
+}
+
 // --- Chart config builders ---
 
-export function buildAuMChart(items: AuMSnapshot[], currency: string): LineChartConfig {
+export function buildAuMChart(items: AuMSnapshot[], currency: string, performance: PerformanceSeries[] = []): LineChartConfig {
+  const benchmarkByDate = new Map(performance.map(p => [p.date, p.benchmarkReturn]))
+  const startingAuM = items.length ? items[0]!.aum : 0
+  const benchmarkNav = items.map((d) => {
+    const bmkReturn = benchmarkByDate.get(d.date) ?? 0
+    return Math.round(startingAuM * (1 + bmkReturn))
+  })
+  const hasBenchmark = performance.length > 0
+
   return {
     categories: items.map(d => d.date),
-    series: [{ name: 'AuM', data: items.map(d => d.aum), area: true }],
+    series: [
+      { name: 'Portfolio', data: items.map(d => d.aum), area: true },
+      ...(hasBenchmark ? [{ name: 'Benchmark', data: benchmarkNav }] : []),
+    ],
     format: 'currency',
     currency,
   }
 }
 
-export function buildPnLChart(items: PnLResult[], currency: string): Omit<LineChartConfig, 'zeroLine'> {
+export function buildPnLChart(items: PnLResult[], currency: string, performance: PerformanceSeries[] = [], startingNav = 0): Omit<LineChartConfig, 'zeroLine'> {
+  const benchmarkByDate = new Map(performance.map(p => [p.date, p.benchmarkReturn]))
+  const benchmarkPnL = items.map((d) => {
+    const bmkReturn = benchmarkByDate.get(d.date) ?? 0
+    return Math.round(startingNav * bmkReturn)
+  })
+  const hasBenchmark = performance.length > 0 && startingNav > 0
+
   return {
     categories: items.map(d => d.date),
-    series: [{ name: 'Cumulative P&L', data: items.map(d => d.cumulative) }],
+    series: [
+      { name: 'Portfolio', data: items.map(d => d.cumulative) },
+      ...(hasBenchmark ? [{ name: 'Benchmark', data: benchmarkPnL }] : []),
+    ],
     format: 'currency',
     currency,
   }
@@ -138,5 +209,18 @@ export function buildLiquidityChart(items: LiquidityBucket[]): Omit<BarChartConf
     categories: items.map(d => d.horizon),
     series: [{ name: 'Liquidity', data: items.map(d => d.percentage) }],
     format: 'percent',
+  }
+}
+
+export function buildPerformanceChart(items: PerformanceSeries[]): LineChartConfig {
+  return {
+    categories: items.map(d => d.date),
+    series: [
+      { name: 'Portfolio', data: items.map(d => d.portfolioReturn) },
+      { name: 'Benchmark', data: items.map(d => d.benchmarkReturn) },
+      { name: 'Active Return', data: items.map(d => d.activeReturn), yAxisIndex: 1 },
+    ],
+    format: 'percent',
+    rightFormat: 'percent',
   }
 }

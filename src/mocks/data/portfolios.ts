@@ -2,9 +2,9 @@ import type { Portfolio, Position } from '@/api/schemas'
 import { http, HttpResponse } from 'msw'
 
 const portfolios: Portfolio[] = [
-  { id: '1', name: 'Global Multi-Asset', currency: 'EUR', navTotal: 500_000_000 },
-  { id: '2', name: 'European Equity', currency: 'EUR', navTotal: 250_000_000 },
-  { id: '3', name: 'Fixed Income Absolute Return', currency: 'EUR', navTotal: 350_000_000 },
+  { id: '1', name: 'Global Multi-Asset', benchmarkName: '60/40 MSCI World/BBG Euro Agg', currency: 'EUR', navTotal: 500_000_000, manager: 'Maria Schmidt', inceptionDate: '2018-03-15' },
+  { id: '2', name: 'European Equity', benchmarkName: 'EURO STOXX 50', currency: 'EUR', navTotal: 250_000_000, manager: 'Thomas Weber', inceptionDate: '2020-01-10' },
+  { id: '3', name: 'Fixed Income Absolute Return', benchmarkName: '€STR + 150bps', currency: 'EUR', navTotal: 350_000_000, manager: 'Sophie Dubois', inceptionDate: '2021-06-01' },
 ]
 
 const positions: Position[] = [

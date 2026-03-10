@@ -22,8 +22,8 @@ function fmtPct(v: number): string {
 export function deriveAuMStat(items: AuMSnapshot[], currency: string): StatCardData {
   if (items.length < 2)
     return { label: 'AuM', value: '-', change: '', trend: 'flat' }
-  const latest = items[items.length - 1]!
-  const prev = items[items.length - 2]!
+  const latest = items.at(-1)!
+  const prev = items.at(-2)!
   const pctChange = ((latest.aum - prev.aum) / prev.aum) * 100
   return {
     label: 'AuM',
@@ -37,7 +37,7 @@ export function deriveAuMStat(items: AuMSnapshot[], currency: string): StatCardD
 export function derivePnLStat(items: PnLResult[], currency: string): StatCardData {
   if (!items.length)
     return { label: 'Daily P&L', value: '-', change: '', trend: 'flat' }
-  const latest = items[items.length - 1]!
+  const latest = items.at(-1)!
   const v = latest.daily
   return {
     label: 'Daily P&L',
@@ -59,8 +59,8 @@ export function varStatus(var95: number): RiskStatus {
 export function deriveVaRStat(items: VaRResult[]): StatCardData {
   if (items.length < 2)
     return { label: 'VaR 95%', value: '-', change: '', trend: 'flat' }
-  const latest = items[items.length - 1]!
-  const prev = items[items.length - 2]!
+  const latest = items.at(-1)!
+  const prev = items.at(-2)!
   const diff = latest.var95 - prev.var95
   return {
     label: 'VaR 95%',
@@ -75,7 +75,7 @@ export function deriveVaRStat(items: VaRResult[]): StatCardData {
 export function deriveTEStat(items: TrackingErrorResult[]): StatCardData {
   if (!items.length)
     return { label: 'Tracking Error', value: '-', change: '', trend: 'flat' }
-  const latest = items[items.length - 1]!
+  const latest = items.at(-1)!
   return {
     label: 'Tracking Error',
     value: `${latest.te.toFixed(2)}%`,

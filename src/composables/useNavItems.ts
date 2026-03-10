@@ -1,6 +1,8 @@
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 
+const paramSuffix = /\/:\w+\?$/
+
 export interface NavItem {
   label: string
   icon: string
@@ -24,7 +26,7 @@ export function useNavItems() {
       .map(r => ({
         label: r.meta.title ?? '',
         icon: r.meta.sidebar!.icon,
-        to: r.path.replace(/\/:\w+\?$/, ''),
+        to: r.path.replace(paramSuffix, ''),
         section: r.meta.sidebar!.section,
       })),
   )

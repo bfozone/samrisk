@@ -4,7 +4,7 @@ export default antfu(
   {
     vue: true,
     typescript: true,
-    ignores: ['dist/', 'public/mockServiceWorker.js', '.claude/'],
+    ignores: ['dist/', 'public/mockServiceWorker.js', '.claude/', '**/*.md'],
   },
   {
     rules: {

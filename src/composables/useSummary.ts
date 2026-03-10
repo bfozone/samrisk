@@ -1,5 +1,5 @@
 import type { MaybeRefOrGetter } from 'vue'
-import { useQuery } from '@tanstack/vue-query'
+import { keepPreviousData, useQuery } from '@tanstack/vue-query'
 import { toValue } from 'vue'
 import { getSummary } from '@/api/summary'
 import { useAnalyticsContext } from '@/stores/analytics'
@@ -14,5 +14,6 @@ export function useSummary(portfolioId: MaybeRefOrGetter<string>) {
         signal,
       }),
     enabled: () => !!toValue(portfolioId),
+    placeholderData: keepPreviousData,
   })
 }

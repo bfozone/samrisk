@@ -40,6 +40,7 @@ export function lineChart(config: LineChartConfig, overrides?: ChartOverrides): 
     axisTick: cleanAxisTick,
     axisLabel: { ...cleanAxisLabel },
     splitLine: cleanSplitLine,
+    min: 'dataMin' as const,
   }
 
   const yAxis: EChartsOption['yAxis'] = hasDualAxis
@@ -106,7 +107,10 @@ export function lineChart(config: LineChartConfig, overrides?: ChartOverrides): 
       boundaryGap: false,
       axisLine: cleanAxisLine,
       axisTick: cleanAxisTick,
-      axisLabel: cleanAxisLabel,
+      axisLabel: {
+        ...cleanAxisLabel,
+        interval: Math.max(0, Math.floor(categories.length / 5) - 1),
+      },
     },
     yAxis,
     series: echartsSeries,

@@ -25,6 +25,26 @@ export function dualMetric(config: LineChartConfig, overrides?: ChartOverrides):
   return lineChart(config, { color: [chartColors.amber, chartColors.teal], ...overrides })
 }
 
+/** Performance combo: lines for portfolio/benchmark + bars for active return on right axis */
+export function performanceCombo(config: LineChartConfig, overrides?: ChartOverrides): EChartsOption {
+  const option = lineChart(config, {
+    color: [chartColors.tealDark, chartColors.olive, chartColors.amber],
+    ...overrides,
+  })
+  // Convert the active return series (3rd) from line to bar
+  const series = option.series as Record<string, unknown>[]
+  if (series.length >= 3) {
+    const barSeries = series[2]!
+    barSeries.type = 'bar'
+    barSeries.barMaxWidth = 4
+    barSeries.itemStyle = { borderRadius: [2, 2, 0, 0] }
+    // Remove line-specific properties
+    delete barSeries.smooth
+    delete barSeries.showSymbol
+  }
+  return option
+}
+
 /** Allocation donut - default series palette */
 export function allocationDonut(config: PieChartConfig, overrides?: ChartOverrides): EChartsOption {
   return pieChart(config, overrides)

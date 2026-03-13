@@ -52,11 +52,11 @@ export const gridDualAxis: EChartsOption['grid'] = {
 }
 
 export const gridHorizontalBar: EChartsOption['grid'] = {
-  left: 80,
+  left: 8,
   right: 48,
   top: 8,
   bottom: 28,
-  containLabel: false,
+  containLabel: true,
 }
 
 // --- Tooltips: dark, rounded, no border ---

@@ -1,4 +1,4 @@
-import type { AuMSnapshot, ExposureBucket, LiquidityBucket, PnLResult, TrackingErrorResult, VaRResult } from '@/api/schemas'
+import type { AuMSnapshot, ExposureBucket, LiquidityBucket, PerformanceSeries, PnLResult, TrackingErrorResult, VaRResult } from '@/api/schemas'
 import { http, HttpResponse } from 'msw'
 import { lastNWeekdays, seededRandom } from './seed'
 
@@ -69,6 +69,31 @@ function generatePnL(portfolioId: string, nav: number, dailyVol: number, seed: n
   })
 }
 
+function generatePerformance(
+  portfolioVol: number,
+  benchmarkVol: number,
+  alphaDrift: number,
+  seed: number,
+): PerformanceSeries[] {
+  const rand = seededRandom(seed)
+  let portfolioReturn = 0
+  let benchmarkReturn = 0
+  return tradingDays.map((date) => {
+    const commonFactor = (rand() - 0.48) * benchmarkVol
+    const bmkDaily = commonFactor
+    const portDaily = commonFactor + (rand() - 0.5 + alphaDrift) * (portfolioVol - benchmarkVol)
+    portfolioReturn += portDaily
+    benchmarkReturn += bmkDaily
+    const activeReturn = portfolioReturn - benchmarkReturn
+    return {
+      date,
+      portfolioReturn: +portfolioReturn.toFixed(4),
+      benchmarkReturn: +benchmarkReturn.toFixed(4),
+      activeReturn: +activeReturn.toFixed(4),
+    }
+  })
+}
+
 // --- Generated datasets ---
 
 const varResults: VaRResult[] = [
@@ -94,6 +119,12 @@ const pnlResults: PnLResult[] = [
   ...generatePnL('2', 250_000_000, 0.005, 602),
   ...generatePnL('3', 350_000_000, 0.0015, 703),
 ]
+
+const performanceResults: Record<string, PerformanceSeries[]> = {
+  1: generatePerformance(0.08, 0.06, 0.005, 2001),
+  2: generatePerformance(0.12, 0.11, 0.002, 2002),
+  3: generatePerformance(0.03, 0.02, 0.01, 2003),
+}
 
 const exposures: Record<string, ExposureBucket[]> = {
   1: [
@@ -163,6 +194,7 @@ export const riskHandlers = [
       trackingError: filterByAsOf(trackingErrorResults.filter(t => t.portfolioId === id), asOf),
       exposures: exposures[id] ?? [],
       liquidity: liquidityData[id] ?? [],
+      performance: filterByAsOf(performanceResults[id] ?? [], asOf),
     })
   }),
 

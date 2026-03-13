@@ -47,7 +47,6 @@ const trendColor: Record<string, string> = {
       :manager="portfolio.manager"
       :benchmark-name="portfolio.benchmarkName"
       :currency="portfolio.currency"
-      :inception-date="portfolio.inceptionDate"
       :nav-total="portfolio.navTotal"
       :as-of-date="analytics.asOfDate"
     />

@@ -2,7 +2,7 @@
 import type { EChartsOption } from 'echarts'
 import type { BarChartConfig, ChartOverrides, LineChartConfig, PieChartConfig } from '@/charts'
 import { computed } from 'vue'
-import { allocationDonut, dualMetric, liquidityProfile, metricTrend, pnlTrend, riskTrend } from '@/charts'
+import { allocationDonut, dualMetric, liquidityProfile, metricTrend, performanceCombo, pnlTrend, riskTrend } from '@/charts'
 import ChartCard from '@/components/ChartCard.vue'
 import { uiDefaults } from '@/ui/config'
 
@@ -11,6 +11,7 @@ type PresetPayload
     | { preset: 'pnlTrend', config: Omit<LineChartConfig, 'zeroLine'> }
     | { preset: 'riskTrend', config: LineChartConfig }
     | { preset: 'dualMetric', config: LineChartConfig }
+    | { preset: 'performanceCombo', config: LineChartConfig }
     | { preset: 'allocationDonut', config: PieChartConfig }
     | { preset: 'liquidityProfile', config: Omit<BarChartConfig, 'horizontal'> }
 
@@ -35,6 +36,8 @@ const option = computed<EChartsOption>(() => {
       return riskTrend(props.config, props.overrides)
     case 'dualMetric':
       return dualMetric(props.config, props.overrides)
+    case 'performanceCombo':
+      return performanceCombo(props.config, props.overrides)
     case 'allocationDonut':
       return allocationDonut(props.config, props.overrides)
     case 'liquidityProfile':

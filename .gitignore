@@ -25,3 +25,6 @@ dist-ssr
 
 # Generated styles
 app.css
+
+# Test coverage
+coverage/
